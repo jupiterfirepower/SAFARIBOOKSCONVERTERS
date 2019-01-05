@@ -21,7 +21,7 @@ Result - in current directory two files<br>
 resultbook.html - book in html format Original - 170MB  resultbook.html ~12MB<br>
 shortbookcode.txt - code from tags pre<br>
 <br>
-https://html2pdf.com/ - Converting html in more comfortable format pdf.<br>
+Use utility wkhtmltopdf - Converting html in more comfortable format pdf.<br>
 
 
 # safari-download<br>
