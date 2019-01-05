@@ -1,0 +1,4574 @@
+﻿Conventions used
+
+class LazyDemo {
+ lazy val lazyVal =  {
+ println("Evaluating lazyVal")
+
+def lazyEvenPlusOne(xs: Vector[Int]): Vector[Int] = 
+ xs.withFilter { x => println(s"filter $x"); x % 2 = =  0 }
+
+$ mkdir css
+$ cd css
+
+Installing the Java SDK
+
+javac -version
+
+javac 1.8.0_112
+
+SBT synchronization
+
+name :=  'scala_fundamentals"
+
+version :=  "0.1"
+
+scalaVersion :=  "2.12.4"
+
+Using the Scala Console
+
+scala> 1+1
+
+res0: Int =  2
+
+Declaring variables
+
+scala> val x =  1 + 1
+x: Int =  2
+
+scala> val y: Int =  1 + 1
+y: Int =  2
+
+scala> var x =  1
+x: Int =  1
+
+scala> x =  2
+x: Int =  2
+
+scala> val y =  1
+y: Int =  1
+
+scala> y =  2
+<console>:12: error: reassignment to val
+ y =  2
+ ^
+
+Types
+
+scala> val str =  "Hello" + "World"
+str: String =  HelloWorld
+
+scala> val i =  1 + 1
+i: Int =  2
+
+scala> val b =  true + false
+<console>:11: error: type mismatch;
+ found : Boolean(false)
+
+Declaring and calling functions
+
+scala> def presentation(name: String, age: Int): String =  
+ "Hello, my name is " + name + ". I am " + age + " years old."
+presentation: (name: String, age: Int)String
+
+scala> presentation(name =  "Bob", age =  25)
+res1: String =  Hello, my name is Bob. I am 25 years old.
+
+scala> presentation(age =  25, name =  "Bob")
+
+res2: String =  Hello, my name is Bob. I am 25 years old.
+
+Side effects
+
+scala> val x =  println("hello")
+hello
+x: Unit =  ()
+
+scala> def printName(name: String): Unit =  println(name)
+printName: (name: String)Unit
+
+scala> val y =  {
+ var a =  1
+ a =  a+1
+}
+y: Unit =  ()
+
+scala> val z =  ()
+z: Unit =  ()
+
+scala> def helloWorld(): Unit =  println("Hello world")
+helloWorld: ()Unit
+
+scala> helloWorld()
+Hello world
+
+scala> def helloWorldPure: String =  "Hello world"
+helloWorldPure: String
+
+scala> val x =  helloWorldPure
+x: String =  Hello world
+
+If...else expression
+
+scala> def agePeriod(age: Int): String =  {
+ if (age >=  65)
+ "elderly"
+ else if (age >=  40 && age < 65)
+ "middle aged"
+ else if (age >=  18 && age < 40)
+ "young adult"
+ else
+ "child"
+}
+agePeriod: (age: Int)String
+
+scala> val ifElseWiden =  if (true) 2: Int else 2.0: Double
+ifElseWiden: Double =  2.0
+
+scala> val ifElseSupertype =  if (true) 2 else "2"
+ifElseSupertype: Any =  2
+
+scala> val ifWithoutElse =  if (true) 2
+ifWithoutElse: AnyVal =  2
+
+scala> val ifWithoutElseExpanded =  if (true) 2: Int else (): Unit
+ifWithoutElseExpanded: AnyVal =  2
+
+scala> def sideEffectingFunction(): Unit =  if (true) println("hello world")
+sideEffectingFunction: ()Unit
+
+Class
+
+scala> class Robot
+defined class Robot
+
+scala> val nao =  new Robot
+nao: Robot =  Robot@78318ac2
+
+scala> val naoBis =  nao
+naoBis: Robot =  Robot@78318ac2
+
+scala> nao eq naoBis
+res0: Boolean =  true
+
+scala> val johnny5 =  new Robot
+johnny5: Robot =  Robot@6b64bf61
+
+scala> nao eq johnny5
+res1: Boolean =  false
+
+scala> class Rectangle(width: Int, height: Int) {
+ val area: Int =  width * height
+ def scale(factor: Int): Rectangle =  new Rectangle(width * factor, height * factor)
+}
+defined class Rectangle
+
+scala> val square =  new Rectangle(2, 2)
+square: Rectangle =  Rectangle@2af9a5ef
+
+scala> square.area
+res0: Int =  4
+
+scala> val square2 =  square.scale(2)
+square2: Rectangle =  Rectangle@8d29719
+
+scala> square2.area
+res1: Int =  16
+
+scala> square.width
+<console>:13: error: value width is not a member of Rectangle
+ square.width
+
+scala> class Rectangle(val width: Int, val height: Int) {
+ val area: Int =  width * height
+ def scale(factor: Int): Rectangle =  new Rectangle(width * factor, height * factor)
+}
+defined class Rectangle
+
+scala> val rect =  new Rectangle(3, 2)
+rect: Rectangle =  Rectangle@3dbb7bb
+
+scala> rect.width
+res3: Int =  3
+
+scala> rect.height
+res4: Int =  2
+
+Class inheritance
+
+class Shape(val x: Int, val y: Int) {
+val isAtOrigin: Boolean =  x = =  0 && y = =  0
+}
+
+class Rectangle(x: Int, y: Int, val width: Int, val height: Int)
+extends Shape(x, y)
+
+class Square(x: Int, y: Int, width: Int)
+extends Rectangle(x, y, width, width)
+
+class Circle(x: Int, y: Int, val radius: Int)
+extends Shape(x, y)
+
+val rect =  new Rectangle(x =  0, y =  3, width =  3, height =  2)
+rect.x
+rect.y
+rect.isAtOrigin
+rect.width
+rect.height
+
+Subclass assignment
+
+val shape: Shape =  new Rectangle(x =  0, y =  3, width =  3, height =  2)
+val rectangle: Rectangle =  new Shape(x =  0, y =  3)
+
+Overriding methods
+
+class Shape(val x: Int, val y: Int) {
+def description: String =  s"Shape at (" + x + "," + y + ")"
+}
+
+class Rectangle(x: Int, y: Int, val width: Int, val height: Int)
+extends Shape(x, y) {
+override def description: String =  {
+super.description + s" - Rectangle " + width + " * " + height
+ }
+}
+
+val rect =  new Rectangle(x =  0, y =  3, width =  3, height =  2)
+rect.description
+
+res0: String =  Shape at (0,3) - Rectangle 3 * 2
+
+class Rectangle(x: Int, y: Int, val width: Int, val height: Int)
+extends Shape(x, y) {
+override def description: String =  {
+super.description + s" - Rectangle " + width + " * " + height
+ }
+
+def descThis: String =  this.description
+def descSuper: String =  super.description
+}
+
+val rect =  new Rectangle(x =  0, y =  3, width =  3, height =  2)
+rect.description
+rect.descThis
+rect.descSuper
+
+res0: String =  Shape at (0,3) - Rectangle 3 * 2
+res1: String =  Shape at (0,3) - Rectangle 3 * 2
+res2: String =  Shape at (0,3)
+
+Abstract class
+
+abstract class Shape(val x: Int, val y: Int) {
+val area: Double
+def description: String
+}
+
+class Rectangle(x: Int, y: Int, val width: Int, val height: Int)
+extends Shape(x, y) {
+
+val area: Double =  width * height
+
+def description: String = 
+"Rectangle " + width + " * " + height
+}
+
+Trait
+
+trait Description {
+def description: String
+}
+
+trait Coordinates extends Description {
+def x: Int
+def y: Int
+
+def description: String = 
+"Coordinates (" + x + ", " + y + ")"
+}
+
+trait Area {
+def area: Double
+}
+
+class Rectangle(val x: Int,
+val y: Int,
+val width: Int,
+val height: Int)
+extends Coordinates with Description with Area {
+
+val area: Double =  width * height
+
+override def description: String = 
+super.description + " - Rectangle " + width + " * " + height
+}
+
+val rect =  new Rectangle(x =  0, y =  3, width =  3, height =  2)
+rect.description
+
+res0: String =  Coordinates (0, 3) - Rectangle 3 * 2
+
+Case class
+
+case class Person(name: String, age: Int)
+val mikaelNew =  new Person("Mikael", 41)
+// 'new' is optional
+val mikael =  Person("Mikael", 41)
+// = =  compares values, not references
+mikael = =  mikaelNew
+// = =  is exactly the same as .equals
+mikael.equals(mikaelNew)
+
+val name =  mikael.name
+
+// a case class is immutable. The line below does not compile:
+//mikael.name =  "Nicolas"
+// you need to create a new instance using copy
+val nicolas =  mikael.copy(name =  "Nicolas")
+
+Companion object
+
+case class City(name: String, urbanArea: Int)
+object City {
+ val London =  City("London", 1738)
+ val Lausanne =  City("Lausanne", 41)
+}
+
+case class Person(firstName: String, lastName: String, city: City)
+object Person {
+ def apply(fullName: String, city: City): Person =  {
+ val splitted =  fullName.split(" ")
+ new Person(firstName =  splitted(0), lastName =  splitted(1), city =  city)
+ }
+}
+
+// Uses the default apply method
+val m1 =  Person("Mikael", "Valot", City.London)
+// Call apply with fullName
+val m2 =  Person("Mikael Valot", City.London)
+// We can omit 'apply'
+val n =  Person.apply("Nicolas Jorand", City.Lausanne)
+
+Creating the Main object
+
+object Main extends App {
+
+}
+
+Writing the first unit test
+
+name :=  "Examples"
+version :=  "0.1"
+scalaVersion :=  "2.12.4"
+resolvers +=  "Artima Maven Repository" at "http://repo.artima.com/releases"
+libraryDependencies +=  "org.scalatest" %% "scalatest" % "3.0.4" % "test"
+
+class MainSpec extends WordSpec with Matchers {
+
+}
+
+import org.scalatest.{WordSpec, Matchers}
+
+class MainSpec extends WordSpec with Matchers {
+
+}
+
+class MainSpec extends WordSpec with Matchers {
+ "A Person" should {
+ "be instantiated with a age and name" in {
+val john =  Person(firstName =  "John", lastName =  "Smith", 42)
+ john.firstName should be("John")
+ john.lastName should be("Smith")
+ john.age should be(42)
+ }
+ }
+}
+
+case class Person(firstName: String, lastName: String, age: Int)
+
+Implementing another feature
+
+"Get a human readable representation of the person" in {
+val paul =  Person(firstName =  "Paul", lastName =  "Smith", age =  24)
+ paul.description should be("Paul Smith is 24 years old")
+}
+
+def description =  s"$firstName $lastName is $age ${if (age <=  1) "year" else "years"} old"
+
+"The Person companion object" should {
+val (akira, peter, nick) =  (
+Person(firstName =  "Akira", lastName =  "Sakura", age =  12),
+Person(firstName =  "Peter", lastName =  "M=C3=BCller", age =  34),
+Person(firstName =  "Nick", lastName =  "Tagart", age =  52)
+ )
+"return a list of adult person" in {
+val ref =  List(akira, peter, nick)
+ Person.filterAdult(ref) should be(List(peter, nick))
+ }
+"return an empty list if no adult in the list" in {
+val ref =  List(akira)
+ Person.filterAdult(ref) should be(List.empty[Person])
+ }
+}
+
+object Person {
+ def filterAdult(persons: List[Person]) : List[Person] =  {
+ for {
+ person <- persons
+ if (person.age >=  18)
+ } yield (person)
+ }
+}
+
+def filterAdult(persons: List[Person]) : List[Person] =  {
+ persons.filter(_.age >=  18)
+}
+
+Implementing the Main method
+
+object Main extends App {
+val persons =  List(
+Person(firstName =  "Akira", lastName =  "Sakura", age =  12),
+Person(firstName =  "Peter", lastName =  "M=C3=BCller", age =  34),
+Person(firstName =  "Nick", lastName =  "Tagart", age =  52))
+
+val adults =  Person.filterAdult(persons)
+val descriptions =  adults.map(p => p.description).mkString("\n\t")
+println(s"The adults are \n\t$descriptions")
+}
+
+Writing a unit test for the accumulation phase
+
+package retcalc
+
+import org.scalactic.{Equality, TolerantNumerics, TypeCheckedTripleEquals}
+import org.scalatest.{Matchers, WordSpec}
+
+class RetCalcSpec extends WordSpec with Matchers with TypeCheckedTripleEquals {
+
+implicit val doubleEquality: Equality[Double] =  
+ TolerantNumerics.tolerantDoubleEquality(0.0001)
+
+"RetCalc.futureCapital" should {
+"calculate the amount of savings I will have in n months" in {
+val actual =  RetCalc.futureCapital(
+ interestRate =  0.04 / 12, nbOfMonths =  25 * 12, 
+netIncome =  3000, currentExpenses =  2000, 
+initialCapital =  10000)
+val expected =  541267.1990
+actual should = = = (expected)
+ }
+}
+
+implicit val doubleEquality: Equality[Double] = 
+ TolerantNumerics.tolerantDoubleEquality(0.0001)
+
+scala> val double1 =  0.01 -0.001 + 0.001
+double1: Double =  0.010000000000000002
+
+scala> double1 = =  0.01
+res2: Boolean =  false
+
+package retcalc
+
+object RetCalc {
+def futureCapital(interestRate: Double, nbOfMonths: Int, netIncome: 
+ Int, currentExpenses: Int, initialCapital: Double): Double =  ???
+}
+
+Implementing futureCapital
+
+def futureCapital(interestRate: Double, nbOfMonths: Int, netIncome: Int,currentExpenses: Int, initialCapital: Double): Double =  {
+val monthlySavings =  netIncome - currentExpenses
+
+def nextCapital(accumulated: Double, month: Int): Double = 
+ accumulated * (1 + interestRate) + monthlySavings
+
+ (0 until nbOfMonths).foldLeft(initialCapital)(nextCapital)
+}
+
+def foldLeft[B](z: B)(op: (B, A) =>B): B
+
+Refactoring the production code
+
+def futureCapital(interestRate: Double, nbOfMonths: Int, netIncome: Int,currentExpenses: Int, initialCapital: Double): Double =  {
+val monthlySavings =  netIncome - currentExpenses
+ (0 until nbOfMonths).foldLeft(initialCapital)(
+ (accumulated, _) => accumulated * (1 + interestRate) + 
+ monthlySavings)
+}
+
+(param1, param2, ..., paramN) => function body.
+
+Writing a test for the decumulation phase
+
+"RetCalc.futureCapital" should {
+"calculate how much savings will be left after having taken a pension 
+ for n months" in {
+val actual =  RetCalc.futureCapital(
+ interestRate =  0.04/12, nbOfMonths =  40 * 12,
+netIncome =  0, currentExpenses =  2000, initialCapital =  
+541267.1990)
+val expected =  309867.53176
+actual should = = = (expected)
+ }
+}
+
+Writing a failing unit test
+
+"RetCalc.simulatePlan" should {
+"calculate the capital at retirement and the capital after death" in {
+val (capitalAtRetirement, capitalAfterDeath) =  
+ RetCalc.simulatePlan(
+ interestRate =  0.04 / 12,
+nbOfMonthsSaving =  25 * 12, nbOfMonthsInRetirement =  40 * 12,
+netIncome =  3000, currentExpenses =  2000,
+initialCapital =  10000)
+ capitalAtRetirement should = = =  (541267.1990)
+ capitalAfterDeath should = = =  (309867.5316)
+ }
+}
+
+def simulatePlan(interestRate: Double,
+nbOfMonthsSavings: Int, nbOfMonthsInRetirement: Int,
+netIncome: Int, currentExpenses: Int, initialCapital: 
+Double) : (Double, Double) =  ???
+
+Working with tuples
+
+scala> val tuple3 =  (1, "hello", 2.0)
+tuple3: (Int, String, Double) =  (1,hello,2.0)
+
+scala> tuple3._1
+res1: Int =  1
+
+scala> tuple3._2
+res2: String =  hello
+
+scala> val (a, b, c) =  tuple3
+
+a: Int =  1
+b: String =  hello
+c: Double =  2.0
+
+Implementing simulatePlan
+
+def simulatePlan(interestRate: Double,
+nbOfMonthsSaving: Int, nbOfMonthsInRetirement: Int,
+netIncome: Int, currentExpenses: Int, initialCapital: 
+ Double) : (Double, Double) =  {
+val capitalAtRetirement =  futureCapital(
+ interestRate =  interestRate, nbOfMonths =  nbOfMonthsSaving,
+netIncome =  netIncome, currentExpenses =  currentExpenses,
+initialCapital =  initialCapital)
+
+val capitalAfterDeath =  futureCapital(
+ interestRate =  interestRate, nbOfMonths =  nbOfMonthsInRetirement,
+netIncome =  0, currentExpenses =  currentExpenses,
+initialCapital =  capitalAtRetirement)
+
+ (capitalAtRetirement, capitalAfterDeath)
+}
+
+Writing a failing test for nbOfMonthsSaving
+
+"RetCalc.nbOfMonthsSaving" should {
+"calculate how long I need to save before I can retire" in {
+val actual =  RetCalc.nbOfMonthsSaving(
+ interestRate =  0.04 / 12, nbOfMonthsInRetirement =  40 * 12,
+netIncome =  3000, currentExpenses =  2000, initialCapital =  10000)
+val expected =  23 * 12 + 1
+actual should = = = (expected)
+ }
+}
+
+Writing the function body
+
+def nbOfMonthsSaving(interestRate: Double, nbOfMonthsInRetirement: Int,
+netIncome: Int, currentExpenses: Int, initialCapital: Double): Int =  {
+def loop(months: Int): Int =  {
+val (capitalAtRetirement, capitalAfterDeath) =  simulatePlan(
+ interestRate =  interestRate,
+nbOfMonthsSaving =  months, nbOfMonthsInRetirement =  
+ nbOfMonthsInRetirement,
+netIncome =  netIncome, currentExpenses =  currentExpenses,
+initialCapital =  initialCapital)
+
+val returnValue = 
+if (capitalAfterDeath >0.0)
+ months
+else
+loop(months + 1)
+ returnValue
+ }
+ loop(0)
+}
+
+Understanding tail-recursion
+
+"RetCalc.nbOfMonthsSaving" should {
+"calculate how long I need to save before I can retire" in {...}
+
+"not crash if the resulting nbOfMonths is very high" in {
+val actual =  RetCalc.nbOfMonthsSaving(
+ interestRate =  0.01 / 12, nbOfMonthsInRetirement =  40 * 12,
+netIncome =  3000, currentExpenses =  2999, initialCapital =  0)
+val expected =  8280
+actual should = = = (expected)
+ }
+
+"not loop forever if I enter bad parameters" in pending
+
+@tailrec
+def loop(months: Int): Int =  {
+val (capitalAtRetirement, capitalAfterDeath) =  simulatePlan(
+ interestRate =  interestRate,
+nbOfMonthsSaving =  months, nbOfMonthsInRetirement =  
+ nbOfMonthsInRetirement,
+netIncome =  netIncome, currentExpenses =  currentExpenses,
+initialCapital =  initialCapital)
+
+if (capitalAfterDeath >0.0)
+ months
+else
+loop(months + 1)
+
+Ensuring termination
+
+"RetCalc.nbOfMonthsSaving" should {
+"calculate how long I need to save before I can retire" in {...}
+
+"not crash if the resulting nbOfMonths is very high" in {...}
+
+"not loop forever if I enter bad parameters" in {
+val actual =  RetCalc.nbOfMonthsSavingV2(
+ interestRate =  0.04 / 12, nbOfMonthsInRetirement =  40 * 12,
+netIncome =  1000, currentExpenses =  2000, initialCapital =  10000)
+actual should = = =  (Int.MaxValue)
+ }
+}
+
+def nbOfMonthsSaving(interestRate: Double, nbOfMonthsInRetirement: Int,
+netIncome: Int, currentExpenses: Int, initialCapital: Double): Int =  {
+@tailrec
+def loop(nbOfMonthsSaving: Int): Int =  {...}
+
+if (netIncome > currentExpenses)
+ loop(0)
+else
+Int.MaxValue
+}
+
+Defining an algebraic data type
+
+sealed trait Shape
+case class Circle(diameter: Double) extends Shape
+case class Rectangle(width: Double, height: Double) extends Shape
+
+package retcalc
+
+sealed trait Returns
+case class FixedReturns(annualRate: Double) extends Returns
+case class VariableReturns(returns: Vector[VariableReturn]) extends Returns
+case class VariableReturn(monthId: String, monthlyRate: Double)
+
+Filtering returns for a specific period
+
+"VariableReturns.fromUntil" should {
+"keep only a window of the returns" in {
+val variableReturns =  VariableReturns(Vector.tabulate(12) { i =>
+val d =  (i + 1).toDouble
+VariableReturn(f"2017.$d%02.0f", d)
+ })
+
+ variableReturns.fromUntil("2017.07", "2017.09").returns should = = = 
+ (Vector(
+VariableReturn("2017.07", 7.0),
+VariableReturn("2017.08", 8.0)
+ ))
+
+ variableReturns.fromUntil("2017.10", "2018.01").returns should = = = 
+ (Vector(
+VariableReturn("2017.10", 10.0),
+VariableReturn("2017.11", 11.0),
+VariableReturn("2017.12", 12.0)
+ ))
+ }
+}
+
+case class VariableReturns(returns: Vector[VariableReturn]) extends Returns {
+def fromUntil(monthIdFrom: String, monthIdUntil: String): 
+ VariableReturns = 
+VariableReturns(
+ returns
+ .dropWhile(_.monthId !=  monthIdFrom)
+ .takeWhile(_.monthId !=  monthIdUntil))
+}
+
+Pattern matching
+
+"RetCalc.futureCapital" should {
+ "calculate the amount of savings I will have in n months" in {
+ // Excel = -FV(0.04/12,25*12,1000,10000,0)
+ val actual =  RetCalc.futureCapital(FixedReturns(0.04), 
+ nbOfMonths =  25 * 12, netIncome =  3000, 
+ currentExpenses =  2000, initialCapital =  10000).right.value
+ val expected =  541267.1990
+ actual should = = = (expected)
+ }
+
+ "calculate how much savings will be left after having taken a 
+ pension for n months" in {
+ val actual =  RetCalc.futureCapital(FixedReturns(0.04), 
+ nbOfMonths =  40 * 12, netIncome =  0, currentExpenses =  2000, 
+ initialCapital =  541267.198962).right.value
+ val expected =  309867.5316
+ actual should = = = (expected)
+ }
+ }
+
+def futureCapital(returns: Returns, nbOfMonths: Int, netIncome: Int, currentExpenses: Int,
+initialCapital: Double): Double =  {
+val monthlySavings =  netIncome - currentExpenses
+ (0 until nbOfMonths).foldLeft(initialCapital) {
+case (accumulated, month) =>
+ accumulated * (1 + Returns.monthlyRate(returns, month)) + 
+ monthlySavings
+ }
+}
+
+object Returns {
+def monthlyRate(returns: Returns, month: Int): Double =  ???
+}
+
+class ReturnsSpec extends WordSpec with Matchers with TypeCheckedTripleEquals {
+
+implicit val doubleEquality: Equality[Double] = 
+ TolerantNumerics.tolerantDoubleEquality(0.0001)
+
+"Returns.monthlyRate" should {
+"return a fixed rate for a FixedReturn" in {
+ Returns.monthlyRate(FixedReturns(0.04), 0) should = = = (0.04 / 12)
+ Returns.monthlyRate(FixedReturns(0.04), 10) should = = = (0.04 / 12)
+ }
+
+ val variableReturns =  VariableReturns(Vector(
+ VariableReturn("2000.01", 0.1), 
+ VariableReturn("2000.02", 0.2)))
+"return the nth rate for VariableReturn" in {
+ Returns.monthlyRate(variableReturns, 0) should = = = (0.1)
+ Returns.monthlyRate(variableReturns, 1) should = = = (0.2)
+ }
+
+"roll over from the first rate if n > length" in {
+ Returns.monthlyRate(variableReturns, 2) should = = = (0.1)
+ Returns.monthlyRate(variableReturns, 3) should = = = (0.2)
+ Returns.monthlyRate(variableReturns, 4) should = = = (0.1)
+ }
+ }
+
+def monthlyRate(returns: Returns, month: Int): Double =  returns match {
+case FixedReturns(r) => r / 12
+case VariableReturns(rs) => rs(month % rs.length).monthlyRate
+}
+
+scala> Vector(1, 2, 3, 4) match {
+ case head +: second +: tail => tail
+}
+res0: scala.collection.immutable.Vector[Int] =  Vector(3, 4)
+
+scala> Vector(1, 2, 3, 4) match {
+ case head +: second +: tail => second
+}
+
+scala> ("0", 1, (2.0, 3.0)) match {
+ case ("0", int, (d0, d1)) => d0 + d1
+}
+res2: Double =  5.0
+
+scala> "hello" match {
+ case "hello" | "world" => 1
+ case "hello world" => 2
+}
+res3: Int =  1
+
+scala> def present(p: Person): String =  p match {
+ case Person(name, age) if age < 18 => s"$name is a child"
+ case p => s"${p.name} is an adult" 
+}
+present: (p: Person)String
+
+def monthlyRate(returns: Returns, month: Int): Double =  returns match {
+// case FixedReturns(r) => r / 12
+case VariableReturns(rs) => rs(month % rs.length).monthlyRate
+ }
+
+Warning:(27, 59) match may not be exhaustive.
+It would fail on the following input: FixedReturns(_)
+ def monthlyRate(returns: Returns, month: Int): Double =  returns match {
+
+Refactoring simulatePlan
+
+val params =  RetCalcParams(
+ nbOfMonthsInRetirement =  40 * 12,
+ netIncome =  3000,
+ currentExpenses =  2000,
+ initialCapital =  10000)
+
+"RetCalc.simulatePlan" should {
+"calculate the capital at retirement and the capital after death" in {
+val (capitalAtRetirement, capitalAfterDeath) =  
+ RetCalc.simulatePlan(
+ returns =  FixedReturns(0.04), params, nbOfMonthsSavings =  25*12)
+
+ capitalAtRetirement should = = =  (541267.1990)
+ capitalAfterDeath should = = =  (309867.5316)
+ }
+
+"use different returns for capitalisation and drawdown" in {
+val nbOfMonthsSavings =  25 * 12
+val returns =  VariableReturns(
+Vector.tabulate(nbOfMonthsSavings + 
+params.nbOfMonthsInRetirement)(i =>
+if (i < nbOfMonthsSavings)
+VariableReturn(i.toString, 0.04 / 12)
+else
+VariableReturn(i.toString, 0.03 / 12)))
+val (capitalAtRetirement, capitalAfterDeath) = 
+ RetCalc.simulatePlan(returns, params, nbOfMonthsSavings)
+capitalAtRetirement should = = = (541267.1990)
+capitalAfterDeath should = = = (-57737.7227)
+ }
+}
+
+case class RetCalcParams(nbOfMonthsInRetirement: Int,
+netIncome: Int,
+currentExpenses: Int,
+initialCapital: Double)
+
+object RetCalc {
+def simulatePlan(returns: Returns, params: RetCalcParams, 
+nbOfMonthsSavings: Int)
+ : (Double, Double) =  {
+import params._
+val capitalAtRetirement =  futureCapital(
+ returns =  returns,
+nbOfMonths =  nbOfMonthsSavings,
+netIncome =  netIncome, currentExpenses =  currentExpenses,
+initialCapital =  initialCapital)
+
+val capitalAfterDeath =  futureCapital(
+ returns =  OffsetReturns(returns, nbOfMonthsSavings),
+nbOfMonths =  nbOfMonthsInRetirement,
+netIncome =  0, currentExpenses =  currentExpenses,
+initialCapital =  capitalAtRetirement)
+
+ (capitalAtRetirement, capitalAfterDeath)
+ }
+
+"Returns.monthlyReturn" should {
+"return a fixed rate for a FixedReturn" in {...}
+
+val variableReturns =  VariableReturns(
+Vector(VariableReturn("2000.01", 0.1), VariableReturn("2000.02", 0.2)))
+
+"return the nth rate for VariableReturn" in {...}
+
+"return an error if n > length" in {...}
+
+"return the n+offset th rate for OffsetReturn" in {
+ val returns =  OffsetReturns(variableReturns, 1)
+ Returns.monthlyRate(returns, 0).right.value should = = = (0.2)
+ }
+}
+
+sealed trait Returns
+case class FixedReturns(annualRate: Double) extends Returns
+case class VariableReturn(monthId: String, monthlyRate: Double)
+case class OffsetReturns(orig: Returns, offset: Int) extends Returns
+
+object Returns {
+ def monthlyRate(returns: Returns, month: Int): Double =  returns match {
+ case FixedReturns(r) => r / 12
+ case VariableReturns(rs) => rs(month % rs.length).monthlyRate
+ case OffsetReturns(rs, offset) => monthlyRate(rs, month + offset)
+ }
+}
+
+Writing the unit test using the column selection mode
+
+package retcalc
+
+import org.scalatest.{Matchers, WordSpec}
+
+class EquityDataSpec extends WordSpec with Matchers {
+"EquityData.fromResource" should {
+"load market data from a tsv file" in {
+val data =  EquityData.fromResource("sp500_2017.tsv")
+ data should = = = (Vector(
+EquityData("2016.09", 2157.69, 45.03),
+EquityData("2016.10", 2143.02, 45.25),
+EquityData("2016.11", 2164.99, 45.48),
+EquityData("2016.12", 2246.63, 45.7),
+EquityData("2017.01", 2275.12, 45.93),
+EquityData("2017.02", 2329.91, 46.15),
+EquityData("2017.03", 2366.82, 46.38),
+EquityData("2017.04", 2359.31, 46.66),
+EquityData("2017.05", 2395.35, 46.94),
+EquityData("2017.06", 2433.99, 47.22),
+EquityData("2017.07", 2454.10, 47.54),
+EquityData("2017.08", 2456.22, 47.85),
+EquityData("2017.09", 2492.84, 48.17)
+ ))
+ }
+ }
+
+"EquityData.monthlyDividend" should {
+"return a monthly dividend" in {
+ EquityData("2016.09", 2157.69, 45.03).monthlyDividend should = = =  
+ (45.03 / 12)
+ }
+ }
+}
+
+month   SP500  dividend
+2016.09 2157.69 45.03
+2016.10 2143.02 45.25
+2016.11 2164.99 45.48
+
+Loading the file with Source
+
+package retcalc
+
+import scala.io.Source
+
+case class EquityData(monthId: String, value: Double, annualDividend: Double) {
+val monthlyDividend: Double =  annualDividend / 12
+}
+
+object EquityData {
+def fromResource(resource: String): Vector[EquityData] = 
+ Source.fromResource(resource).getLines().drop(1).map { line =>
+val fields =  line.split("\t")
+EquityData(
+ monthId =  fields(0), 
+value =  fields(1).toDouble, 
+annualDividend =  fields(2).toDouble)
+ }.toVector
+}
+
+scala> val iterator =  (1 to 3).iterator
+iterator: Iterator[Int] =  non-empty iterator
+
+scala> iterator foreach println
+1
+2
+3
+
+scala> iterator foreach println
+
+scala>
+
+Loading inflation data
+
+package retcalc
+
+import org.scalatest.{Matchers, WordSpec}
+
+class InflationDataSpec extends WordSpec with Matchers {
+"InflationData.fromResource" should {
+"load CPI data from a tsv file" in {
+val data =  InflationData.fromResource("cpi_2017.tsv")
+ data should = = = (Vector(
+InflationData("2016.09", 241.428),
+InflationData("2016.10", 241.729),
+InflationData("2016.11", 241.353),
+InflationData("2016.12", 241.432),
+InflationData("2017.01", 242.839),
+InflationData("2017.02", 243.603),
+InflationData("2017.03", 243.801),
+InflationData("2017.04", 244.524),
+InflationData("2017.05", 244.733),
+InflationData("2017.06", 244.955),
+InflationData("2017.07", 244.786),
+InflationData("2017.08", 245.519),
+InflationData("2017.09", 246.819)
+ ))
+ }
+ }
+}
+
+package retcalc
+
+import scala.io.Source
+
+case class InflationData(monthId: String, value: Double)
+
+object InflationData {
+def fromResource(resource: String): Vector[InflationData] = 
+ Source.fromResource(resource).getLines().drop(1).map { line =>
+val fields =  line.split("\t")
+InflationData(monthId =  fields(0), value =  fields(1).toDouble)
+ }.toVector
+}
+
+Computing real returns
+
+"Returns.fromEquityAndInflationData" should {
+"compute real total returns from equity and inflation data" in {
+val equities =  Vector(
+EquityData("2117.01", 100.0, 10.0),
+EquityData("2117.02", 101.0, 12.0),
+EquityData("2117.03", 102.0, 12.0))
+
+val inflations =  Vector(
+InflationData("2117.01", 100.0),
+InflationData("2117.02", 102.0),
+InflationData("2117.03", 102.0))
+
+val returns =  Returns.fromEquityAndInflationData(equities, 
+inflations)
+returns should = = = (VariableReturns(Vector(
+VariableReturn("2117.02", (101.0 + 12.0 / 12) / 100.0 - 102.0 / 
+100.0),
+VariableReturn("2117.03", (102.0 + 12.0 / 12) / 101.0 - 102.0 / 
+102.0))))
+ }
+}
+
+object Returns {
+ def fromEquityAndInflationData(equities: Vector[EquityData],
+ inflations: Vector[InflationData]):
+ VariableReturns =  {
+ VariableReturns(equities.zip(inflations).sliding(2).collect {
+ case (prevEquity, prevInflation) +: (equity, inflation) +:
+ Vector() =>
+ val inflationRate =  inflation.value / prevInflation.value
+ val totalReturn = 
+ (equity.value + equity.monthlyDividend) / prevEquity.value
+ val realTotalReturn =  totalReturn - inflationRate
+
+ VariableReturn(equity.monthId, realTotalReturn)
+ }.toVector)
+}
+
+scala> Vector(1,2).zip(Vector("a", "b", "c"))
+res0: scala.collection.immutable.Vector[(Int, String)] =  Vector((1,a), (2,b))
+
+scala> val it =  Vector(1, 2, 3, 4).sliding(2)
+it: Iterator[scala.collection.immutable.Vector[Int]] =  non-empty iterator
+
+scala> it.toVector
+res0: Vector[scala.collection.immutable.Vector[Int]] =  
+Vector(Vector(1, 2), Vector(2, 3), Vector(3, 4))
+
+scala> Vector(1).sliding(2).toVector
+res12: Vector[scala.collection.immutable.Vector[Int]] =  Vector(Vector(1))
+
+scala> val v =  Vector(1, 2, 3)
+v: scala.collection.immutable.Vector[Int] =  Vector(1, 2, 3)
+
+scala> v.filter(i => i !=  2).map(_ + 1)
+res15: scala.collection.immutable.Vector[Int] =  Vector(2, 4)
+
+scala> v.collect { case i if i !=  2 => i + 1 }
+res16: scala.collection.immutable.Vector[Int] =  Vector(2, 4)
+
+case (prevEquity, prevInflation) +: (equity, inflation) +: Vector() =>
+
+Creating the App object
+
+package retcalc
+
+import org.scalactic.TypeCheckedTripleEquals
+import org.scalatest.{Matchers, WordSpec}
+
+class SimulatePlanAppIT extends WordSpec with Matchers with TypeCheckedTripleEquals {
+"SimulatePlanApp.strMain" should {
+"simulate a retirement plan using market returns" in {
+val actualResult =  SimulatePlanApp.strMain(
+Array("1997.09,2017.09", "25", "40", "3000", "2000", "10000"))
+
+val expectedResult = 
+s"""
+ |Capital after 25 years of savings: 499923
+ |Capital after 40 years in retirement: 586435
+ """.stripMargin
+ actualResult should = = =  (expectedResult)
+ }
+ }
+}
+
+package retcalc
+
+object SimulatePlanApp extends App {
+println(strMain(args))
+
+def strMain(args: Array[String]): String =  {
+val (from +: until +: Nil) =  args(0).split(",").toList
+val nbOfYearsSaving =  args(1).toInt
+val nbOfYearsInRetirement =  args(2).toInt
+
+val allReturns =  Returns.fromEquityAndInflationData(
+ equities =  EquityData.fromResource("sp500.tsv"),
+inflations =  InflationData.fromResource("cpi.tsv"))
+val (capitalAtRetirement, capitalAfterDeath) =  
+ RetCalc.simulatePlan(
+ returns =  allReturns.fromUntil(from, until),
+params =  RetCalcParams(
+ nbOfMonthsInRetirement =  nbOfYearsInRetirement * 12,
+netIncome =  args(3).toInt,
+currentExpenses =  args(4).toInt,
+initialCapital =  args(5).toInt),
+nbOfMonthsSavings =  nbOfYearsSaving * 12)
+
+s"""
+ |Capital after $nbOfYearsSaving years of savings: 
+${capitalAtRetirement.round}
+ |Capital after $nbOfYearsInRetirement years in retirement: 
+${capitalAfterDeath.round}
+""".stripMargin
+ }
+}
+
+1997.09,2017.09 25 40 3000 2000 10000
+
+Packaging the application
+
+addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.6")
+
+name :=  "retirement_calculator"
+
+version :=  "0.1"
+
+scalaVersion :=  "2.12.4"
+
+libraryDependencies +=  "org.scalatest" %% "scalatest" % "3.0.4" % "test"
+
+mainClass in Compile :=  Some("retcalc.SimulatePlanApp")
+
+[info] Checking every *.class/*.jar file's SHA-1.
+[info] Merging files...
+[warn] Merging 'META-INF/MANIFEST.MF' with strategy 'discard'
+[warn] Strategy 'discard' was applied to a file
+[info] SHA-1: 7b7710bf370159c549a11754bf66302a76c209b2
+[info] Packaging /home/mikael/projects/scala_fundamentals/retirement_calculator/target/scala-2.12/retirement_calculator-assembly-0.1.jar ...
+[info] Done packaging.
+[success] Total time: 11 s, completed 14-Jan-2018 12:23:39
+
+$ java -jar <path to your .jar file> 1997.09,2017.09 25 40 3000 2000 10000
+
+Capital after 25 years of savings: 499923
+Capital after 40 years in retirement: 586435
+
+$ java -jar <path to your .jar file> 2000.01,2010.01 25 40 3000 2000 10000
+
+Capital after 25 years of savings: 225209
+Capital after 40 years in retirement: -510074
+
+$ java -jar <path to your .jar file> 1950.01,1960.01 25 40 3000 2000 10000
+
+Capital after 25 years of savings: 4505196
+Capital after 40 years in retirement: 2077953853
+
+Throwing exceptions
+
+case class Person(name: String, age: Int)
+case class AgeNegativeException(message: String) extends Exception(message)
+
+def createPerson(description: String): Person =  {
+val split =  description.split(" ")
+val age =  split(1).toInt
+if (age <0)
+throw AgeNegativeException(s"age: $age should be > 0")
+else
+Person(split(0), age)
+
+scala> createPerson("John 25")
+res0: Person =  Person(John,25)
+
+scala>createPerson("John25")
+java.lang.ArrayIndexOutOfBoundsException: 1
+ at .createPerson(<console>:17)
+ ... 24 elided
+
+scala>createPerson("John -25")
+AgeNegativeException: age: -25 should be > 0
+ at .createPerson(<console>:19)
+ ... 24 elided
+
+scala>createPerson("John 25.3")
+java.lang.NumberFormatException: For input string: "25.3"
+ at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+ at java.lang.Integer.parseInt(Integer.java:580)
+ at java.lang.Integer.parseInt(Integer.java:615)
+ at scala.collection.immutable.StringLike.toInt(StringLike.scala:301)
+ at scala.collection.immutable.StringLike.toInt$(StringLike.scala:301)
+ at scala.collection.immutable.StringOps.toInt(StringOps.scala:29)
+ at .createPerson(<console>:17)
+ ... 24 elided
+
+Catching exceptions
+
+def averageAge(descriptions: Vector[String]): Double =  {
+val total =  descriptions.map(createPerson).map(_.age).sum
+ total / descriptions.length
+}
+
+import scala.util.control.NonFatal
+def personsSummary(personsInput: String): String =  {
+val descriptions =  personsInput.split("\n").toVector
+val avg =  try {
+ averageAge(descriptions)
+ } catch {
+case e:AgeNegativeException =>
+println(s"one of the persons has a negative age: $e")
+0
+case NonFatal(e) =>
+println(s"something was wrong in the input: $e")
+0
+}
+s"${descriptions.length} persons with an average age of $avg"
+}
+
+scala> personsSummary(
+ """John 25
+ |Sharleen 45""".stripMargin)
+res1: String =  2 persons with an average age of 35.0
+
+scala> personsSummary(
+ """John 25
+ |Sharleen45""".stripMargin)
+something was wrong in the input: java.lang.ArrayIndexOutOfBoundsException: 1
+res2: String =  2 persons with an average age of 0.0
+
+scala> personsSummary(
+ """John -25
+ |Sharleen 45""".stripMargin)
+one of the persons has a negative age: $line5.$read$$iw$$iw$AgeNegativeException: age should be > 0
+res3: String =  2 persons with an average age of 0.0
+
+Using the finally block
+
+import java.io.IOException
+import java.net.URL
+import scala.annotation.tailrec
+
+val stream =  new URL("https://www.packtpub.com/").openStream()
+val htmlPage: String = 
+try {
+@tailrec
+def loop(builder: StringBuilder): String =  {
+val i =  stream.read()
+if (i !=  -1)
+ loop(builder.append(i.toChar))
+else
+builder.toString()
+ }
+ loop(StringBuilder.newBuilder)
+ } catch {
+case e: IOException =>s"cannot read URL: $e"
+}
+finally {
+ stream.close()
+ }
+
+val htmlPage2 =  scala.io.Source.fromURL("https://www.packtpub.com/").mkString
+
+Defining pure functions
+
+def pureSquare(x: Int): Int =  x * x
+val pureExpr =  pureSquare(4) + pureSquare(3)
+// pureExpr: Int =  25
+
+val pureExpr2 =  16 + 9
+// pureExpr2: Int =  25
+
+var globalState =  1
+def impure(x: Int): Int =  {
+ globalState =  globalState + x
+ globalState
+}
+val impureExpr =  impure(3)
+// impureExpr: Int =  4
+val impureExpr2 =  4
+
+import scala.util.Random
+def impureRand(): Int =  Random.nextInt()
+impureRand()
+//res0: Int =  -528134321
+val impureExprRand =  impureRand() + impureRand()
+//impureExprRand: Int =  681209667
+val impureExprRand2 =  -528134321 + -528134321
+
+def pureRand(seed: Int): Int =  new Random(seed).nextInt()
+pureRand(10)
+//res1: Int =  -1157793070
+val pureExprRand =  pureRand(10) + pureRand(10)
+//pureExprRand: Int =  1979381156
+val pureExprRand2 =  -1157793070 + -1157793070
+//pureExprRand2: Int =  1979381156
+
+def impurePrint(): Unit =  println("Hello impure")
+val impureExpr1: Unit =  impurePrint()
+val impureExpr2: Unit =  ()
+
+Best practices
+
+def foldLeft[B](z: B)(op: (B, A) =>B): B =  {
+var result =  z
+this foreach (x => result =  op(result, x))
+ result
+}
+
+Showing how exceptions break referential transparency
+
+case class Rectangle(width: Double, height: Double)
+
+def area(r: Rectangle): Double = 
+ if (r.width > 5 || r.height > 5)
+ throw new IllegalArgumentException("too big")
+ else
+ r.width * r.height
+
+val area1 =  area(3, 2)
+val area2 =  area(4, 2)
+
+val total =  try {
+ area1 + area2
+} catch {
+ case e: IllegalArgumentException => 0
+}
+
+val total =  try {
+ area(3, 2) + area(4, 2)
+} catch {
+case e: IllegalArgumentException =>0
+}
+
+val area1 =  area(6, 2)
+val area2 =  area(4, 2)
+
+val total =  try {
+ area1 + area2
+} catch {
+case e: IllegalArgumentException =>0
+}
+
+val total =  try {
+ area(6, 2) + area(4, 2)
+} catch {
+case e: IllegalArgumentException =>0
+}
+
+Manipulating instances of Option
+
+sealed trait Option[+A]
+case class Some[A](value: A) extends Option[A]
+case object None extends Option[Nothing]
+
+val opt0: Option[Int] =  None
+// opt0: Option[Int] =  None
+
+val opt1: Option[Int] =  Some(1)
+// opt1: Option[Int] =  Some(1)
+
+val list0 =  List.empty[String]
+list0.headOption
+// res0: Option[String] =  None
+list0.lastOption
+// res1: Option[String] =  None
+
+val list3 =  List("Hello", "World")
+list3.headOption
+// res2: Option[String] =  Some(Hello)
+list3.lastOption
+// res3: Option[String] =  Some(World)
+
+def personDescription(name: String, db: Map[String, Int]): String = 
+ db.get(name) match {
+case Some(age) =>s"$name is $age years old"
+case None =>s"$name is not present in db"
+}
+
+val db =  Map("John" ->25, "Rob" ->40)
+personDescription("John", db)
+// res4: String =  John is 25 years old
+personDescription("Michael", db)
+// res5: String =  Michael is not present in db
+
+def personDesc(name: String, db: Map[String, Int]): String =  {
+ val optString: Option[String] =  db.get(name).map(age => s"$name is 
+ $age years old")
+ optString.getOrElse(s"$name is not present in db")
+}
+
+Composing transformations with for... yield
+
+def averageAgeA(name1: String, name2: String, db: Map[String, Int]): Option[Double] =  {
+val optOptAvg: Option[Option[Double]] = 
+ db.get(name1).map(age1 =>
+ db.get(name2).map(age2 =>
+ (age1 + age2).toDouble / 2))
+ optOptAvg.flatten
+}
+val db =  Map("John" -> 25, "Rob" -> 40)
+averageAge("John", "Rob", db)
+// res6: Option[Double] =  Some(32.5)
+averageAge("John", "Michael", db)
+// res7: Option[Double] =  None
+
+def averageAgeB(name1: String, name2: String, db: Map[String, Int]): Option[Double] = 
+ db.get(name1).flatMap(age1 =>
+ db.get(name2).map(age2 =>
+ (age1 + age2).toDouble / 2))
+
+def averageAgeC(name1: String, name2: String, db: Map[String, Int]): Option[Double] = 
+for {
+ age1 <- db.get(name1)
+ age2 <- db.get(name2)
+ } yield (age1 + age2).toDouble / 2
+
+for {
+ i <- Vector("one", "two")
+ j <- Vector(1, 2, 3)
+} yield (i, j)
+// res8: scala.collection.immutable.Vector[(String, Int)] =  
+// Vector((one,1), (one,2), (one,3), (two,1), (two,2), (two,3))
+
+Refactoring the retirement calculator to use Option
+
+def nbOfMonthsSaving(params: RetCalcParams, 
+returns: Returns): Option[Int] =  {
+import params._
+@tailrec
+def loop(months: Int): Int =  {
+val (capitalAtRetirement, capitalAfterDeath) =  
+simulatePlan(returns, params, months)
+
+if (capitalAfterDeath >0.0)
+ months
+else
+loop(months + 1)
+ }
+
+if (netIncome > currentExpenses)
+Some(loop(0))
+else
+None
+}
+
+Error:(65, 14) types Option[Int] and Int do not adhere to the type constraint selected for the = = =  and != =  operators; the missing implicit parameter is of type org.scalactic.CanEqual[Option[Int],Int]
+ actual should = = = (expected)
+
+actual should = = = (Some(expected))
+
+"not loop forever if I enter bad parameters" in {
+val actual =  RetCalc.nbOfMonthsSaving(params.copy(netIncome =  1000), FixedReturns(0.04))
+ actual should = = = (None)
+}
+
+Using Either
+
+sealed trait Either[A, B]
+case class Left[A, B](value: A) extends Either[A, B]
+case class Right[A, B](value: B) extends Either[A, B]
+
+def divide(x: Double, y: Double): Either[String, Double] = 
+if (y = =  0)
+Left(s"$x cannot be divided by zero")
+else
+Right(x / y)
+
+divide(6, 3)
+// res0: Either[String,Double] =  Right(2.0)
+divide(6, 0)
+// res1: Either[String,Double] =  Left(6.0 cannot be divided by zero)
+
+Manipulating Either
+
+def getPersonAge(name: String, db: Map[String, Int]): Either[String, Int] = 
+ db.get(name).toRight(s"$name is not present in db")
+
+def personDescription(name: String, db: Map[String, Int]): String = 
+ getPersonAge(name, db) match {
+case Right(age) =>s"$name is $age years old"
+case Left(error) => error
+ }
+
+val db =  Map("John" ->25, "Rob" ->40)
+personDescription("John", db)
+// res4: String =  John is 25 years old
+personDescription("Michael", db)
+// res5: String =  Michael is not present in db
+
+def averageAge(name1: String, name2: String, db: Map[String, Int]): Either[String, Double] = 
+ getPersonAge(name1, db).flatMap(age1 =>
+ getPersonAge(name2, db).map(age2 =>
+ (age1 + age2).toDouble / 2))
+
+averageAge("John", "Rob", db)
+// res4: Either[String,Double] =  Right(32.5)
+averageAge("John", "Michael", db)
+// res5: Either[String,Double] =  Left(Michael is not present in db)
+
+getPersonAge("bob", db).left.map(err =>s"The error was: $err")
+// res6: scala.util.Either[String,Int] =  Left(The error was: bob is not present in db)
+
+def averageAge2(name1: String, name2: String, db: Map[String, Int]): Either[String, Double] = 
+for {
+ age1 <- getPersonAge(name1, db)
+ age2 <- getPersonAge(name2, db)
+ } yield (age1 + age2).toDouble / 2
+
+Refactoring nbOfMonthsSavings
+
+package retcalc
+
+sealed abstract class RetCalcError(val message: String)
+
+object RetCalcError {
+ case class MoreExpensesThanIncome(income: Double, expenses: Double) 
+ extends RetCalcError(
+ s"Expenses: $expenses >=  $income. You will never be able to save 
+ enough to retire !")
+}
+
+def nbOfMonthsSaving(params: RetCalcParams, 
+returns: Returns): Either[RetCalcError, Int] =  {
+import params._
+@tailrec
+def loop(months: Int): Int =  {
+val (capitalAtRetirement, capitalAfterDeath) =  
+simulatePlan(returns, params, months)
+if (capitalAfterDeath >0.0)
+ months
+else
+loop(months + 1)
+ }
+
+if (netIncome > currentExpenses)
+Right(loop(0))
+else
+Left(MoreExpensesThanIncome(netIncome, currentExpenses))
+}
+
+class RetCalcSpec extends WordSpec with Matchers with TypeCheckedTripleEquals 
+with EitherValues {
+
+"RetCalc.nbOfMonthsSaving" should {
+"calculate how long I need to save before I can retire" in {
+val actual =  RetCalc.nbOfMonthsSaving(params, 
+FixedReturns(0.04)).right.value
+val expected =  23 * 12 + 1
+actual should = = = (expected)
+ }
+
+"not crash if the resulting nbOfMonths is very high" in {
+val actual =  RetCalc.nbOfMonthsSaving(
+ params =  RetCalcParams(
+ nbOfMonthsInRetirement =  40 * 12,
+netIncome =  3000, currentExpenses =  2999, initialCapital =  0),
+returns =  FixedReturns(0.01)).right.value
+val expected =  8280
+actual should = = = (expected)
+ }
+
+"not loop forever if I enter bad parameters" in {
+val actual =  RetCalc.nbOfMonthsSaving(
+params.copy(netIncome =  1000), FixedReturns(0.04)).left.value
+ actual should = = = (RetCalcError.MoreExpensesThanIncome(1000, 2000))
+ }
+}
+
+Refactoring monthlyRate
+
+case class ReturnMonthOutOfBounds(month: Int, maximum: Int) extends RetCalcError(
+ s"Cannot get the return for month $month. Accepted range: 0 to $maximum")
+
+"Returns.monthlyReturn" should {
+"return a fixed rate for a FixedReturn" in {
+ Returns.monthlyRate(FixedReturns(0.04), 0).right.value should = = = 
+ (0.04 / 12)
+ Returns.monthlyRate(FixedReturns(0.04), 10).right.value should = = = 
+ (0.04 / 12)
+ }
+
+val variableReturns =  VariableReturns(
+Vector(VariableReturn("2000.01", 0.1), VariableReturn("2000.02", 
+0.2)))
+"return the nth rate for VariableReturn" in {
+ Returns.monthlyRate(variableReturns, 0).right.value should = = = (0.1)
+ Returns.monthlyRate(variableReturns, 1).right.value should = = = (0.2)
+ }
+
+"return None if n > length" in {
+ Returns.monthlyRate(variableReturns, 2).left.value should = = = (
+RetCalcError.ReturnMonthOutOfBounds(2, 1))
+ Returns.monthlyRate(variableReturns, 3).left.value should = = = (
+RetCalcError.ReturnMonthOutOfBounds(3, 1))
+ }
+
+"return the n+offset th rate for OffsetReturn" in {
+val returns =  OffsetReturns(variableReturns, 1)
+ Returns.monthlyRate(returns, 0).right.value should = = = (0.2)
+ }
+}
+
+def monthlyRate(returns: Returns, month: Int): Either[RetCalcError, Double] =  returns match {
+case FixedReturns(r) =>Right(r / 12)
+
+case VariableReturns(rs) =>
+if (rs.isDefinedAt(month))
+Right(rs(month).monthlyRate)
+else
+Left(RetCalcError.ReturnMonthOutOfBounds(month, rs.size - 1))
+
+case OffsetReturns(rs, offset) =>monthlyRate(rs, month + offset)
+}
+
+Error:(55, 26) overloaded method value + with alternatives:
+(...)
+ cannot be applied to (Either[retcalc.RetCalcError,Double])
+ accumulated * (1 + Returns.monthlyRate(returns, month)) + 
+ monthlySavings
+
+def futureCapital(returns: Returns, nbOfMonths: Int, netIncome: Int, currentExpenses: Int,
+initialCapital: Double): Either[RetCalcError, Double] =  {
+val monthlySavings =  netIncome - currentExpenses
+ (0 until nbOfMonths).foldLeft[Either[RetCalcError, Double]]
+(Right(initialCapital)) {
+case (accumulated, month) =>
+for {
+ acc <- accumulated
+ monthlyRate <- Returns.monthlyRate(returns, month)
+ } yield acc * (1 + monthlyRate) + monthlySavings
+ }
+}
+
+Refactoring simulatePlan
+
+def simulatePlan(returns: Returns, params: RetCalcParams, nbOfMonthsSavings: Int,
+monthOffset: Int =  0): Either[RetCalcError, (Double, 
+Double)] =  {
+import params._
+
+for {
+ capitalAtRetirement <- futureCapital(
+ returns =  OffsetReturns(returns, monthOffset),
+nbOfMonths =  nbOfMonthsSavings, netIncome =  netIncome, 
+currentExpenses =  currentExpenses,
+initialCapital =  initialCapital)
+
+ capitalAfterDeath <- futureCapital(
+ returns =  OffsetReturns(returns, monthOffset + 
+ nbOfMonthsSavings),
+nbOfMonths =  nbOfMonthsInRetirement,
+netIncome =  0, currentExpenses =  currentExpenses,
+initialCapital =  capitalAtRetirement)
+ } yield (capitalAtRetirement, capitalAfterDeath)
+}
+
+def nbOfMonthsSaving(params: RetCalcParams, returns: Returns): Either[RetCalcError, Int] =  {
+import params._
+@tailrec
+def loop(months: Int): Either[RetCalcError, Int] =  {
+simulatePlan(returns, params, months) match {
+case Right((capitalAtRetirement, capitalAfterDeath)) =>
+if (capitalAfterDeath >0.0)
+Right(months)
+else
+loop(months + 1)
+
+case Left(err) =>Left(err)
+ }
+ }
+
+if (netIncome > currentExpenses)
+ loop(0)
+else
+Left(MoreExpensesThanIncome(netIncome, currentExpenses))
+}
+
+Refactoring SimulatePlanApp
+
+"SimulatePlanApp.strMain" should {
+ "simulate a retirement plan using market returns" in {...}
+
+ "return an error when the period exceeds the returns bounds" in {
+ val actualResult =  SimulatePlanApp.strMain(
+ Array("1952.09,2017.09", "25", "60", "3000", "2000", "10000"))
+ val expectedResult =  "Cannot get the return for month 780. 
+ Accepted range: 0 to 779"
+ actualResult should = = =  (expectedResult)
+ }
+ }
+
+object SimulatePlanApp extends App {
+println(strMain(args))
+
+def strMain(args: Array[String]): String =  {
+val (from +: until +: Nil) =  args(0).split(",").toList
+val nbOfYearsSaving =  args(1).toInt
+val nbOfYearsRetired =  args(2).toInt
+
+val allReturns =  Returns.fromEquityAndInflationData(
+ equities =  EquityData.fromResource("sp500.tsv"),
+inflations =  InflationData.fromResource("cpi.tsv"))
+
+ RetCalc.simulatePlan(
+ returns =  allReturns.fromUntil(from, until),
+params =  RetCalcParams(
+ nbOfMonthsInRetirement =  nbOfYearsRetired * 12,
+netIncome =  args(3).toInt,
+currentExpenses =  args(4).toInt,
+initialCapital =  args(5).toInt),
+nbOfMonthsSavings =  nbOfYearsSaving * 12
+) match {
+case Right((capitalAtRetirement, capitalAfterDeath)) =>
+s"""
+ |Capital after $nbOfYearsSaving years of savings: 
+${capitalAtRetirement.round}
+ |Capital after $nbOfYearsRetired years in retirement: 
+${capitalAfterDeath.round}
+""".stripMargin
+
+case Left(err) => err.message
+ }
+ }
+}
+
+Using ValidatedNel
+
+def sequentialErrorHandling(x: String): Either[MyError, String] = 
+ for {
+ a <- function1(x)
+ b <- function2(a)
+ c <- function3(b)
+ } yield c
+
+Adding the cats dependency
+
+libraryDependencies +=  "org.typelevel" %% "cats-core" % "1.0.1"
+scalacOptions +=  "-Ypartial-unification"
+
+Introducing NonEmptyList
+
+import cats.data.NonEmptyList
+
+NonEmptyList(1, List(2, 3))
+// res0: cats.data.NonEmptyList[Int] =  NonEmptyList(1, 2, 3)
+NonEmptyList.fromList(List(1, 2, 3))
+// res3: Option[cats.data.NonEmptyList[Int]] =  Some(NonEmptyList(1, 2, 3))
+NonEmptyList.fromList(List.empty[Int])
+// res4: Option[cats.data.NonEmptyList[Int]] =  None
+val nel =  NonEmptyList.of(1, 2, 3)
+// nel: cats.data.NonEmptyList[Int] =  NonEmptyList(1, 2, 3)
+
+nel.head
+// res0: Int =  1
+nel.tail
+// res1: List[Int] =  List(2, 3)
+nel.map(_ + 1)
+// res2: cats.data.NonEmptyList[Int] =  NonEmptyList(2, 3, 4)
+
+Introducing Validated
+
+sealed trait Validated[+E, +A]
+case class Valid[+A](a: A) extends Validated[Nothing, A]
+case class Invalid[+E](e: E) extends Validated[E, Nothing]
+
+import cats.data._
+import cats.data.Validated._
+import cats.implicits._
+
+val valid1: Validated[NonEmptyList[String], Int] =  Valid(1)
+// valid1: cats.data.Validated[cats.data.NonEmptyList[String],Int] =  Valid(1)
+
+val valid2 =  2.validNel[String]
+// valid2: cats.data.ValidatedNel[String,Int] =  Valid(2)
+
+(valid1, valid2).mapN { case (i1, i2) => i1 + i2 }
+// res1: cats.data.ValidatedNel[String,Int] =  Valid(3)
+
+val invalid3: ValidatedNel[String, Int] =  Invalid(NonEmptyList.of("error"))
+val invalid4 =  "another error".invalidNel[Int]
+(valid1, valid2, invalid3, invalid4).mapN { case (i1, i2, i3, i4) => i1 + i2 + i3 + i4 }
+// res2: cats.data.ValidatedNel[String,Int] =  Invalid(NonEmptyList(error, another error))
+
+type ValidatedNel[+E, +A] =  Validated[NonEmptyList[E], A]
+
+Adding unit tests
+
+package retcalc
+
+import cats.data.Validated.{Invalid, Valid}
+import org.scalactic.TypeCheckedTripleEquals
+import org.scalatest.{Matchers, WordSpec}
+
+class SimulatePlanAppIT extends WordSpec with Matchers with TypeCheckedTripleEquals {
+"SimulatePlanApp.strMain" should {
+"simulate a retirement plan using market returns" in {
+val actualResult =  SimulatePlanApp.strMain(
+Array("1952.09,2017.09", "25", "40", "3000", "2000", "10000"))
+
+val expectedResult = 
+s"""
+ |Capital after 25 years of savings: 468925
+ |Capital after 40 years in retirement: 2958842
+ |""".stripMargin
+ actualResult should = = = (Valid(expectedResult))
+ }
+
+"return an error when the period exceeds the returns bounds" in {
+val actualResult =  SimulatePlanApp.strMain(
+Array("1952.09,2017.09", "25", "60", "3000", "2000", "10000"))
+val expectedResult =  "Cannot get the return for month 780. 
+ Accepted range: 0 to 779"
+actualResult should = = = (Invalid(expectedResult))
+ }
+
+"return an usage example when the number of arguments is incorrect" 
+in {
+val result =  SimulatePlanApp.strMain(
+Array("1952.09:2017.09", "25.0", "60", "3'000", "2000.0"))
+ result should = = = (Invalid(
+"""Usage:
+ |simulatePlan from,until nbOfYearsSaving nbOfYearsRetired 
+ netIncome currentExpenses initialCapital
+ |
+ |Example:
+ |simulatePlan 1952.09,2017.09 25 40 3000 2000 10000
+ |""".stripMargin))
+ }
+
+"return several errors when several arguments are invalid" in {
+val result =  SimulatePlanApp.strMain(
+Array("1952.09:2017.09", "25.0", "60", "3'000", "2000.0", 
+"10000"))
+ result should = = = (Invalid(
+"""Invalid format for fromUntil. Expected: from,until, actual: 
+ 1952.09:2017.09
+ |Invalid number for nbOfYearsSaving: 25.0
+ |Invalid number for netIncome: 3'000
+ |Invalid number for currentExpenses: 2000.0""".stripMargin))
+ }
+ }
+}
+
+Implementing parsing functions
+
+object RetCalcError {
+ type RetCalcResult[A] =  ValidatedNel[RetCalcError, A]
+
+case class MoreExpensesThanIncome(income: Double, expenses: Double) 
+extends RetCalcError(...)
+
+case class ReturnMonthOutOfBounds(month: Int, maximum: Int) extends 
+RetCalcError(...)
+
+ case class InvalidNumber(name: String, value: String) extends 
+ RetCalcError(
+ s"Invalid number for $name: $value")
+
+ case class InvalidArgument(name: String, 
+ value: String, 
+ expectedFormat: String) extends 
+ RetCalcError(
+ s"Invalid format for $name. Expected: $expectedFormat, actual: 
+ $value")
+}
+
+def parseInt(name: String, value: String): RetCalcResult[Int] = 
+ Validated
+ .catchOnly[NumberFormatException](value.toInt)
+ .leftMap(_ => NonEmptyList.of(InvalidNumber(name, value)))
+
+import cats.implicits._
+def parseFromUntil(fromUntil: String): RetCalcResult[(String, String)] =  {
+val array =  fromUntil.split(",")
+if (array.length !=  2)
+InvalidArgument(
+ name =  "fromUntil", value =  fromUntil, 
+expectedFormat =  "from,until"
+).invalidNel
+else
+(array(0), array(1)).validNel
+}
+
+def parseParams(args: Array[String]): RetCalcResult[RetCalcParams] = 
+ (
+parseInt("nbOfYearsRetired", args(2)),
+parseInt("netIncome", args(3)),
+parseInt("currentExpenses", args(4)),
+parseInt("initialCapital", args(5))
+ ).mapN { case (nbOfYearsRetired, netIncome, currentExpenses, 
+initialCapital) =>
+RetCalcParams(
+ nbOfMonthsInRetirement =  nbOfYearsRetired * 12,
+netIncome =  netIncome,
+currentExpenses =  currentExpenses,
+initialCapital =  initialCapital)
+ }
+
+Implementing SimulatePlanApp.strSimulatePlan
+
+def strSimulatePlan(returns: Returns, nbOfYearsSaving: Int, params: RetCalcParams)
+: RetCalcResult[String] =  {
+ RetCalc.simulatePlan(
+ returns =  returns,
+params =  params,
+nbOfMonthsSavings =  nbOfYearsSaving * 12
+).map {
+case (capitalAtRetirement, capitalAfterDeath) =>
+val nbOfYearsInRetirement =  params.nbOfMonthsInRetirement / 12
+s"""
+ |Capital after $nbOfYearsSaving years of savings: 
+${capitalAtRetirement.round}
+ |Capital after $nbOfYearsInRetirement years in retirement: 
+${capitalAfterDeath.round}
+ |""".stripMargin
+ }.toValidatedNel
+}
+
+Refactoring SimulatePlanApp.strMain
+
+def strMain(args: Array[String]): Validated[String, String] =  {
+if (args.length !=  6)
+"""Usage:
+ |simulatePlan from,until nbOfYearsSaving nbOfYearsRetired 
+ netIncome currentExpenses initialCapital
+ |
+ |Example:
+ |simulatePlan 1952.09,2017.09 25 40 3000 2000 10000
+ |""".stripMargin.invalid
+else {
+val allReturns =  Returns.fromEquityAndInflationData(
+ equities =  EquityData.fromResource("sp500.tsv"),
+inflations =  InflationData.fromResource("cpi.tsv"))
+
+val vFromUntil =  parseFromUntil(args(0))
+val vNbOfYearsSaving =  parseInt("nbOfYearsSaving", args(1))
+val vParams =  parseParams(args)
+
+ (vFromUntil, vNbOfYearsSaving, vParams)
+ .tupled
+ .andThen { case ((from, until), nbOfYearsSaving, params) =>
+strSimulatePlan(allReturns.fromUntil(from, until), 
+nbOfYearsSaving, params)
+ }
+ .leftMap(nel => nel.map(_.message).toList.mkString("\n"))
+ }
+
+Strict val
+
+class StrictDemo {val strictVal =  {println("Evaluating strictVal")"Hello"}}val strictDemo =  new StrictDemo//Evaluating strictVal//strictDemo: StrictDemo =  StrictDemo@32fac009
+
+lazy val
+
+class LazyDemo {lazy val lazyVal =  {println("Evaluating lazyVal")"Hello"}}val lazyDemo =  new LazyDemo//lazyDemo: LazyDemo =  LazyDemo@13ca84d5
+
+lazyDemo.lazyVal + " World"//Evaluating lazyVal//res0: String =  Hello World
+
+class LazyChain {lazy val val1 =  {println("Evaluating val1")"Hello"}lazy val val2 =  {println("Evaluating val2")val1 + " lazy"} lazy val val3 =  {println("Evaluating val3")val2 + " chain"}}val lazyChain =  new LazyChain// lazyChain: LazyChain =  LazyChain@4ca51fa
+
+lazyChain.val3// Evaluating val3// Evaluating val2// Evaluating val1// res1: String =  Hello lazy chain
+
+By-name parameters
+
+object AppConfig {lazy val greeting: String =  {println("Loading greeting")"Hello "}}
+
+def greet(name: String, greeting: =>String): String =  {if (name = =  "Mikael")greeting + nameelses"I don't know you $name"}greet("Bob", AppConfig.greeting)// res2: String =  I don't know you Bobgreet("Mikael", AppConfig.greeting)// Loading greeting// res3: String =  Hello Mikael
+
+Lazy data structures
+
+def evenPlusOne(xs: Vector[Int]): Vector[Int] = 
+ xs.filter { x =>println(s"filter $x"); x % 2 = =  0 }
+ .map { x =>println(s"map $x"); x + 1 }
+
+evenPlusOne(Vector(0, 1, 2))
+
+filter 0
+filter 1
+filter 2
+map 0
+map 2
+res4: Vector[Int] =  Vector(1, 3)
+
+def lazyEvenPlusOne(xs: Vector[Int]): Vector[Int] = 
+ xs.withFilter { x =>println(s"filter $x"); x % 2 = =  0 }
+ .map { x =>println(s"map $x") ; x + 1 }
+
+lazyEvenPlusOne(Vector(0, 1, 2))
+
+filter 0
+map 0
+filter 1
+filter 2
+map 2
+res5: Vector[Int] =  Vector(1, 3)
+
+def lazyEvenPlusTwo(xs: Vector[Int]): Vector[Int] = 
+ xs.withFilter { x =>println(s"filter $x"); x % 2 = =  0 }
+ .map { x =>println(s"map $x") ; x + 1 }
+ .map { x =>println(s"map2 $x") ; x + 1 }
+
+lazyEvenPlusTwo(Vector(0, 1, 2))
+
+filter 0
+map 0
+filter 1
+filter 2
+map 2
+map2 1
+map2 3
+res6: Vector[Int] =  Vector(2, 4)
+
+def lazyEvenPlusTwoStream(xs: Stream[Int]): Stream[Int] = 
+ xs.filter { x =>println(s"filter $x") ; x % 2 = =  0 }
+ .map { x =>println(s"map $x") ; x + 1 }
+ .map { x =>println(s"map2 $x") ; x + 1 }
+
+lazyEvenPlusTwoStream(Stream(0, 1, 2)).toVector
+
+filter 0
+map 0
+map2 1
+filter 1
+filter 2
+map 2
+map2 3
+res7: Vector[Int] =  Vector(2, 4)
+
+val evenInts: Stream[Int] =  0 #:: 2 #:: evenInts.tail.map(_ + 2)
+evenInts.take(10).toVector
+// res8: Vector[Int] =  Vector(0, 2, 4, 6, 8, 10, 12, 14, 16, 18)
+
+InvariantDecoder
+
+trait Animal
+case class Cat(name: String) extends Animal
+case class Dog(name: String) extends Animal
+
+val animal1: Animal =  Cat("Max")
+val animal2: Animal =  Dog("Dolly")
+implicitly[Dog <:< Animal]
+
+trait InvariantDecoder[A] {
+def decode(s: String): Option[A]
+}
+
+object InvariantCatDecoder extends InvariantDecoder[Cat] {
+val CatRegex =  """Cat\((\w+\))""".r
+def decode(s: String): Option[Cat] =  s match {
+case CatRegex(name) =>Some(Cat(name))
+case _ => None
+ }
+}
+
+InvariantCatDecoder.decode("Cat(Max)")
+// res0: Option[Cat] =  Some(Cat(Max)))
+
+val invariantAnimalDecoder: InvariantDecoder[Animal] =  InvariantCatDecoder
+
+error: type mismatch;
+ found : InvariantCatDecoder.type
+ required: InvariantDecoder[Animal]
+ Note: Cat <: Animal (and InvariantCatDecoder.type <: 
+ InvariantDecoder[Cat]), but trait InvariantDecoder is invariant in 
+ type A.
+ You may wish to define A as +A instead. (SLS 4.5)
+ val invariantAnimalDecoder: InvariantDecoder[Animal] =  
+ InvariantCatDecoder
+ ^
+
+CovariantDecoder
+
+trait CovariantDecoder[+A] {
+def decode(s: String): Option[A]
+}
+object CovariantCatDecoder extends CovariantDecoder[Cat] {
+ (...)
+}
+
+implicitly[CovariantDecoder[Cat] <:< CovariantDecoder[Animal]]
+
+val covariantAnimalDecoder: CovariantDecoder[Animal] =  CovariantCatDecoder
+covariantAnimalDecoder.decode("Cat(Ulysse)")
+// res0: Option[Animal] =  Some(Cat(Ulysse)))
+
+object CovariantCatAndDogDecoder extends CovariantDecoder[Animal] {
+val CatRegex =  """Cat\((\w+\))""".r
+val DogRegex =  """Dog\((\w+\))""".r
+def decode(s: String): Option[Animal] =  s match {
+case CatRegex(name) =>Some(Cat(name))
+case DogRegex(name) =>Some(Dog(name))
+case _ => None
+ }
+}
+
+val covariantCatsAndDogsDecoder =  CovariantCatAndDogDecoder
+
+covariantCatsAndDogsDecoder.decode("Cat(Garfield)")
+// res4: Option[Animal] =  Some(Cat(Garfield)))
+covariantCatsAndDogsDecoder.decode("Dog(Aiko)")
+// res5: Option[Animal] =  Some(Dog(Aiko)))
+
+Contravariant encoder
+
+trait Encoder[-A] {
+def encode(a: A): String
+}
+
+object AnimalEncoder extends Encoder[Animal] {
+def encode(a: Animal): String =  a.toString
+}
+
+val catEncoder: Encoder[Cat] =  AnimalEncoder
+catEncoder.encode(Cat("Luna"))
+// res1: String =  Cat(Luna)
+
+object CatAndDogCodec extends Codec[Animal] {
+val CatRegex =  """Cat\((\w+\))""".r
+val DogRegex =  """Dog\((\w+\))""".r
+
+override def encode(a: Animal) =  a.toString
+
+override def decode(s: String): Option[Animal] =  s match {
+case CatRegex(name) =>Some(Cat(name))
+case DogRegex(name) =>Some(Dog(name))
+case _ => None
+ }
+}
+
+trait Codec[+A] {
+ def encode(a: A): String
+ def decode(s: String): Option[A]
+}
+ Error:(55, 15) covariant type A occurs in contravariant position in 
+ type A of value a
+ def encode(a: A): String
+ ^
+
+trait Function3[-T1, -T2, -T3, +R] extends AnyRef { self =>
+
+Covariance in collections
+
+final class Vector[+A] (...)
+
+val cats: Vector[Cat] =  Vector(Cat("Max"))
+val animals: Vector[Animal] =  cats
+
+val catsAndDogs =  cats :+ Dog("Medor")
+// catsAndDogs: Vector[Product with Serializable with Animal] =  
+// Vector(Cat(Max), Dog(Medor))
+
+override def :+[B >: A, That](elem: B)(implicit bf: CanBuildFrom[Vector[A], B, That]): That
+
+val serializables =  catsAndDogs :+ "string"
+// serializables: Vector[Serializable] =  Vector(Cat(Max), Dog(Medor), 
+// string)
+val anys =  serializables :+ 1
+// anys: Vector[Any] =  Vector(Cat(Max), Dog(Medor), string, 1)
+
+Function value
+
+def multiply(x: Int, y: Int): Int =  x * y
+// multiply: multiply[](val x: Int,val y: Int) => Int
+
+val multiplyVal =  (x: Int, y: Int) => x * y
+// multiplyVal: (Int, Int) => Int =  ...
+
+val multiplyVal2 =  multiply _
+// multiplyVal2: (Int, Int) => Int =  ...
+
+multiply(2, 3)
+multiplyVal(2, 3)
+multiplyVal2(2, 3)
+
+Currying
+
+val multiplyCurried =  multiplyVal.curried
+// multiplyCurried: Int => (Int => Int) =  ...
+
+multiplyVal(2, 3)
+// res3: Int =  6
+multiplyCurried(2)
+// res4: Int => Int =  ...
+multiplyCurried(2)(3)
+// res5: Int =  6
+
+Partially applied functions
+
+case class Item(description: String, price: Double)
+
+def discount(percentage: Double)(item: Item): Item = 
+ item.copy(price =  item.price * (1 - percentage / 100))
+
+discount(10)(Item("Monitor", 500))
+// res6: Item =  Item(Monitor,450.0)
+
+val discount10 =  discount(10) _
+// discount10: Item => Item =  ...
+discount10(Item("Monitor", 500))
+// res7: Item =  Item(Monitor,450.0)
+
+val items =  Vector(Item("Monitor", 500), Item("Laptop", 700))
+items.map(discount(10))
+// res8: Vector[Item] =  Vector(Item(Monitor,450.0), Item(Laptop,630.0))
+
+Implicit parameters
+
+case class AppContext(message: String)
+implicit val myAppCtx: AppContext =  AppContext("implicit world")
+
+def greeting(prefix: String)(implicit appCtx: AppContext): String = 
+ prefix + appCtx.message
+
+greeting("hello ")
+// res0: String =  hello implicit world
+
+greeting("hello ")(myAppCtx)
+// res0: String =  hello implicit world
+
+Passing a timeout
+
+import cats.data.ValidatedNel
+case class Timeout(millis: Int)
+
+trait PriceService {
+def getPrice(productName: String)(implicit timeout: Timeout): 
+ ValidatedNel[String, Double]
+}
+
+Passing an application context
+
+case class Product(name: String, price: Double)
+
+trait DataService {
+def getProduct(name: String): ValidatedNel[String, Product]
+def saveProduct(product: Product): ValidatedNel[String, Unit]
+}
+
+class AppContext(implicit val defaultTimeout: Timeout,
+val priceService: PriceService,
+val dataService: DataService)
+
+import cats.implicits._
+def updatePrice(productName: String)(implicit appContext: AppContext)
+: ValidatedNel[String, Double] =  {
+import appContext._
+ (dataService.getProduct(productName), 
+priceService.getPrice(productName)).tupled.andThen {
+case (product, newPrice) =>
+ dataService.saveProduct(product.copy(price =  newPrice)).map(_ =>
+ newPrice
+ )
+ }
+}
+
+breakOut
+
+val vec =  Vector("hello", "world").map(s => s -> s.length)
+// vec: scala.collection.immutable.Vector[(String, Int)] =  
+// Vector((hello,5), (world,5))
+
+def map[B, That](f: A =>B)(implicit bf: CanBuildFrom[Repr, B, That]): That =  {...}
+
+trait CanBuildFrom[-From, -Elem, +To]
+
+object Vector extends IndexedSeqFactory[Vector] {
+...
+ implicit def canBuildFrom[A]: CanBuildFrom[Coll, A, Vector[A]] =  ...
+
+val vec =  Vector("hello", "world").map(s => s -> s.length)
+vec.toMap
+// res0: scala.collection.immutable.Map[String,Int] =  Map(hello -> 5, world -> 5)
+
+import scala.collection.breakOut
+val map: Map[String, Int] =  Vector("hello", "world").map(s => s -> s.length)(breakOut)
+// map: Map[String,Int] =  Map(hello -> 5, world -> 5)
+
+executionContext
+
+scala> import scala.concurrent.Future
+import scala.concurrent.Future
+scala>Future(println(Thread.currentThread().getName))
+
+<console>:13: error: Cannot find an implicit ExecutionContext. You might pass
+an (implicit ec: ExecutionContext) parameter to your method
+or import scala.concurrent.ExecutionContext.Implicits.global.
+ Future(println(Thread.currentThread().getName))
+
+scala> import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext.Implicits.global
+scala> import scala.concurrent.Future
+import scala.concurrent.Future
+
+scala> Future(println(Thread.currentThread().getName))
+scala-execution-context-global-11
+res1: scala.concurrent.Future[Unit] =  Future(Success(()))
+
+scala> import scala.concurrent.Future
+import scala.concurrent.Future
+
+scala> import java.util.concurrent.Executors
+import java.util.concurrent.Executors
+
+scala> import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext, Future}
+
+scala> implicit val myThreadPool: ExecutionContext =  ExecutionContext.fromExecutor(Executors.newFixedThreadPool(2))
+myThreadPool: scala.concurrent.ExecutionContext =  scala.concurrent.impl.ExecutionContextImpl@7f3c0399
+
+scala> Future(println(Thread.currentThread().getName))
+pool-1-thread-1
+res0: scala.concurrent.Future[Unit] =  Future(<not completed>)
+
+Implicit conversion
+
+import java.time.LocalDate
+
+implicit def stringToLocalDate(s: String): LocalDate =  LocalDate.parse(s)
+
+"2018-09-01".getDayOfWeek
+// res0: java.time.DayOfWeek =  SATURDAY
+
+"2018-09-01".getYear
+// res1: Int =  2018
+
+import java.time.temporal.ChronoUnit.DAYS
+DAYS.between("2018-09-01", "2018-10-10")
+// res2: Long =  39
+
+"2018".getMonth
+// java.time.format.DateTimeParseException: Text '2018' could not be parsed at index 4
+
+Implicit class
+
+scala>
+class IntOps(val i: Int) extends AnyVal {
+def square: Int =  i * i
+}
+scala> implicit def intToIntOps(i: Int): IntOps =  new IntOps(i)
+intToIntOps: (i: Int)IntOps
+scala> 5.square
+res0: Int =  25
+
+scala>
+implicit class IntOps(val i: Int) extends AnyVal {
+ def square: Int =  i * i
+}
+
+scala>5.square
+res0: Int =  25
+
+"abcd".reverse
+val abcd: StringOps =  Predef.augmentString("abcd")
+abcd.reverse
+
+How are implicits resolved?
+
+case class Person(name: String, age: Int)
+object Person {
+implicit val ordering: Ordering[Person] =  Ordering.by(_.age)
+}
+
+List(Person("Omer", 40), Person("Bart", 10)).sorted
+
+Understanding type classes
+
+trait Combine[A] {
+def combine(x: A, y: A): A
+}
+
+object Combine {
+def apply[A](implicit combineA: Combine[A]): Combine[A] =  combineA
+
+implicit val combineInt: Combine[Int] =  new Combine[Int] {
+override def combine(x: Int, y: Int): Int =  x + y
+ }
+
+implicit val combineString: Combine[String] =  new Combine[String] {
+override def combine(x: String, y: String) =  x + y
+ }
+}
+
+Combine[Int].combine(1, 2)
+// res0: Int =  3
+Combine[String].combine("Hello", " type class")
+// res1: String =  Hello type class
+
+object Combine {
+...
+ implicit class CombineOps[A](val x: A)(implicit combineA: Combine[A]) {
+ def combine(y: A): A =  combineA.combine(x, y)
+ }
+}
+
+2.combine(3)
+// res2: Int =  5
+"abc" combine "def"
+// res3: String =  abcdef
+
+object Combine {
+...
+ implicit def combineOption[A](implicit combineA: Combine[A])
+ : Combine[Option[A]] =  new Combine[Option[A]] {
+ override def combine(optX: Option[A], optY: Option[A]): Option[A] = 
+ for {
+ x <- optX
+ y <- optY
+ } yield combineA.combine(x, y)
+ }
+}
+
+implicit def combineOption[A: Combine]: Combine[Option[A]] =  new Combine[Option[A]] {
+override def combine(optX: Option[A], optY: Option[A]): Option[A] = 
+for {
+ x <- optX
+ y <- optY
+ } yield Combine[A].combine(x, y)
+}
+
+Option(3).combine(Option(4))
+// res4: Option[Int] =  Some(7)
+Option(3) combine Option.empty
+// res5: Option[Int] =  None
+Option("Hello ") combine Option(" world")
+// res6: Option[String] =  Some(Hello world)
+
+scala.math.Ordering
+
+Vector(1,3,2).sorted // res0: scala.collection.immutable.Vector[Int] =  Vector(1, 2, 3)
+
+def sorted[B >: A](implicit ord: Ordering[B]): Repr
+
+import java.time.LocalDateimplicit val dateOrdering: Ordering[LocalDate] =  
+ Ordering.fromLessThan[LocalDate](_ isBefore _)import Ordering.Implicits._LocalDate.of(2018, 5, 18) < LocalDate.of(2017, 1, 1)// res1: Boolean =  falseVector(
+ LocalDate.of(2018, 5, 18), 
+ LocalDate.of(2018, 6, 1)
+).sorted(dateOrdering.reverse)// res2: Vector[LocalDate] =  Vector(2018-06-01, 2018-05-18)
+
+org.scalactic.Equality
+
+actual shouldBe expected
+actual should = = =  (expected)
+
+class EqualitySpec extends WordSpec with Matchers with TypeCheckedTripleEquals{ "Equality" should {"allow to compare two Doubles with a tolerance" in {1.6 + 1.8 should = = =  (3.4)}} }
+
+3.4000000000000004 did not equal 3.4
+
+class EqualitySpec extends WordSpec with Matchers with 
+ TypeCheckedTripleEquals{ implicit val doubleEquality: Equality[Double] =  
+ TolerantNumerics.tolerantDoubleEquality(0.0001)"Equality" should {...}
+
+class EqualitySpec extends WordSpec with Matchers with TypeCheckedTripleEquals{implicit val doubleEquality: Equality[Double] =  
+ TolerantNumerics.tolerantDoubleEquality(0.0001) implicit def vectorEquality[A](implicit eqA: Equality[A]): 
+ Equality[Vector[A]] =  ???
+
+"Equality" should { (...) "allow to compare two Vector[Double] with a tolerance" in { Vector(1.6 + 1.8, 0.0051) should = = =  (Vector(3.4, 0.0052)) }}
+
+cats.Semigroup
+
+/** * A semigroup is any set `A` with an associative operation (`combine`). */trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable { /** * Associative operation taking which combines two values. */ def combine(x: A, y: A): A(...)}
+
+Laws
+
+a combine (b combine c) =  (a combine b) combine c
+
+Usage examples
+
+import cats.implicits._1 |+| 2// res0: Int =  3"Hello " |+| "World !"// res1: String =  Hello World !(1, 2, "Hello ") |+| (2, 4, "World !")// res2: (Int, Int, String) =  (3,6,Hello World !)
+
+Vector(1, 2) |+| Vector(3, 4)// res3: Vector[Int] =  Vector(1, 2, 3, 4)Option(1) |+| Option(2)// res4: Option[Int] =  Some(3)Option(1) |+| None |+| Option(2)// res5: Option[Int] =  Some(3)
+
+1.asRight |+| 2.asRight// res6: Either[B,Int] =  Right(3)1.asRight[String] |+| 2.asRight |+| "error".asLeft// res7: Either[String,Int] =  Left(error)"error1".asLeft[Int] |+| "error2".asLeft// res8: Either[String,Int] =  Left(error1)
+
+cats.Monoid
+
+trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] { /** * Return the identity element for this monoid. */ def empty: A
+
+import cats.implicits._import cats.kernel.MonoidMonoid[Int].empty// res0: Int =  0Monoid[String].empty// res1: String =  Monoid[Option[Double]].empty// res2: Option[Double] =  NoneMonoid[Vector[Int]].empty// res2: Vector[Int] =  Vector()Monoid[Either[String, Int]].empty// res4: Either[String,Int] =  Right(0)
+
+Laws
+
+(3 |+| Monoid[Int].empty) = =  3("Hello identity" |+| Monoid[String].empty) = =  "Hello identity"(Option(3) |+| Monoid[Option[Int]].empty) = =  Option(3)
+
+Usage examples
+
+Vector(1,2,3).combineAll// res8: Int =  6
+
+Vector(1, 2, 3).foldLeft(0) { case (acc, i) => acc + i }
+
+Vector("1", "2", "3").foldMap(s => (s, s.toInt))// res10: (String, Int) =  (123,6)
+
+Higher-order function
+
+def map: Vector[Int] => (Int => Int) => Vector[Int] =  
+ xs => f => xs.map(f)
+
+cats.Functor
+
+trait Functor[F[_]] { def map[A, B](fa: F[A])(f: A => B): F[B]
+
+import cats.Functorimport cats.implicits._def addOne[F[_] : Functor](fa: F[Int]): F[Int] =  fa.map(_ + 1)
+
+addOne(Vector(1, 2, 3))// res0: Vector[Int] =  Vector(2, 3, 4)addOne(Option(1))// res1: Option[Int] =  Some(2)addOne(1.asRight)// res2: Either[Nothing,Int] =  Right(2)
+
+Usage examples
+
+def square(x: Double): Double =  x * xdef squareVector: Vector[Double] => Vector[Double] =  Functor[Vector].lift(square) squareVector(Vector(1, 2, 3))// res0: Vector[Double] =  Vector(1.0, 4.0, 9.0)def squareOption: Option[Double] => Option[Double] =  Functor[Option].lift(square) squareOption(Some(3))// res1: Option[Double] =  Some(9.0)
+
+Vector("Functors", "are", "great").fproduct(_.length).toMap
+//res2: Map[String,Int] =  Map(Functors -> 8, are -> 3, great -> 5)
+
+cats.Apply
+
+trait Apply[F[_]] extends Functor[F] { def ap[A, B](ff: F[A => B])(fa: F[A]): F[B] /** Alias for [[ap]]. */ @inline final def <*>[A, B](ff: F[A => B])(fa: F[A]): F[B] = ap(ff)(fa)
+
+import cats.implicits._
+ Option[String => String]("Hello " + _).ap(Some("Apply"))// res0: Option[String] =  Some(Hello Apply)Option[String => String]("Hello " + _) <*> None// res1: Option[String] =  NoneOption.empty[String => String] <*> Some("Apply")// res2: Option[String] =  None
+
+def addOne: Int => Int =  _ + 1
+def multByTwo: Int => Int =  _ * 2
+Vector(addOne, multByTwo) <*> Vector(1, 2, 3)
+// res3: Vector[Int] =  Vector(2, 3, 4, 2, 4, 6)
+
+Laws
+
+(fa product (fb product fc)) = = 
+ ((fa product fb) product fc).map { 
+ case ((a, b), c) => (a, (b,c))
+ }
+
+(fbc <*> (fab <*> fa)) = =  ((fbc.map(_.compose[A] _) <*> fab) <*> fa)
+
+Usage examples
+
+trait Apply[F[_]] extends Functor[F] =E2=80=A6 { (...) def map2[A, B, Z](fa: F[A], fb: F[B])(f: (A, B) => Z): F[Z] =  map(product(fa, fb))(f.tupled)override def product[A, B](fa: F[A], fb: F[B]): F[(A, B)] =  ap(map(fa)(a => (b: B) => (a, b)))(fb)
+
+def parseIntO(s: String): Option[Int] =  Either.catchNonFatal(s.toInt).toOptionparseIntO("6").map2(parseIntO("2"))(_ / _)// res4: Option[Int] =  Some(3)parseIntO("abc").map2(parseIntO("def"))(_ / _)// res5: Option[Int] =  None
+
+def parseIntE(s: String): Either[Throwable, Int] =  Either.catchNonFatal(s.toInt)parseIntE("6").map2(parseIntE("2"))(_ / _)// res6: Either[Throwable,Int] =  Right(3)parseIntE("abc").map2(parseIntE("3"))(_ / _)// res7: Either[Throwable,Int] =  Left(java.lang.NumberFormatException: For input string: "abc")
+
+(parseIntE("1"), parseIntE("2"), parseIntE("3")).mapN( (a,b,c) => a + b + c)// res8: Either[Throwable,Int] =  Right(6)
+
+import cats.data.ValidatedNeldef parseIntV(s: String): ValidatedNel[Throwable, Int] =  Validated.catchNonFatal(s.toInt).toValidatedNel(parseIntV("abc"), parseIntV("def"), parseIntV("3")).mapN( (a,b,c) => a + b + c)// res9: ValidatedNel[Throwable,Int] =  Invalid(NonEmptyList(// java.lang.NumberFormatException: For input string: "abc", // java.lang.NumberFormatException: For input string: "def")
+
+cats.Applicative
+
+@typeclass trait Applicative[F[_]] extends Apply[F] {  def pure[A](x: A): F[A]}
+
+import cats.Applicativeimport cats.data.{Validated, ValidatedNel}import cats.implicits._
+Applicative[Option].pure(1)// res0: Option[Int] =  Some(1)3.pure[Option]// res1: Option[Int] =  Some(3)type Result[A] =  ValidatedNel[Throwable, A]Applicative[Result].pure("hi pure")// res2: Result[String] =  Valid(hi pure)"hi pure".pure[Result]// res3: Result[String] =  Valid(hi pure)
+
+Laws
+
+((identity[A] _).pure[F] <*> fa) = =  fa
+
+(fbc <*> (fab <*> fa)) = =  ((fbc.map(_.compose[A] _) <*> fab) <*> fa)
+
+Applicative[F].pure(f) <*>Applicative[F].pure(a) = =  Applicative[F].pure(f(a))
+
+fab <*> Applicative[F].pure(a) = =  
+ Applicative[F].pure((f: A => B) => f(a)) <*> fab
+
+Usage examples
+
+@typeclass trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[F] { self => def traverse[G[_]: Applicative, A, B](fa: F[A])(f: A => G[B]): 
+ G[F[B]](...)}
+
+import cats.implicits._ def parseIntO(s: String): Option[Int] = 
+ Either.catchNonFatal(s.toInt).toOption Vector("1", "2" , "3").traverse(parseIntO)// res5: Option[Vector[Int]] =  Some(Vector(1, 2, 3))Vector("1", "boom" , "3").traverse(parseIntO)// res6: Option[Vector[Int]] =  None
+
+import cats.data.{Validated, ValidatedNel}
+defparseIntV(s:String):ValidatedNel[Throwable, Int] =  Validated.catchNonFatal(s.toInt).toValidatedNel
+
+Vector("1", "2" , "3").traverse(parseIntV)// res7: ValidatedNel[Throwable, Vector[Int]] =  Valid(Vector(1, 2, 3))Vector("1", "boom" , "crash").traverse(parseIntV)// res8: ValidatedNel[Throwable, Vector[Int]] =  // Invalid(NonEmptyList(// NumberFormatException: For input string: "boom", // NumberFormatException: For input string: "crash"))
+
+def sequence[G[_]: Applicative, A](fga: F[G[A]]): G[F[A]] =  traverse(fga)(ga => ga)
+
+val vecOpt: Vector[Option[Int]] =  Vector(Option(1), Option(2), Option(3))val optVec: Option[Vector[Int]] =  vecOpt.sequence// optVec: Option[Vector[Int]] =  Some(Vector(1, 2, 3))
+
+import scala.concurrent._
+import ExecutionContext.Implicits.global
+import duration.Duration
+
+val vecFut: Vector[Future[Int]] =  Vector(Future(1), Future(2), Future(3))
+val futVec: Future[Vector[Int]] =  vecFut.sequence
+
+Await.result(futVec, Duration.Inf)
+// res9: Vector[Int] =  Vector(1, 2, 3)
+
+cats.Monad
+
+@typeclass trait Monad[F[_]] extends FlatMap[F] with Applicative[F]@typeclass trait FlatMap[F[_]] extends Apply[F] { def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]}
+
+Laws
+
+((fa flatMap f) flatMap g) = =  (fa flatMap(f(_) flatMap g))
+
+Monad[F].pure(a).flatMap(f) = =  f(a)
+
+fa.flatMap(Monad[F].pure) = =  fa
+
+Usage examples
+
+import cats.{Id, Monad}
+import cats.implicits._
+
+case class Item(id: Int, label: String, price: Double, category: String)
+
+trait ItemApi[F[_]] {
+def findAllItems: F[Vector[Item]]
+def saveItem(item: Item): F[Unit]
+}
+
+def startSalesSeason[F[_] : Monad](api: ItemApi[F]): F[Unit] =  {
+for {
+ items <- api.findAllItems
+ _ <- items.traverse { item =>
+val discount =  if (item.category = =  "shoes") 0.80 else 0.70
+val discountedItem =  item.copy(price =  item.price * discount)
+ api.saveItem(discountedItem)
+ }
+ } yield ()
+}
+
+Summary
+
+Option(1) |+| None |+| Option(2)// res5: Option[Int] =  Some(3)
+
+Vector(1,2,3).combineAll// res8: Int =  6
+
+Vector("1", "2", "3").foldMap(s => (s,s.toInt)) // res10: (String, Int) =  (123,6)
+
+def square(x: Double): Double =  x * x
+def squareVector: 
+ Vector[Double] => Vector[Double] = 
+ Functor[Vector].lift(square) squareVector(Vector(1, 2, 3))// res0: Vector[Double] =  Vector(1.0, 4.0, 9.0)
+
+Vector("Functors", "are", "great")
+ .fproduct(_.length)
+ .toMap // res2: Map[String,Int] =  Map(Functors -> 8, //are -> 3, great -> 5)
+
+Option[String => String]
+ ("Hello " + _).ap(Some("Apply")) // res0: Option[String] =  Some(Hello Apply)Option[String => String]("Hello " + _) <*> None// res1: Option[String] =  None
+
+def addOne: Int => Int =  _ + 1def multByTwo: Int => Int =  _ * 2Vector(addOne, multByTwo) <*> Vector(1, 2, 3)// res3: Vector[Int] =  Vector(2, 3, 4, 2, 4, 6)
+
+import cats.data.{Validated, ValidatedNel}
+defparseIntV(s:String):ValidatedNel[Throwable, Int] =  Validated.catchNonFatal(s.toInt).toValidatedNel
+
+Vector("1", "2" , "3").traverse(parseIntV)// res7: ValidatedNel[Throwable, Vector[Int]] =  Valid(Vector(1, 2, 3)) Vector("1", "boom" , "crash")
+ .traverse(parseIntV) // res8: ValidatedNel[Throwable, Vector[Int]] =  // Invalid(NonEmptyList(// NumberFormatException: For input string: "boom", // NumberFormatException: For input string: "crash"))
+
+import cats.{Id, Monad}
+import cats.implicits._
+case class Item(id: Int,
+ label: String,
+ price: Double,
+ category: String)
+trait ItemApi[F[_]] {
+ def findAllItems: F[Vector[Item]]
+ def saveItem(item: Item): F[Unit]
+}
+
+def startSalesSeason[F[_] : Monad](
+ api: ItemApi[F]): F[Unit] =  {
+ for {
+ items <- api.findAllItems
+ _ <- items.traverse { item =>
+ val discount =  if (item.category = = 
+ "shoes") 0.80 else 0.70
+ val discountedItem =  item.copy(price = 
+ item.price * discount)
+ api.saveItem(discountedItem)
+ }} yield ()
+}
+
+Creating the project
+
+sbt new scala-fundamentals/scala-play.g8 --name= shopping --organization= io.fscala
+
+Setting up Slick
+
+libraryDependencies ++=  Seq(
+  "com.typesafe.play" %% "play-slick" % "3.0.0",
+  "com.typesafe.play" %% "play-slick-evolutions" % "3.0.0",
+  "com.h2database" % "h2" % "1.4.196"
+)
+
+Setting up the database
+
+# Default database configuration
+slick.dbs.default.profile= "slick.jdbc.H2Profile$"
+slick.dbs.default.db.driver= "org.h2.Driver"
+slick.dbs.default.db.url= "jdbc:h2:mem:shopping"
+
+play.evolutions.enabled= true
+play.evolutions.db.default.autoApply= true
+
+Product test
+
+classProductDaoSpec extends PlaySpec with ScalaFutures with GuiceOneAppPerSuite {
+"ProductDao" should {
+"Have default rows on database creation" in {
+val app2dao =  Application.instanceCache[ProductDao]
+val dao: ProductDao =  app2dao(app)
+
+val expected =  Set(
+Product("PEPPER", "ALD2", "PEPPER is a robot moving with wheels 
+ and with a screen as human interaction", 7000),
+Product("NAO", "ALD1", "NAO is an humanoid robot.", 3500),
+Product("BEOBOT", "BEO1", "Beobot is a multipurpose robot.", 
+159.0)
+ )
+
+ dao.all().futureValue should contain theSameElementsAs (expected)
+ }
+ }
+}
+
+Cart test
+
+class CartDaoSpec extends PlaySpec with ScalaFutures with GuiceOneAppPerSuite {
+
+ "CartDao" should {
+ val app2dao =  Application.instanceCache[CartDao]
+
+ "be empty on database creation" in {
+ val dao: CartDao =  app2dao(app)
+ dao.all().futureValue shouldBe empty
+ }
+
+ "accept to add new cart" in {
+ val dao: CartDao =  app2dao(app)
+ val user =  "userAdd"
+
+ val expected =  Set(
+ Cart(user, "ALD1", 1),
+ Cart(user, "BEO1", 5)
+ )
+ val noise =  Set(
+ Cart("userNoise", "ALD2", 10)
+ )
+ val allCarts =  expected ++ noise
+
+ val insertFutures =  allCarts.map(dao.insert)
+
+ whenReady(Future.sequence(insertFutures)) { _ =>
+ dao.cart4(user).futureValue should contain theSameElementsAs expected
+ dao.all().futureValue.size should equal(allCarts.size)
+ }
+ }
+ }
+}
+
+"error thrown when adding a cart with same user and productCode" in {
+ val dao: CartDao =  app2dao(app)
+ val user =  "userAdd"
+ val expected =  Set(
+ Cart(user, "ALD1", 1),
+ Cart(user, "BEO1", 5)
+ )
+ val noise =  Set(
+ Cart(user, "ALD1", 10)
+ )
+ val allCarts =  expected ++ noise
+ val insertFutures =  allCarts.map(dao.insert)
+ recoverToSucceededIf[org.h2.jdbc.JdbcSQLException]{
+ Future.sequence(insertFutures)
+ }
+}
+
+"accept to remove a product from a cart" in {
+ val dao: CartDao =  app2dao(app)
+ val user =  "userRmv"
+ val initial =  Vector(
+ Cart(user, "ALD1", 1),
+ Cart(user, "BEO1", 5)
+ )
+ val expected =  Vector(Cart(user, "ALD1", 1))
+
+ whenReady(Future.sequence(initial.map(dao.insert(_)))) { _ =>
+ dao.remove(ProductInCart(user, "BEO1")).futureValue
+ dao.cart4(user).futureValue should contain theSameElementsAs 
+ (expected)
+ }
+}
+
+"accept to update quantities of an item in a cart" in {
+ val dao: CartDao =  app2dao(app)
+ val user =  "userUpd"
+ val initial =  Vector(Cart(user, "ALD1", 1))
+ val expected =  Vector(Cart(user, "ALD1", 5))
+
+ whenReady(Future.sequence(initial.map(dao.insert(_)))) { _ =>
+ dao.update(Cart(user, "ALD1", 5)).futureValue
+ dao.cart4(user).futureValue should contain theSameElementsAs 
+ (expected)
+ }
+}
+
+Waiting on a Future
+
+Await.result(awaitable: Awaitable[T], atMost: Duration)
+
+Callback
+
+Import scala.concurrent.{Await, Future}
+import scala.util.{Failure, Success}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration._
+
+val f: Future[String] =  Future {
+  Thread.sleep(1000)
+  =E2=80=9CFinished=E2=80=9D
+}
+f.onComplete {
+  case Success(value) => println(value) case Failure(e) => e.printStackTrace() }
+
+Using for-comprehension
+
+val f1 =  Future {1}
+val f2 =  Future {2}
+val f3 =  Future {3}
+
+val res =  for {
+  v1 <- f1 v2 <- f2 v3 <- f3 } yield (v1 + v2 + v3)
+
+val response =  Await.result(res, 1 second)
+
+def sum(v: Int*) =  v.sum
+
+val minExpected =  5
+
+val res =  for {
+  v1 <- f1 v2 <- f2 v3 <- f3 if (sum(v1, v2, v3) > minExpected) } yield (v1, v2, v3)
+
+res.onComplete {
+  case Success(result) => println(s"The result is $result") case Failure(e) => println("The sum is not big enough") }
+
+The result is (1,2,3)
+
+The sum is not big enough
+
+Future(Failure(java.util.NoSuchElementException: Future.filter predicate is not satisfied))
+
+import scala.concurrent.ExecutionContext.Implicits.global
+
+Database creation
+
+# --- !Ups
+CREATE TABLE IF NOT EXISTS PUBLIC.PRODUCTS (
+  name VARCHAR(100) NOT NULL,
+  code VARCHAR(255) NOT NULL,
+  description VARCHAR(1000) NOT NULL,
+  price INT NOT NULL,
+  PRIMARY KEY(code)
+);
+
+INSERT INTO PUBLIC.PRODUCTS (name,code, description, price) VALUES ('NAO','ALD1','NAO is an humanoid robot.', 3500);
+INSERT INTO PUBLIC.PRODUCTS (name,code, description, price) VALUES ('PEPER','ALD2','PEPPER is a robot moving with wheels and with a screen as human interaction',7000);
+INSERT INTO PUBLIC.PRODUCTS (name,code, description, price) VALUES ('BEOBOT','BEO1','Beobot is a multipurpose robot.',159);
+
+CREATE TABLE IF NOT EXISTS PUBLIC.CART (
+  id BIGINT AUTO_INCREMENT,
+  user VARCHAR(255) NOT NULL,
+  code VARCHAR(255) NOT NULL,
+  qty INT NOT NULL,
+  PRIMARY KEY(id),
+ CONSTRAINT UC_CART UNIQUE (user,code)
+);
+
+# --- !Ups
+
+# --- !Downs
+
+# --- !Downs
+DROP TABLE PRODUCTS;
+DROP TABLE CART;
+
+Data Access Object&nbsp;creation
+
+class ProductsDao @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit executionContext: ExecutionContext) extends HasDatabaseConfigProvider[JdbcProfile] {
+
+  import profile.api._
+
+  def all(): Future[Seq[Product]] =  db.run(products.result)
+
+  def insert(product: Product): Future[Unit] =  db.run(products 
+ insertOrUpdate product).map { _ => () } private class ProductsTable(tag: Tag) extends Table[Product](tag, 
+ "PRODUCTS") { def name =  column[String]("NAME") def code =  column[String]("CODE") def description =  column[String]("DESCRIPTION") def price =  column[Double]("PRICE") override def * =  (name, code, description, price) <>
+ (Product.tupled, Product.unapply) } private val products =  TableQuery[ProductsTable] }
+
+case class Product(name: String,
+                   code : String,
+                   description : String,
+                   price: Double)
+
+class CartsDao @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit executionContext: ExecutionContext) extends HasDatabaseConfigProvider[JdbcProfile] {
+
+  import profile.api._
+
+
+  def cart4(usr : String): Future[Seq[Cart]] =  
+ db.run(carts.filter(_.user = = =  usr).result) def insert(cart: Cart): Future[_] =  db.run(carts +=  cart) def remove(cart: ProductInCart): Future[Int] =  
+ db.run(carts.filter(c => matchKey(c, cart)).delete)
+
+ def update(cart: Cart): Future[Int] =  {
+ val q =  for {
+ c <- carts if matchKey(c, cart)
+ } yield c.quantity
+ db.run(q.update(cart.quantity))
+ }
+
+ private def matchKey(c: CartTable, cart: CartKey): Rep[Boolean] =  {
+ c.user = = =  cart.user && c.productCode = = =  cart.productCode
+ } def all(): Future[Seq[Cart]] =  db.run(carts.result) private class CartsTable(tag: Tag) extends Table[Cart](tag, "CART") { def user =  column[String]("USER") def productCode =  column[String]("CODE") def quantity =  column[Int]("QTY") override def * =  
+ (user, productCode, quantity) <> (Cart.tupled, Cart.unapply) } private val carts =  TableQuery[CartsTable] }
+
+abstract class CartKey {
+ def user: String
+ def productCode: String
+}
+
+case class ProductInCart(user:String, productCode: String) extends CartKey
+
+case class Cart(user:String, productCode: String, quantity: Int) extends CartKey
+
+Deploying your application
+
+heroku login
+
+git init
+
+heroku git:remote -a shopping-fs
+
+set git remote heroku to https://git.heroku.com/shopping-fs.git
+
+git add . git commit -am 'Initial commit'
+
+git push heroku master
+
+..........
+remote: -----> Launching... remote: Released v4 remote:https://shopping-fs.herokuapp.com/ deployed to Heroku remote:
+
+Heroku configuration
+
+web: server/target/universal/stage/bin/server -Dhttp.port= $PORT -Dconfig.file= server/conf/heroku.conf
+
+Writing the tests
+
+class APISpec extends PlaySpec with ScalaFutures with GuiceOneServerPerSuite {
+
+  val baseURL =  s"localhost:$port/v1"
+  val productsURL =  s"http://$baseURL/products"
+  val addProductsURL =  s"http://$baseURL/products/add"
+  val productsInCartURL =  s"http://$baseURL/cart/products"
+  def deleteProductInCartURL(productID: String) =  
+ s"http://$baseURL/cart/products/$productID" def actionProductInCartURL(productID: String, quantity: Int) =  
+ s"http://$baseURL/cart/products/$productID/quantity/$quantity" "The API" should { val wsClient =  app.injector.instanceOf[WSClient] } }
+
+"list all the product" in {
+     val response =  Await.result(
+ wsClient.url(productsURL).get(),
+ 1 seconds) response.status mustBe OK }
+
+"add a product" in {
+  val newProduct = 
+"""
+ {
+      "name" : "NewOne",
+      "code" : "New",
+      "description" : "The brand new product",
+      "price" : 100.0
+ }
+"""
+
+     val posted =  wsClient.url(addProductsURL).
+ post(newProduct).futureValue posted.status mustBe OK }
+
+"add a product in the cart" in {
+      val productID =  "ALD1"
+      val quantity =  1
+      val posted =  wsClient.url(actionProductInCartURL(productID, 
+ quantity)).post("").futureValue posted.status mustBe OK } "delete a product from the cart" in { val productID =  "ALD1" val quantity =  1 val posted =  wsClient.url(deleteProductInCartURL(productID))
+ .delete().futureValue posted.status mustBe OK } "update a product quantity in the cart" in { val productID =  "ALD1" val quantity =  1 val posted =  wsClient.url(actionProductInCartURL(productID, 
+ quantity))
+ .post("").futureValue posted.status mustBe OK val newQuantity =  99 val update =  wsClient.url(actionProductInCartURL(productID, 
+ newQuantity)).put("").futureValue update.status mustBe OK }
+
+Defining the routes
+
+# Product API
+GET    /v1/products                         W.listProduct
+POST   /v1/products/add                     W.addProduct
+
+# Cart API
+GET    /v1/cart/products                    W.listCartProducts()
+DELETE /v1/cart/products/:id                W.deleteCartProduct(id)
+POST   /v1/cart/products/:id/quantity/:qty  W.addCartProduct(id,qty)
+PUT    /v1/cart/products/:id/quantity/:qty  W.updateCartProduct(id,qty)
+
+@Singleton
+class WebServices  @Inject()(cc: ControllerComponents, productDao: ProductsDao) extends AbstractController(cc) {
+
+  // *********** CART Controler ******** //
+  def listCartProducts() =  play.mvc.Results.TODO
+
+  def deleteCartProduct(id: String) =  play.mvc.Results.TODO
+
+  def addCartProduct(id: String, quantity: String) =      
+ play.mvc.Results.TODO def updateCartProduct(id: String, quantity: String) =  
+ play.mvc.Results.TODO // *********** Product Controler ******** // def listProduct() =  play.mvc.Results.TODO def addProduct() =  play.mvc.Results.TODO }
+
+Completing the product tests
+
+"list all the products" in {
+      val response =  wsClient.url(productsURL).get().futureValue
+      println(response.body)
+      response.status mustBe OK
+      response.body must include("PEPER")
+      response.body must include("NAO")
+      response.body must include("BEOBOT")
+    }
+
+"add a product" in {
+      val newProduct = 
+        """
+       {
+            "name" : "NewOne",
+            "code" : "New",
+            "description" : "The brand new product",
+            "price" : 100.0
+       }
+      """
+
+      val posted =  wsClient.url(addProductsURL).post(newProduct).
+ futureValue posted.status mustBe OK val response =  wsClient.url(productsURL).get().futureValue println(response.body) response.body must include("NewOne") }
+
+Product list
+
+def listProduct() =  Action.async { request => val futureProducts =  productDao.all() for ( products <- futureProducts ) yield (Ok(products.mkstring(","))) }
+
+Encoding JSON with Circe
+
+libraryDependencies +=  "com.dripower" %% "play-circe" % "2609.0"
+
+class WebServices @Inject()(cc: ControllerComponents, productDao: ProductsDao) extends AbstractController(cc) with Circe
+
+import play.api.libs.circe.Circe
+import io.circe.generic.auto._
+import io.circe.syntax._
+
+def listProduct() =  Action.async { request => val futureProducts =  productDao.all() for( products <- futureProducts ) yield (Ok(products.asJson)) }
+
+Adding a product
+
+def addProduct() =  Action.async { request => Future.successful(Ok) }
+
+def addProduct() =  Action.async { request => val productOrNot =  decode[Product]
+ (request.body.asText.getOrElse("")) productOrNot match { case Right(product) => { val futureInsert =  productDao.insert(product).recover { case e => { Logger.error("Error while writing in the database", e) InternalServerError("Cannot write in the database") } futureInsert.map(_ => Ok) } case Left(error) => { Logger.error("Error while adding a product",error) Future.successful(BadRequest) } } }
+
+Unit test
+
+"return a cookie when a user logins" in {
+       val cookieFuture =  wsClient.url(login).post("myID").map {
+ response =>
+ response.headers.get("Set-Cookie").map(
+ header => header.head.split(";")
+ .filter(_.startsWith("PLAY_SESSION")).head)
+ }
+ } val loginCookies =  Await.result(cookieFuture, 1 seconds) val play_session_Key =  loginCookies.get.split("= ").head play_session_Key must equal("PLAY_SESSION") }
+
+Implementation
+
+# Login
+POST    /v1/login    controllers.WebServices.login
+
+def login() =  Action { request => request.body.asText match { case None => BadRequest case Some(user) => Ok.withSession("user" -> user) } }
+
+Passing the cookie
+
+"list all the products in a cart" in {
+      val loginCookies =  
+ Await.result(wsClient.url(login).post("me").map(p =>
+ p.headers.get("Set-Cookie").map(_.head.split(";").head)), 1 
+ seconds) val play_session =  loginCookies.get.split("= ").tail.mkString("") val response =  (wsClient.url(productsInCartURL).
+ addCookies(DefaultWSCookie("PLAY_SESSION", 
+ play_session)).get().futureValue println(response) response.status mustBe OK val listOfProduct =  decode[Seq[Cart]](response.body) listOfProduct.right.get mustBe empty }
+
+lazy val defaultCookie =  {
+      val loginCookies =  Await.result(wsClient.url(login).post("me")
+ .map(p => p.headers.get("Set-Cookie").map(
+ _.head.split(";").head)), 1 seconds) val play_session =  loginCookies.get.split("= ").tail.mkString("") DefaultWSCookie("PLAY_SESSION", play_session) }
+
+"list all the products in a cart" in {
+       val response =  wsClient.url(productsInCartURL)
+ .addCookies(defaultCookie).get().futureValue response.status mustBe OK val listOfProduct =  decode[Seq[Cart]](response.body) listOfProduct.right.get mustBe empty }
+
+"add a product in the cart" in {
+ val productID =  "ALD1"
+ val quantity =  1
+ val posted =  wsClient.url(actionProductInCartURL(productID, 
+ quantity)).addCookies(defaultCookie).post("").futureValue
+ posted.status mustBe OK
+
+ val response =  wsClient.url(productsInCartURL)
+ .addCookies(defaultCookie).get().futureValue
+ println(response)
+ response.status mustBe OK
+ response.body must include("ALD1")
+ }
+
+"delete a product from the cart" in {
+ val productID =  "ALD1"
+ val posted =  wsClient.url(deleteProductInCartURL(productID))
+ .addCookies(defaultCookie).delete().futureValue
+ posted.status mustBe OK
+
+ val response =  wsClient.url(productsInCartURL)
+ .addCookies(defaultCookie).get().futureValue
+ println(response)
+ response.status mustBe OK
+ response.body mustNot include("ALD1")
+ }
+
+"update a product quantity in the cart" in {
+ val productID =  "ALD1"
+ val quantity =  1
+ val posted =  wsClient.url(actionProductInCartURL(productID, 
+ quantity)).addCookies(defaultCookie).post("").futureValue
+ posted.status mustBe OK
+
+ val newQuantity =  99
+ val update =  wsClient.url(actionProductInCartURL(productID, 
+ newQuantity)).addCookies(defaultCookie).put("").futureValue
+ update.status mustBe OK
+
+ val response =  wsClient.url(productsInCartURL)
+ .addCookies(defaultCookie).get().futureValue
+ println(response)
+ response.status mustBe OK
+ response.body must include(productID)
+ response.body must include(newQuantity.toString)
+ }
+
+Listing products in cart
+
+class WebServices @Inject()(cc: ControllerComponents, productDao: ProductsDao, cartsDao: CartsDao) extends AbstractController(cc) with Circe {
+
+def listCartProducts() =  Action.async { request => val userOption =  request.session.get("user") userOption match { case Some(user) => { Logger.info(s"User '$user' is asking for the list of product in 
+ the cart") val futureInsert =  cartsDao.all(user) futureInsert.map(products => Ok(products.asJson)).recover { case e => { Logger.error("Error while writing in the database", e) InternalServerError("Cannot write in the database") } } } case None => Future.successful(Unauthorized) } }
+
+def addCartProduct(id: String, quantity: String) =  
+ Action.async { request => val user =  request.session.get("user") user match { case Some(user) => { val futureInsert =  cartsDao.insert(Cart(user, id, 
+ quantity.toInt)) futureInsert.map(_ => Ok).recover { case e => { Logger.error("Error while writing in the database", e) InternalServerError("Cannot write in the database") } } } case None => Future.successful(Unauthorized) } }
+
+val recoverError: PartialFunction[Throwable, Result] =  {
+  case e: Throwable => { Logger.error("Error while writing in the database", e) InternalServerError("Cannot write in the database") } }
+
+def deleteCartProduct(id: String) =  Action.async { request => val userOption =  request.session.get("user") userOption match { case Some(user) => { Logger.info(s"User '$user' is asking to delete the product 
+ '$id' from the cart") val futureInsert =  cartsDao.remove(ProductInCart(user, id)) futureInsert.map(_ => Ok).recover(recoverError) } case None => Future.successful(Unauthorized) } }
+
+def updateCartProduct(id: String, quantity: String) =  Action.async {   
+request => val userOption =  request.session.get("user") userOption match { case Some(user) => { Logger.info(s"User '$user' is updating the product'$id' in it 
+ is cart with a quantity of '$quantity") val futureInsert =  cartsDao.update(Cart(user, id, 
+ quantity.toInt)) futureInsert.map(_ => Ok).recover(recoverError) } case None => Future.successful(Unauthorized) } }
+
+Installing Swagger
+
+"io.swagger" %% "swagger-play2" % "1.6.0"
+
+play.modules.enabled +=  "play.modules.swagger.SwaggerModule"
+
+GET  /swagger.json  controllers.ApiHelpController.getResources
+
+"org.webjars" % "swagger-ui" % "3.10.0",
+
+GET  /docs/swagger-ui/*file controllers.Assets.at(path:String= "/public/lib/swagger-ui", file:String)
+
+play.filters.hosts {
+  # Allow requests from heroku and the temporary domain and localhost:9000.
+  allowed =  ["shopping-fs.herokuapp.com", "localhost:9000"]
+}
+play.filters.headers.contentSecurityPolicy =  "default-src * 'self' 'unsafe-inline' data:"
+
+Declaring endpoints
+
+api.version =  "1.0.0"
+swagger.api.info =  {
+  description : "API for the online shopping example",
+  title : "Online Shopping"
+}
+
+@Singleton
+@Api(value =  "Product and Cart API")
+class WebServices @Inject()(cc: ControllerComponents, productDao: ProductsDao, cartsDao: CartsDao) extends AbstractController(cc) with Circe {
+
+Running the application
+
+--- (Running the application, auto-reloading is enabled) ---
+[info] p.c.s.AkkaHttpServer - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+(Server started, use Enter to stop and go back to the console...)
+
+Login
+
+@ApiOperation(value =  "Login to the service", consumes =  "text/plain")
+  @ApiImplicitParams(Array(
+    new ApiImplicitParam(
+      value =  "Create a session for this user",
+      required =  true,
+      dataType =  "java.lang.String", // complete path
+      paramType =  "body"
+    )
+  ))
+  @ApiResponses(Array(new ApiResponse(code =  200, message =  "login         success"), new ApiResponse(code =  400, message = 
+ "Invalid user name supplied"))) def login() =  Action { request =>
+
+List of products
+
+@ApiOperation(value =  "List all the products")
+  @ApiResponses(Array(new ApiResponse(code =  200, message =  "The list 
+ of all the product"))) def listProduct() =  Action.async { request =>
+
+@ApiOperation(value =  "Add a product", consumes =  "text/plain")
+  @ApiImplicitParams(Array(
+    new ApiImplicitParam(
+      value =  "The product to add",
+      required =  true,
+      dataType =  "models.Product", // complete path
+      paramType =  "body"
+    )
+  ))
+  @ApiResponses(Array(new ApiResponse(code =  200, message =  "Product 
+ added"), new ApiResponse(code =  400, message =  "Invalid 
+ body supplied"), new ApiResponse(code =  500, message =  "Internal 
+ server error, database error"))) def addProduct() =  Action.async { request =>
+
+Cart endpoints
+
+@ApiOperation(value =  "List the product in the cart", consumes =  
+ "text/plain") @ApiResponses(Array(new ApiResponse(code =  200, message =  "Product 
+ added"), new ApiResponse(code =  401, message =  "unauthorized, please login 
+ before to proceed"), new ApiResponse(code =  500, message =  "Internal server error, 
+ database error"))) def listCartProducts() =  Action.async { request =>
+
+@ApiOperation(value =  "Add a product in the cart", consumes =  
+ "text/plain") @ApiResponses(Array(new ApiResponse(code =  200, message =  "Product 
+ added in the cart"),
+ new ApiResponse(code =  400, message =  "Cannot insert duplicates in 
+ the database"), new ApiResponse(code =  401, message =  "unauthorized, please login 
+ before to proceed"), new ApiResponse(code =  500, message =  "Internal server error, 
+ database error"))) def addCartProduct( @ApiParam(name =  "id", value =  "The product code", required =  
+ true) id: String, @ApiParam(name =  "quantity", value=  "The quantity to add", 
+ required =  true) quantity: String) =  Action.async { request 
+ =>
+
+@ApiOperation(value =  "Update a product quantity in the cart", 
+ consumes =  "text/plain") @ApiResponses(Array(new ApiResponse(code =  200, message =  "Product 
+ added in the cart"), new ApiResponse(code =  401, message =  "unauthorized, please login 
+ before to proceed"), new ApiResponse(code =  500, message =  "Internal server error, 
+ database error"))) def updateCartProduct(@ApiParam(name =  "id", value =  "The product 
+ code", required =  true, example =  "ALD1") id: String, 
+ @ApiParam(name =  "quantity", value=  "The quantity to update", 
+ required =  true) quantity: String) =  Action.async { request =>
+
+@ApiOperation(value =  "Delete a product from the cart", consumes =  
+ "text/plain") @ApiResponses(Array(new ApiResponse(code =  200, message =  "Product 
+ delete from the cart"), new ApiResponse(code =  401, message =  "unauthorized, please login 
+ before to proceed"), new ApiResponse(code =  500, message =  "Internal server error, 
+ database error"))) def deleteCartProduct(@ApiParam(name =  "id", value =  "The product 
+ code", required =  true) id: String) =  Action.async { request =>
+
+Deploying on Heroku
+
+git push heroku master
+
+Setting up
+
+addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.24")
+addSbtPlugin("com.vmunier" % "sbt-web-scalajs" % "1.0.8-0.6")
+
+.enablePlugins(ScalaJSPlugin, ScalaJSWeb)
+
+"com.lihaoyi" %%% "scalatags" % "0.6.7"
+
+Creating the layout
+
+@(title: String)
+<!DOCTYPE html><html>
+<head>
+<title>@title</title>
+</head>
+<body>
+<div class= "container">
+<div class= "row">
+<div id= "productPanel" class= "col-8">
+<div id= "products" class= "row">
+</div>
+</div>
+<div id= "cartPanel" class= "col-4">
+</div>
+</div>
+</div>
+
+ @scalajs.html.scripts("client",
+ routes.Assets.versioned(_).toString,
+ name => getClass.getResource(s"/public/$name") !=  null)
+</body>
+</html>
+
+Building the page
+
+<head><title>@title</title><!-- Bootstrap CSS --><link rel= "stylesheet" 
+ href= "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0
+ /css/bootstrap.min.css" integrity= "sha384- 
+ Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW
+ /dAiS6JXm" crossorigin= "anonymous"></head>
+
+Main layout
+
+<body><div class= "container">
+<div class= "row">
+<div id= "productPanel" class= "col-8">
+<div id= "products" class= "row"></div>
+</div>
+<div id= "cartPanel" class= "col-4"></div>
+</div>
+</div></body>
+
+Product list panel
+
+<div id= "productPanel" class= "col-8"><div id= "products" class= "row">
+<-- Added programatically --></div></div>
+
+case class ProductDiv(product: Product) {
+  def content: Div =  div(`class` :=  "col")
+ (getProductDescription, getButton).render
+ private def getProductDescription =  div( p(product.name), p(product.description), p(product.price)) private def getButton =  button(
+ `type` :=  "button",
+ onclick :=  addToCart)("Add to Cart") private def addToCart =  () => ??? }
+
+Cart panel
+
+case class CartLine(qty: Int, product: Product)
+
+def content: Div =  div(`class` :=  "row", id :=  s"cart-${product.code}-row")(
+ div(`class` :=  "col-1")(getDeleteButton),
+ div(`class` :=  "col-2")(getQuantityInput),
+ div(`class` :=  "col-6")(getProductLabel),
+ div(`class` :=  "col")(getPriceLabel)
+).render
+
+private def getDeleteButton =  button(
+ `type` :=  "button",
+ onclick :=  removeFromCart)("X").render
+
+private def removeFromCart =  () => ???
+
+private def getQuantityInput =  input(
+ id :=  s"cart-${product.code}-qty",
+ onchange :=  changeQty,
+ value :=  qty.toString,
+ `type` :=  "text",
+ style :=  "width: 100%;").render
+
+private def changeQty =  () => ???
+
+private def getProductLabel =  label(product.name).render
+
+private def getPriceLabel =  label(product.price * qty).render
+
+case class CartDiv(lines: Set[CartLine]) {
+  def content =  lines.foldLeft(div.render) { (a, b) => a.appendChild(b.content).render a } def addProduct(line: CartLine): CartDiv =  { new CartDiv(this.lines + line) } }
+
+Adding jQuery to our project
+
+"org.querki" %%% "jquery-facade" % "1.2"
+
+jsDependencies += 
+                "org.webjars" % "jquery" % "2.2.1" / "jquery.js"
+                minified "jquery.min.js"
+
+Setting the main method
+
+scalaJSUseMainModuleInitializer :=  true
+
+object UIManager {
+
+  val origin: UndefOr[String] =  dom.document.location.origin
+  val cart: CartDiv =  CartDiv(Set.empty[CartLine])
+ val webSocket: WebSocket =  getWebSocket
+ val dummyUserName =  s"user-${Random.nextInt(1000)}"
+ def main(args: Array[String]): Unit =  { val settings =  JQueryAjaxSettings
+ .url(s"$origin/v1/login")
+ .data(dummyUserName) 
+ .contentType("text/plain") $.post(settings._result).done((_: String) => { initUI(origin) }) } }
+
+def done(doneCallbacks: js.Function*): JQueryDeferred =  js.native
+
+Initializing the user interface
+
+private def initUI(origin: UndefOr[String]) =  {
+  $.get(url =  s"$origin/v1/products", dataType =  "text")
+    .done((answers: String) => { val products =  decode[Seq[Product]](answers) products.right.map { seq => seq.foreach(p => $("#products").append(ProductDiv(p).content) ) initCartUI(origin, seq) } }) .fail((xhr: JQueryXHR, textStatus: String, textError: String) => println(s"call failed: $textStatus with status code: 
+ ${xhr.status} $textError") ) }
+
+private def initCartUI(origin: UndefOr[String], products: Seq[Product]) =  {
+  $.get(url =  s"$origin/v1/cart/products", dataType =  "text")
+    .done((answers: String) => { val carts =  decode[Seq[Cart]](answers) carts.right.map { cartLines => cartLines.foreach { cartDao => val product =  products.find(
+ _.code = =  cartDao.productCode) product match { case Some(p) => val cartLine =  CartLine(cartDao.quantity, p.name, 
+ cartDao.productCode, p.price) val cartContent =  UIManager.cart.addProduct(cartLine)
+ .content $("#cartPanel").append(cartContent) case None => println(
+ s"product code ${cartDao.productCode} doesn't 
+ exists in the catalog") } } } }) .fail((xhr: JQueryXHR, textStatus: String, textError: String) => println(
+ s"call failed: $textStatus with status code: 
+ ${xhr.status} $textError") ) }
+
+Adding a product to the cart
+
+private def addToCart() =  () => UIManager.addOneProduct(product)
+
+def addOneProduct(product: Product): JQueryDeferred =  {
+  val quantity =  1
+  def onDone =  () => { val cartContent =  cart.addProduct(CartLine(quantity, product) ).content $("#cartPanel").append(cartContent) println(s"Product $product added in the cart") } postInCart(product.code, quantity, onDone) }
+
+private def postInCart(productCode: String, quantity: Int, onDone: () => Unit) =  { val url =  s"${UIManager.origin}/v1/cart/products/$productCode
+ /quantity/$quantity" $.post(JQueryAjaxSettings.url(url)._result) .done(onDone) .fail(() => println("cannot add a product twice")) }
+
+Removing a product from the cart
+
+private def removeFromCart() =  
+ () => UIManager.deleteProduct(product)
+
+def deleteProduct(product: Product): JQueryDeferred =  {
+ def onDone =  () => {
+ val cartContent =  $(s"#cart-${product.code}-row")
+ cartContent.remove()
+ println(s"Product ${product.code} removed from the cart")
+ }
+
+ deletefromCart(product.code, onDone)
+}
+
+private def deletefromCart(
+ productCode: String,
+ onDone: () => Unit) =  { val url =  s"${UIManager.origin}/v1/cart/products/$productCode" $.ajax(JQueryAjaxSettings.url(url).method("DELETE")._result) .done(onDone) }
+
+Updating the quantity
+
+private def changeQty() =  
+ () => UIManager.updateProduct(product)
+
+def updateProduct(productCode: String): JQueryDeferred =  {
+  putInCart(product.code, quantity(product.code))
+}
+
+private def quantity(productCode: String) =  Try {
+ val inputText =  $(s"#cart-$productCode-qty")
+ if (inputText.length !=  0) 
+ Integer.parseInt(inputText.`val`().asInstanceOf[String]) 
+ else 1
+ }.getOrElse(1)
+
+private def putInCart(productCode: String, updatedQuantity: Int) =  {
+  val url =  
+ s"${UIManager.origin}/v1/cart/products/
+ $productCode/quantity/$updatedQuantity" $.ajax(JQueryAjaxSettings.url(url).method("PUT")._result) .done() }
+
+Deploying the user interface
+
+git push heroku master
+
+Setting up
+
+jsDependencies ++=  Seq(
+        ...,
+  "org.webjars" % "notifyjs" % "0.4.2" / "notify.js")
+
+Creating the web socket route
+
+GET /v1/cart/events controllers.WebSockets.cartEventWS
+
+@Singleton
+class WebSockets @Inject()(
+  implicit actorSystem: ActorSystem,
+  materializer: Materializer,
+  cc: ControllerComponents) extends AbstractController(cc) {
+
+  def cartEventWS =  WebSocket.accept[String, String] { 
+ implicit request 
+ => ActorFlow.actorRef { out => // handle upstream } } } }
+
+Implementing BrowserManager
+
+val managerActor =  actorSystem.actorOf(
+  BrowserManagerActor.props(),
+  "manager-actor")
+
+object BrowserManagerActor {
+  def props() =  Props(new BrowserManagerActor())
+ 
+  case class AddBrowser(browser: ActorRef)
+}
+
+private class BrowserManagerActor() extends Actor with ActorLogging {
+
+  val browsers: ListBuffer[ActorRef] =  ListBuffer.empty[ActorRef]
+
+  def receive: Receive =  {
+   
+    case AddBrowser(b) => context.watch(b) browsers += b log.info("websocket {} added", b.path)  case CartEvent(user, product, action) => val messageText =  s"The user '$user' ${action.toString} 
+ ${product.name}" log.info("Sending alarm to all the browser with '{}' action: {}", messageText, action) browsers.foreach(_ ! Alarm(messageText, action).asJson.noSpaces)  case Terminated(b) => browsers -=  b log.info("websocket {} removed", b.path) } }
+
+Handling WebSocket
+
+def cartEventWS =  WebSocket.accept[String, String] { implicit request => ActorFlow.actorRef{out => Logger.info(s"Got a new websocket connection from 
+ ${request.host}") managerActor ! BrowserManagerActor.AddBrowser(out) BrowserActor.props(managerActor) } }
+
+object BrowserActor {
+  def props(browserManager :ActorRef) = 
+      Props(new BrowserActor(browserManager))
+}
+
+class BrowserActor(browserManager: ActorRef) extends Actor with ActorLogging {
+  def receive =  {
+    case msg: String => log.info("Received JSON message: {}", msg) decode[CartEvent](msg) match { case Right(cartEvent) => log.info("Got {} message", cartEvent) browserManager forward cartEvent case Left(error) => log.info("Unhandled message : {}", error) } } }
+
+Adding the web socket
+
+val webSocket: WebSocket =  getWebSocket
+
+private def getWebSocket: WebSocket =  {
+  val ws =  new WebSocket(getWebsocketUri(dom.document, 
+ "v1/cart/events"))  ws.onopen =  { (event: Event) =E2=87=92 println(s"webSocket.onOpen '${event.`type`}'") event.preventDefault() } ws.onerror =  { (event: Event) => System.err.println(s"webSocket.onError '${event.getClass}'") } ws.onmessage =  { (event: MessageEvent) => println(s"[webSocket.onMessage] '${event.data.toString}'...") val msg =  decode[Alarm](event.data.toString) msg match { case Right(alarm) => println(s"[webSocket.onMessage] Got alarm event : $alarm)") notify(alarm) case Left(e) => println(s"[webSocket.onMessage] Got a unknown event : $msg)") } } ws.onclose =  { (event: CloseEvent) =E2=87=92 println(s"webSocket.onClose '${event.`type`}'") } ws }
+
+private def getWebsocketUri(document: Document, context: String): String =  {
+  val wsProtocol =  
+ if (dom.document.location.protocol = =  "https:") "wss" else "ws" s"$wsProtocol://${ dom.document.location.host }/$context" }
+
+Extending jQuery
+
+@js.native
+@JSGlobal("$")
+object NotifyJS extends js.Object {
+  def notify(msg: String, option: Options): String =  js.native
+}
+
+{
+  // whether to hide the notification on click
+  clickToHide: true,
+  // whether to auto-hide the notification
+  autoHide: true,
+  // if autoHide, hide after milliseconds
+  autoHideDelay: 5000,
+  // show the arrow pointing at the element
+  arrowShow: true,
+  // arrow size in pixels
+  arrowSize: 5,
+  // position defines the notification position though uses the 
+ defaults below position: '...', // default positions elementPosition: 'bottom left', globalPosition: 'top right', // default style style: 'bootstrap', // default class (string or [string]) className: 'error', // show animation showAnimation: 'slideDown', // show animation duration showDuration: 400, // hide animation hideAnimation: 'slideUp', // hide animation duration hideDuration: 200, // padding between element and notification gap: 2 }
+
+@ScalaJSDefined
+trait Options extends js.Object {
+  // whether to hide the notification on click
+  var clickToHide: js.UndefOr[Boolean] =  js.undefined
+  // whether to auto-hide the notification
+  var autoHide: js.UndefOr[Boolean] =  js.undefined
+  // if autoHide, hide after milliseconds
+  var autoHideDelay: js.UndefOr[Int] =  js.undefined
+  // show the arrow pointing at the element
+  var arrowShow: js.UndefOr[Boolean] =  js.undefined
+  // arrow size in pixels
+  var arrowSize: js.UndefOr[Int] =  js.undefined
+  // position defines the notification position 
+ // though uses the defaults below var position: js.UndefOr[String] =  js.undefined // default positions var elementPosition: js.UndefOr[String] =  js.undefined var globalPosition: js.UndefOr[String] =  js.undefined // default style var style: js.UndefOr[String] =  js.undefined // default class (string or [string]) var className: js.UndefOr[String] =  js.undefined // show animation var showAnimation: js.UndefOr[String] =  js.undefined // show animation duration var showDuration: js.UndefOr[Int] =  js.undefined // hide animation var hideAnimation: js.UndefOr[String] =  js.undefined // hide animation duration var hideDuration: js.UndefOr[Int] =  js.undefined // padding between element and notification var gap: js.UndefOr[Int] =  js.undefined }
+
+private def notify(alarm: Alarm): Unit =  {
+  val notifyClass =  if (alarm.action = =  Add) "info" else "warn"
+  NotifyJS.notify(alarm.message, new Options {
+    className =  notifyClass
+    globalPosition =  "right bottom"
+  })
+}
+
+Setting up the project
+
+name :=  "bitcoin-analyser"
+
+version :=  "0.1"
+
+scalaVersion :=  "2.11.11"
+val sparkVersion =  "2.3.1"
+
+libraryDependencies ++=  Seq(
+"org.lz4" % "lz4-java" % "1.4.0",
+"org.apache.spark" %% "spark-core" % sparkVersion % Provided,
+"org.apache.spark" %% "spark-core" % sparkVersion % Test classifier 
+"tests",
+"org.apache.spark" %% "spark-sql" % sparkVersion % Provided,
+"org.apache.spark" %% "spark-sql" % sparkVersion % Test classifier "tests",
+"org.apache.spark" %% "spark-catalyst" % sparkVersion % Test classifier "tests",
+"com.typesafe.scala-logging" %% "scala-logging" % "3.9.0",
+"org.scalatest" %% "scalatest" % "3.0.4" % "test",
+"org.typelevel" %% "cats-core" % "1.1.0",
+"org.typelevel" %% "cats-effect" % "1.0.0-RC2",
+"org.apache.spark" %% "spark-streaming" % sparkVersion % Provided,
+"org.apache.spark" %% "spark-sql-kafka-0-10" % sparkVersion % 
+Provided exclude ("net.jpountz.lz4", "lz4"),
+"com.pusher" % "pusher-java-client" % "1.8.0")
+
+ scalacOptions +=  "-Ypartial-unification"
+
+// Avoids SI-3623
+target :=  file("/tmp/sbt/bitcoin-analyser")
+
+Exploring the Spark&nbsp;API with the Scala console
+
+import org.apache.spark.sql.SparkSession
+val spark =  SparkSession.builder().master("local[*]").getOrCreate()
+import spark.implicits._
+
+import org.apache.spark.sql.Dataset
+
+val dsString: Dataset[String] =  Seq("1", "2", "3").toDS()
+// dsString: org.apache.spark.sql.Dataset[String] =  [value: string]
+
+dsString.show()
+
++-----+
+|value|
++-----+
+| 1|
+| 2|
+| 3|
++-----+
+
+Transforming rows using map
+
+val dsInt =  dsString.map(_.toInt)
+// dsInt: org.apache.spark.sql.Dataset[Int] =  [value: int]
+dsInt.explain()
+
+= =  Physical Plan = = 
+*(1) SerializeFromObject [input[0, int, false] AS value#96]
++- *(1) MapElements <function1>, obj#95: int
+ +- *(1) DeserializeToObject value#91.toString, obj#94: 
+ java.lang.String
+ +- LocalTableScan [value#91]
+
+Transforming rows using select
+
+import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.types.IntegerType
+
+val df =  ds.select($"value".cast(IntegerType))
+// df: org.apache.spark.sql.DataFrame =  [value: int]
+val dsInt =  df.as[Int]
+// dsInt: org.apache.spark.sql.Dataset[Int] =  [value: int]
+
+dsInt.explain()
+
+= =  Physical Plan = = 
+LocalTableScan [value#122]
+
+Calling the Bitstamp REST API
+
+[
+ {
+ "date": "1534582650",
+ "tid": "72519377",
+ "price": "6488.27",
+ "type": "1",
+ "amount": "0.05000000"
+ },
+ {
+ "date": "1534582645",
+ "tid": "72519375",
+ "price": "6488.27",
+ "type": "1",
+ "amount": "0.01263316"
+ },
+ ...
+]
+
+import java.net.URL
+import scala.io.Source
+
+val transactions =  Source.fromURL(new URL("https://www.bitstamp.net/api/v2/transactions/btcusd/?time= hour")).mkString
+
+Unit testing jsonToHttpTransaction
+
+package coinyser
+
+case class HttpTransaction(date: String,
+ tid: String,
+ price: String,
+ `type`: String,
+ amount: String)
+
+package coinyser
+
+import org.apache.spark.sql._
+import org.apache.spark.sql.test.SharedSparkSession
+import org.scalatest.{Matchers, WordSpec}
+
+class BatchProducerSpec extends WordSpec with Matchers with SharedSparkSession {
+ val httpTransaction1 =  
+ HttpTransaction("1532365695", "70683282", "7740.00", "0", 
+ "0.10041719")
+ val httpTransaction2 =  
+ HttpTransaction("1532365693", "70683281", "7739.99", "0", 
+ "0.00148564")
+
+ "BatchProducer.jsonToHttpTransaction" should {
+ "create a Dataset[HttpTransaction] from a Json string" in {
+ val json = 
+ """[{"date": "1532365695", "tid": "70683282", "price": 
+ "7740.00", "type": "0", "amount": "0.10041719"},
+ |{"date": "1532365693", "tid": "70683281", "price": 
+ "7739.99", "type": "0", "amount": 
+ "0.00148564"}]""".stripMargin
+
+ val ds: Dataset[HttpTransaction] =  
+ BatchProducer.jsonToHttpTransactions(json)
+ ds.collect() should contain theSameElementsAs 
+ Seq(httpTransaction1, httpTransaction2)
+ }
+ }
+}
+
+Implementing jsonToHttpTransaction
+
+package coinyser
+
+import java.time.Instant
+import java.util.concurrent.TimeUnit
+
+import cats.Monad
+import cats.effect.{IO, Timer}
+import cats.implicits._
+import org.apache.spark.sql.functions.{explode, from_json, lit}
+import org.apache.spark.sql.types._
+import org.apache.spark.sql.{Dataset, SaveMode, SparkSession}
+
+import scala.concurrent.duration._
+object BatchProducer {
+
+ def jsonToHttpTransactions(json: String)(implicit spark: 
+ SparkSession): Dataset[HttpTransaction] =  {
+ import spark.implicits._
+ val ds: Dataset[String] =  Seq(json).toDS()
+ val txSchema: StructType =  Seq.empty[HttpTransaction].schema
+ val schema =  ArrayType(txSchema)
+ val arrayColumn =  from_json($"value", schema)
+ ds.select(explode(arrayColumn).alias("v"))
+ .select("v.*")
+ .as[HttpTransaction]
+ }
+}
+
+def jsonToHttpTransactions(json: String)(implicit spark: SparkSession)
+: Dataset[HttpTransaction] =
+
+import spark.implicits.
+val ds: Dataset[String] =  Seq(json).toDS()
+
+val txSchema: StructType =  Seq.empty[HttpTransaction].toDS().schema
+ val schema =  ArrayType(txSchema)
+ val arrayColumn =  from_json($"value".cast(StringType), schema)
+
+ds.select(explode(arrayColumn).alias("v"))
+ .select("v.*")
+ .as[HttpTransaction]
+
+Unit testing httpToDomainTransactions
+
+package coinyser
+
+import java.sql.{Date, Timestamp}
+import java.time.ZoneOffset
+
+case class Transaction(timestamp: Timestamp,
+ date: Date,
+ tid: Int,
+ price: Double,
+ sell: Boolean,
+ amount: Double)
+
+object Transaction {
+ def apply(timestamp: Timestamp,
+ tid: Int,
+ price: Double,
+ sell: Boolean,
+ amount: Double) = 
+ new Transaction(
+ timestamp =  timestamp,
+ date =  Date.valueOf(
+ timestamp.toInstant.atOffset(ZoneOffset.UTC).toLocalDate),
+ tid =  tid,
+ price =  price,
+ sell =  sell,
+ amount =  amount)
+}
+
+"BatchProducer.httpToDomainTransactions" should {
+ "transform a Dataset[HttpTransaction] into a Dataset[Transaction]" 
+ in {
+ import testImplicits._
+ val source: Dataset[HttpTransaction] =  Seq(httpTransaction1, 
+ httpTransaction2).toDS()
+ val target: Dataset[Transaction] =  
+ BatchProducer.httpToDomainTransactions(source)
+ val transaction1 =  Transaction(timestamp =  new 
+ Timestamp(1532365695000L), tid =  70683282, price =  7740.00, 
+ sell =  false, amount =  0.10041719)
+ val transaction2 =  Transaction(timestamp =  new 
+ Timestamp(1532365693000L), tid =  70683281, price =  7739.99, 
+ sell =  false, amount =  0.00148564)
+
+ target.collect() should contain theSameElementsAs 
+ Seq(transaction1, transaction2)
+ }
+
+Implementing httpToDomainTransactions
+
+def httpToDomainTransactions(ds: Dataset[HttpTransaction]): 
+ Dataset[Transaction] =  {
+ import ds.sparkSession.implicits._
+ ds.select(
+ $"date".cast(LongType).cast(TimestampType).as("timestamp"),
+ $"date".cast(LongType).cast(TimestampType).
+ cast(DateType).as("date"),
+ $"tid".cast(IntegerType),
+ $"price".cast(DoubleType),
+ $"type".cast(BooleanType).as("sell"),
+ $"amount".cast(DoubleType))
+ .as[Transaction]
+ }
+
+Introducing the Parquet format
+
++-------------------+--------+-------+-----+-------+
+|timestamp |tid |price |sell |amount |
++-------------------+--------+-------+-----+-------+
+|2018-08-02 07:22:34| 0|7657.58|true |0.1 |
+|2018-08-02 07:22:47| 1|7663.85|false|0.2 |
+|2018-08-02 07:23:09| 2|7663.85|false|0.3 |
++-------------------+--------+-------+-----+-------+
+
+2018-08-02 07:22:34|0|7657.58|1|0.1;2018-08-02 07:22:47|1|7663.85|0|0.2;2018-08-02 07:23:09|2|7663.85|0|0.3
+
+2018-08-02 07:22:34|2018-08-02 07:22:47|2018-08-02 07:23:09;0|1|2;7657.58|7663.85|7663.85;true|false|false;0.1|0.2|0.3
+
+Writing transactions in Parquet
+
+import java.net.URI
+def unsafeSave(transactions: Dataset[Transaction], path: URI): Unit =  ???
+
+package coinyser
+
+import java.sql.Timestamp
+
+import cats.effect.{IO, Timer}
+import org.apache.spark.sql.test.SharedSparkSession
+import org.scalatest.{Matchers, WordSpec}
+
+class BatchProducerIT extends WordSpec with Matchers with SharedSparkSession {
+
+ import testImplicits._
+
+ "BatchProducer.unsafeSave" should {
+ "save a Dataset[Transaction] to parquet" in withTempDir { tmpDir =>
+ val transaction1 =  Transaction(timestamp =  new 
+ Timestamp(1532365695000L), tid =  70683282, price =  7740.00, 
+ sell =  false, amount =  0.10041719)
+ val transaction2 =  Transaction(timestamp =  new 
+ Timestamp(1532365693000L), tid =  70683281, price =  7739.99, 
+ sell =  false, amount =  0.00148564)
+ val sourceDS =  Seq(transaction1, transaction2).toDS()
+
+ val uri =  tmpDir.toURI
+ BatchProducer.unsafeSave(sourceDS, uri)
+ tmpDir.list() should contain("date= 2018-07-23")
+ val readDS =  spark.read.parquet(uri.toString).as[Transaction]
+ sourceDS.collect() should contain theSameElementsAs 
+ readDS.collect()
+ }
+ }
+}
+
+def unsafeSave(transactions: Dataset[Transaction], path: URI): Unit = 
+    transactions
+      .write
+      .mode(SaveMode.Append)
+      .partitionBy("date")
+      .parquet(path.toString)
+
+spark.read.parquet(uri + "/date= 2018-07-23").show()
+
++-------------------+--------+-------+-----+----------+
+| timestamp| tid| price| sell| amount|
++-------------------+--------+-------+-----+----------+
+|2018-07-23 18:08:15|70683282| 7740.0|false|0.10041719|
+|2018-07-23 18:08:13|70683281|7739.99|false|0.00148564|
++-------------------+--------+-------+-----+----------+
+
+Using the IO Monad
+
+import cats.effect.IO
+
+val io =  IO{ println("Side effect!"); 1 }
+// io: cats.effect.IO[Int] =  =E2=80=A6
+io.unsafeRunSync()
+// Side effect!
+// res1: Int =  1
+
+val program =  for {
+ a <- io
+ b <- io
+} yield a+b
+// program: cats.effect.IO[Int]
+program.unsafeRunSync()
+// IO is run!
+// IO is run!
+// res2: Int =  2
+
+import cats.effect.IO
+import cats.implicits._
+import scala.concurrent.ExecutionContext.Implicits.global
+
+val io =  IO{ Thread.sleep(100); Thread.currentThread().getName }
+val program =  (io, io, io).parMapN((a, b, c) => s"$a\n$b\n$c")
+program.unsafeRunSync()
+// res2: String = 
+// ForkJoinPool-1-worker-5
+// ForkJoinPool-1-worker-3
+// ForkJoinPool-1-worker-1
+
+def save(transactions: Dataset[Transaction], path: URI): IO[Unit] = 
+ IO(unsafeSave(transactions, path))
+
+BatchProducer.save(sourceDS, uri).unsafeRunSync()
+
+Testing processOneBatch
+
+class AppContext(val transactionStorePath: URI)
+ (implicit val spark: SparkSession,
+implicit val timer: Timer[IO])
+
+def processOneBatch(fetchNextTransactions: IO[Dataset[Transaction]],
+transactions: Dataset[Transaction],
+saveStart: Instant,
+saveEnd: Instant)(implicit appCtx: AppContext)
+: IO[(Dataset[Transaction], Instant, Instant)] =  ???
+
+"BatchProducer.processOneBatch" should {
+"filter and save a batch of transaction, wait 59 mn, fetch the next 
+ batch" in withTempDir { tmpDir =>
+implicit object FakeTimer extends Timer[IO] {
+ private var clockRealTimeInMillis: Long = 
+ Instant.parse("2018-08-02T01:00:00Z").toEpochMilli
+
+def clockRealTime(unit: TimeUnit): IO[Long] = 
+IO(unit.convert(clockRealTimeInMillis, TimeUnit.MILLISECONDS))
+
+def sleep(duration: FiniteDuration): IO[Unit] =  IO {
+clockRealTimeInMillis =  clockRealTimeInMillis + 
+duration.toMillis
+}
+
+def shift: IO[Unit] =  ???
+def clockMonotonic(unit: TimeUnit): IO[Long] =  ???
+}
+implicit val appContext: AppContext =  new 
+AppContext(transactionStorePath =  tmpDir.toURI)
+
+implicit def toTimestamp(str: String): Timestamp =  
+ Timestamp.from(Instant.parse(str))
+val tx1 =  Transaction("2018-08-01T23:00:00Z", 1, 7657.58, true, 
+0.021762)
+val tx2 =  Transaction("2018-08-02T01:00:00Z", 2, 7663.85, false, 
+0.01385517)
+val tx3 =  Transaction("2018-08-02T01:58:30Z", 3, 7663.85, false, 
+0.03782426)
+val tx4 =  Transaction("2018-08-02T01:58:59Z", 4, 7663.86, false, 
+0.15750809)
+val tx5 =  Transaction("2018-08-02T02:30:00Z", 5, 7661.49, true, 0.1)
+
+val txs0 =  Seq(tx1)
+val txs1 =  Seq(tx2, tx3)
+val txs2 =  Seq(tx3, tx4, tx5)
+val txs3 =  Seq.empty[Transaction]
+
+val start0 =  Instant.parse("2018-08-02T00:00:00Z")
+val end0 =  Instant.parse("2018-08-02T00:59:55Z")
+val threeBatchesIO = 
+for {
+ tuple1 <- BatchProducer.processOneBatch(IO(txs1.toDS()), 
+ txs0.toDS(), start0, end0) 
+(ds1, start1, end1) =  tuple1
+
+ tuple2 <- BatchProducer.processOneBatch(IO(txs2.toDS()), ds1, 
+ start1, end1)
+ (ds2, start2, end2) =  tuple2
+
+ _ <- BatchProducer.processOneBatch(IO(txs3.toDS()), ds2, start2, 
+ end2)
+ } yield (ds1, start1, end1, ds2, start2, end2)
+val (ds1, start1, end1, ds2, start2, end2) =  
+ threeBatchesIO.unsafeRunSync()
+
+ds1.collect() should contain theSameElementsAs txs1
+start1 should = = = (end0)
+end1 should = = = (Instant.parse("2018-08-02T01:58:55Z"))
+
+ds2.collect() should contain theSameElementsAs txs2
+start2 should = = = (end1)
+end2 should = = = (Instant.parse("2018-08-02T02:57:55Z"))
+
+val lastClock =  Instant.ofEpochMilli(
+ FakeTimer.clockRealTime(TimeUnit.MILLISECONDS).unsafeRunSync())
+lastClock should = = =  (Instant.parse("2018-08-02T03:57:00Z"))
+
+val savedTransactions =  spark.read.parquet(tmpDir.toString).as[Transaction].collect()
+val expectedTxs =  Seq(tx2, tx3, tx4, tx5)
+savedTransactions should contain theSameElementsAs expectedTxs
+
+Implementing processOneBatch
+
+val WaitTime: FiniteDuration =  59.minute
+val ApiLag: FiniteDuration =  5.seconds
+
+def processOneBatch(fetchNextTransactions: IO[Dataset[Transaction]],
+ transactions: Dataset[Transaction],
+ saveStart: Instant,
+ saveEnd: Instant)(implicit appCtx: AppContext)
+: IO[(Dataset[Transaction], Instant, Instant)] =  {
+ import appCtx._
+ val transactionsToSave =  filterTxs(transactions, saveStart, saveEnd)
+ for {
+ _ <- BatchProducer.save(transactionsToSave, 
+ appCtx.transactionStorePath)
+ _ <- IO.sleep(WaitTime)
+ beforeRead <- currentInstant
+ end =  beforeRead.minusSeconds(ApiLag.toSeconds)
+ nextTransactions <- fetchNextTransactions
+ } yield (nextTransactions, saveEnd, end)
+}
+
+def filterTxs(transactions: Dataset[Transaction], 
+fromInstant: Instant, untilInstant: Instant): Dataset[Transaction] =  {
+import transactions.sparkSession.implicits._
+transactions.filter(
+ ($"timestamp" >=  
+ lit(fromInstant.getEpochSecond).cast(TimestampType)) &&
+($"timestamp" <
+lit(untilInstant.getEpochSecond).cast(TimestampType)))
+}
+
+def currentInstant(implicit timer: Timer[IO]): IO[Instant] = 
+ timer.clockRealTime(TimeUnit.SECONDS) map Instant.ofEpochSecond
+
+Implementing processRepeatedly
+
+def processRepeatedly(initialJsonTxs: IO[Dataset[Transaction]], 
+ jsonTxs: IO[Dataset[Transaction]])
+ (implicit appContext: AppContext): IO[Unit] =  {
+import appContext._
+
+for {
+ beforeRead <- currentInstant
+ firstEnd =  beforeRead.minusSeconds(ApiLag.toSeconds)
+ firstTxs <- initialJsonTxs
+ firstStart =  truncateInstant(firstEnd, 1.day)
+ _ <- Monad[IO].tailRecM((firstTxs, firstStart, firstEnd)) {
+case (txs, start, instant) =>
+ processOneBatch(jsonTxs, txs, start, instant).map(_.asLeft)
+ }
+ } yield ()
+}
+
+Implementing BatchProducerApp
+
+package coinyser
+
+import java.io.{BufferedReader, InputStreamReader}
+import java.net.{URI, URL}
+
+import cats.effect.{ExitCode, IO, IOApp}
+import coinyser.BatchProducer.{httpToDomainTransactions, jsonToHttpTransactions}
+import com.typesafe.scalalogging.StrictLogging
+import org.apache.spark.sql.{Dataset, SparkSession}
+
+import scala.io.Source
+
+class BatchProducerApp extends IOApp with StrictLogging {
+
+implicit val spark: SparkSession =  
+ SparkSession.builder.master("local[*]").getOrCreate()
+implicit val appContext: AppContext =  new AppContext(new 
+URI("./data/transactions"))
+
+def bitstampUrl(timeParam: String): URL = 
+new URL("https://www.bitstamp.net/api/v2/transactions/btcusd?time= " 
++ timeParam)
+
+def transactionsIO(timeParam: String): IO[Dataset[Transaction]] =  {
+val url =  bitstampUrl(timeParam)
+val jsonIO =  IO {
+logger.info(s"calling $url")
+ Source.fromURL(url).mkString
+}
+ jsonIO.map(json =>
+httpToDomainTransactions(jsonToHttpTransactions(json)))
+ }
+
+val initialJsonTxs: IO[Dataset[Transaction]] =  transactionsIO("day")
+val nextJsonTxs: IO[Dataset[Transaction]] =  transactionsIO("hour")
+
+def run(args: List[String]): IO[ExitCode] = 
+ BatchProducer.processRepeatedly(initialJsonTxs, nextJsonTxs).map(_ 
+ => ExitCode.Success)
+}
+
+object BatchProducerAppSpark extends BatchProducerApp
+
+package coinyser
+
+object BatchProducerAppIntelliJ extends BatchProducerApp
+
+(...)
+18/09/02 22:29:08 INFO BatchProducerAppIntelliJ$: calling https://www.bitstamp.net/api/v2/transactions/btcusd?time= day
+18/09/02 22:29:15 WARN TaskSetManager: Stage 0 contains a task of very large size (1225 KB). The maximum recommended task size is 100 KB.
+18/09/02 22:29:15 INFO CodecPool: Got brand-new compressor [.snappy]
+18/09/02 22:29:16 INFO FileOutputCommitter: Saved output of task 'attempt_20180902222915_0000_m_000000_0' to file:/home/mikael/projects/Scala-Programming-Projects/bitcoin-analyser/data/transactions/_temporary/0/task_20180902222915_0000_m_000000
+
+import org.apache.spark.sql.SparkSession
+implicit val spark =  SparkSession.builder.master("local[*]").getOrCreate()
+val ds =  spark.read.parquet("./data/transactions")
+ds.show()
+
+Installing Apache Spark
+
+tar xfvz spark-2.3.1-bin-hadoop2.7.tgz ~/
+
+cd ~/spark-2.3.1-bin-hadoop2.7/bin
+./spark-shell
+
+(...)
+Spark context Web UI available at http://192.168.0.11:4040
+Spark context available as 'sc' (master =  local[*], app id =  local-1536218093431).
+Spark session available as 'spark'.
+Welcome to
+ ____ __
+ / __/__ ___ _____/ /__
+ _\ \/ _ \/ _ `/ __/ '_/
+ /___/ .__/\_,_/_/ /_/\_\ version 2.3.1
+ /_/
+
+Using Scala version 2.11.8 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_112)
+Type in expressions to have them evaluated.
+Type :help for more information.
+
+scala>
+
+Packaging the assembly JAR
+
+addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.7"
+
+assemblyOption in assembly :=  (assemblyOption in 
+ assembly).value.copy(includeScala =  false)
+test in assembly :=  {}
+mainClass in assembly :=  Some("coinyser.BatchProducerAppSpark")
+
+[IJ]sbt:bitcoin-analyser> assembly
+[info] Strategy 'discard' was applied to 3 files (Run the task at debug level to see details)[info] Packaging /tmp/sbt/bitcoin-analyser/scala-2.11/bitcoin-analyser-assembly-0.1.jar 
+...
+[info] Done packaging.
+
+Running spark-submit
+
+cd ~/spark-2.3.1-bin-hadoop2.7/bin
+./spark-submit /tmp/sbt/bitcoin-analyser/scala-2.11/bitcoin-analyser-assembly-0.1.jar
+
+(...)
+2018-09-07 07:55:27 INFO SparkContext:54 - Running Spark version 2.3.1
+2018-09-07 07:55:27 INFO SparkContext:54 - Submitted application: coinyser.BatchProducerAppSpark
+(...)
+2018-09-07 07:55:28 INFO Utils:54 - Successfully started service 'SparkUI' on port 4040.
+(...)
+2018-09-07 07:55:28 INFO SparkContext:54 - Added JAR file:/tmp/sbt/bitcoin-analyser/scala-2.11/bitcoin-analyser-assembly-0.1.jar at spark://192.168.0.11:38371/jars/bitcoin-analyser-assembly-0.1.jar with timestamp 1536303328633
+2018-09-07 07:55:28 INFO Executor:54 - Starting executor ID driver on host localhost
+(...)
+2018-09-07 07:55:28 INFO NettyBlockTransferService:54 - Server created on 192.168.0.11:37370
+(...)
+2018-09-07 07:55:29 INFO BatchProducerApp$:23 - calling https://www.bitstamp.net/api/v2/transactions/btcusd?time= day
+(...)
+2018-09-07 07:55:37 INFO SparkContext:54 - Starting job: parquet at BatchProducer.scala:115
+(...)
+2018-09-07 07:55:39 INFO DAGScheduler:54 - Job 0 finished: parquet at BatchProducer.scala:115, took 2.163065 s
+
+Starting Zeppelin
+
+<downloadPath>/zeppelin-0.8.0-bin-all/bin/zeppelin-daemon.sh start
+
+<downloadPath>/zeppelin-0.8.0-bin-all/bin/zepplin.cmd start
+
+Writing a paragraph
+
+val dsString =  Seq("1", "2", "3").toDS()
+dsString.show()
+
+spark.version
+
+Drawing charts
+
+case class Demo(id: String, data: Int)
+val data =  List(
+ Demo("a",1),
+ Demo("a",2),
+ Demo("b",8),
+ Demo("c",4))
+val dataDS =  data.toDS()
+dataDS.createOrReplaceTempView("demoView")
+
+%sql
+select * from demoView
+
+Drawing our first chart
+
+val transactions =  spark.read.parquet("<rootProjectPath>/Scala-Programming-Projects/bitcoin-analyser/data/transactions")
+z.show(transactions.sort($"timestamp"))
+
+val group =  transactions.groupBy(window($"timestamp", "20 minutes"))
+
+val tmpAgg =  group.agg(
+ count("tid").as("count"), 
+ avg("price").as("avgPrice"),
+ stddev("price").as("stddevPrice"),
+ last("price").as("lastPrice"),
+ sum("amount").as("sumAmount"))
+
+val aggregate =  tmpAgg.select("window.start", "count", "avgPrice", "lastPrice", "stddevPrice", "sumAmount").sort("start").cache()
+
+z.show(aggregate)
+
+group: org.apache.spark.sql.RelationalGroupedDataset =  RelationalGroupedDataset: [grouping expressions: [window: struct<start: timestamp, end: timestamp>], value: [timestamp: timestamp, tid: int ... 4 more fields], type: GroupBy] 
+
+tmpAgg: org.apache.spark.sql.DataFrame =  [window: struct<start: timestamp, end: timestamp>, count: bigint ... 4 more fields] 
+
+aggregate: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] =  [start: timestamp, count: bigint ... 4 more fields]
+
+Drawing more charts
+
+%spark
+z.show(aggregate)
+
+Subscribing with Pusher
+
+import com.pusher.client.Pusher
+import com.pusher.client.channel.SubscriptionEventListener
+
+val pusher =  new Pusher("de504dc5763aeef9ff52")
+pusher.connect()
+val channel =  pusher.subscribe("live_trades")
+
+channel.bind("trade", new SubscriptionEventListener() {
+override def onEvent(channel: String, event: String, data: String): 
+ Unit =  {
+println(s"Received event: $event with data: $data")
+ }
+})
+
+Received event: trade with data: {"amount": 0.001, "buy_order_id": 2165113017, "sell_order_id": 2165112803, "amount_str": "0.00100000", "price_str": "6433.53", "timestamp": "1537390248", "price": 6433.5299999999997, "type": 0, "id": 74263342}
+Received event: trade with data: {"amount": 0.0089460000000000008, "buy_order_id": 2165113493, "sell_order_id": 2165113459, "amount_str": "0.00894600", "price_str": "6433.42", "timestamp": "1537390255", "price": 6433.4200000000001, "type": 0, "id": 74263344}
+(...)
+
+package coinyser
+
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.util.TimeZone
+
+import cats.effect.IO
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.pusher.client.Client
+import com.pusher.client.channel.SubscriptionEventListener
+import com.typesafe.scalalogging.StrictLogging
+
+object StreamingProducer extends StrictLogging {
+
+def subscribe(pusher: Client)(onTradeReceived: String =>Unit): 
+ IO[Unit] = 
+for {
+ _ <- IO(pusher.connect())
+ channel <- IO(pusher.subscribe("live_trades"))
+
+ _ <- IO(channel.bind("trade", new SubscriptionEventListener() {
+override def onEvent(channel: String, event: String, data: 
+String): Unit =  {
+logger.info(s"Received event: $event with data: $data")
+onTradeReceived(data)
+ }
+ }))
+ } yield ()
+}
+
+Deserializing live transactions
+
+package coinyser
+
+case class WebsocketTransaction(amount: Double,
+buy_order_id: Long,
+sell_order_id: Long,
+amount_str: String,
+price_str: String,
+timestamp: String,
+price: Double,
+`type`: Int,
+id: Int)
+
+package coinyser
+
+import java.sql.Timestamp
+import coinyser.StreamingProducerSpec._
+import org.scalactic.TypeCheckedTripleEquals
+import org.scalatest.{Matchers, WordSpec}
+
+class StreamingProducerSpec extends WordSpec with Matchers with TypeCheckedTripleEquals {
+"StreamingProducer.deserializeWebsocketTransaction" should {
+"deserialize a valid String to a WebsocketTransaction" in {
+val str = 
+"""{"amount": 0.045318270000000001, "buy_order_id": 1969499130,
+ |"sell_order_id": 1969495276, "amount_str": "0.04531827",
+ |"price_str": "6339.73", "timestamp": "1533797395",
+ |"price": 6339.7299999999996, "type": 0, "id": 
+ 71826763}""".stripMargin
+StreamingProducer.deserializeWebsocketTransaction(str) should
+ = = = (SampleWebsocketTransaction)
+ }
+ }
+}
+
+object StreamingProducerSpec {
+val SampleWebsocketTransaction =  WebsocketTransaction(
+amount =  0.04531827, buy_order_id =  1969499130, sell_order_id =  
+1969495276, amount_str =  "0.04531827", price_str =  "6339.73", 
+timestamp =  "1533797395", price =  6339.73, `type` =  0, id =  
+71826763)
+}
+
+package coinyser
+
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.util.TimeZone
+
+import cats.effect.IO
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.pusher.client.Client
+import com.pusher.client.channel.SubscriptionEventListener
+import com.typesafe.scalalogging.StrictLogging
+
+object StreamingProducer extends StrictLogging {
+
+def subscribe(pusher: Client)(onTradeReceived: String =>Unit): 
+ IO[Unit] = 
+ ...
+
+val mapper: ObjectMapper =  {
+val m =  new ObjectMapper()
+ m.registerModule(DefaultScalaModule)
+val sdf =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+sdf.setTimeZone(TimeZone.getTimeZone("UTC"))
+ m.setDateFormat(sdf)
+ }
+
+def deserializeWebsocketTransaction(s: String): WebsocketTransaction 
+ =  {
+mapper.readValue(s, classOf[WebsocketTransaction])
+ }
+}
+
+Converting to&nbsp;transaction&nbsp;and serializing
+
+class StreamingProducerSpec extends WordSpec with Matchers with TypeCheckedTripleEquals {
+
+"StreamingProducer.deserializeWebsocketTransaction" should {...}
+
+"StreamingProducer.convertTransaction" should {
+"convert a WebSocketTransaction to a Transaction" in { 
+ StreamingProducer.convertWsTransaction
+ (SampleWebsocketTransaction) should
+ = = = (SampleTransaction)
+ }
+ }
+
+"StreamingProducer.serializeTransaction" should {
+"serialize a Transaction to a String" in {
+ StreamingProducer.serializeTransaction(SampleTransaction) should
+ = = = (SampleJsonTransaction)
+ }
+ }
+}
+
+object StreamingProducerSpec {
+val SampleWebsocketTransaction =  WebsocketTransaction(...)
+
+val SampleTransaction =  Transaction(
+timestamp =  new Timestamp(1533797395000L), tid =  71826763,
+price =  6339.73, sell =  false, amount =  0.04531827)
+
+val SampleJsonTransaction = 
+"""{"timestamp":"2018-08-09 06:49:55",
+ |"date":"2018-08-09","tid":71826763,"price":6339.73,"sell":false,
+ |"amount":0.04531827}""".stripMargin
+}
+
+object StreamingProducer extends StrictLogging {
+
+def subscribe(pusher: Client)(onTradeReceived: String =>Unit): 
+ IO[Unit] =  ...
+
+val mapper: ObjectMapper =  {...}
+
+def deserializeWebsocketTransaction(s: String): WebsocketTransaction 
+ =  {...}
+
+def convertWsTransaction(wsTx: WebsocketTransaction): Transaction = 
+Transaction(
+timestamp =  new Timestamp(wsTx.timestamp.toLong * 1000), tid =  
+wsTx.id, price =  wsTx.price, sell =  wsTx.`type` = =  1, amount =  
+wsTx.amount)
+
+def serializeTransaction(tx: Transaction): String =  
+mapper.writeValueAsString(tx)
+}
+
+Putting it all together
+
+package coinyser
+
+import cats.effect.{ExitCode, IO, IOApp}
+import com.pusher.client.Pusher
+import StreamingProducer._
+import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
+import scala.collection.JavaConversions._
+
+object StreamingProducerApp extends IOApp {
+val topic =  "transactions"
+
+val pusher =  new Pusher("de504dc5763aeef9ff52")
+
+val props =  Map(
+"bootstrap.servers" ->"localhost:9092",
+"key.serializer" ->
+"org.apache.kafka.common.serialization.IntegerSerializer",
+"value.serializer" ->
+"org.apache.kafka.common.serialization.StringSerializer")
+
+def run(args: List[String]): IO[ExitCode] =  {
+val kafkaProducer =  new KafkaProducer[Int, String](props)
+
+subscribe(pusher) { wsTx =>
+val tx =  convertWsTransaction(deserializeWebsocket
+ Transaction(wsTx))
+val jsonTx =  serializeTransaction(tx)
+ kafkaProducer.send(new ProducerRecord(topic, tx.tid, jsonTx))
+ }.flatMap(_ => IO.never)
+ }
+}
+
+Running StreamingProducerApp
+
+cd kafka_2.11-1.1.1
+bin/zookeeper-server-start.sh config/zookeeper.properties
+
+cd kafka_2.11-1.1.1
+bin/kafka-server-start.sh config/server.properties
+
+cd kafka_2.11-1.1.1
+bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic transactions =E2=80=93from-beginning
+
+18/09/22 17:30:41 INFO StreamingProducer$: Received event: trade with data: {"amount": 0.019958119999999999, "buy_order_id": 2180038294, "sell_order_id": 2180031836, "amount_str": "0.01995812", "price_str": "6673.66", "timestamp": "1537633840", "price": 6673.6599999999999, "type": 0, "id": 74611373}
+
+{"timestamp":"2018-09-22 16:30:40","date":"2018-09-22","tid":74611373,"price":6673.66,"sell":false,"amount":0.01995812}
+
+Reading transactions from Kafka
+
+case class Transaction(timestamp: java.sql.Timestamp,
+ date: String,
+ tid: Int,
+ price: Double,
+ sell: Boolean,
+ amount: Double)
+val schema =  Seq.empty[Transaction].toDS().schema
+
+val dfStream =  {
+ spark.readStream.format("kafka")
+ .option("kafka.bootstrap.servers", "localhost:9092")
+ .option("startingoffsets", "latest")
+ .option("subscribe", "transactions")
+ .load()
+ .select(
+ from_json(col("value").cast("string"), schema)
+ .alias("v")).select("v.*").as[Transaction]
+}
+
+dfStream: org.apache.spark.sql.DataFrame =  [timestamp: timestamp, date: string ... 4 more fields]
+
+z.show(dfStream)
+
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException at org.apache.zeppelin.spark.SparkZeppelinContext.showData(SparkZeppelinContext.java:112) at org.apache.zeppelin.interpreter.BaseZeppelinContext.show(BaseZeppelinContext.java:238) at org.apache.zeppelin.interpreter.BaseZeppelinContext.show(BaseZeppelinContext.java:224) ... 52 elided Caused by: java.lang.reflect.InvocationTargetException: org.apache.spark.sql.AnalysisException: Queries with streaming sources must be executed with writeStream.start();;
+
+Writing to an in-memory sink
+
+val query =  {
+ dfStream
+ .writeStream
+ .format("memory") 
+ .queryName("transactionsStream")
+ .outputMode("append")
+ .start()
+}
+
+query: org.apache.spark.sql.streaming.StreamingQuery =  org.apache.spark.sql.execution.streaming.StreamingQueryWrapper@3d9dc86a
+
+Drawing a scatter chart
+
+z.show(spark.table("transactionsStream").sort("timestamp"))
+
+Aggregating streaming transactions
+
+val aggDfStream =  { 
+ dfStream
+ .withWatermark("timestamp", "1 second")
+ .groupBy(window($"timestamp", "10 seconds").as("window"))
+ .agg(
+ count($"tid").as("count"), 
+ avg("price").as("avgPrice"),
+ stddev("price").as("stddevPrice"),
+ last("price").as("lastPrice"),
+ sum("amount").as("sumAmount")
+ )
+ .select("window.start", "count", "avgPrice", "lastPrice", 
+ "stddevPrice", "sumAmount")
+}
+
+val aggQuery =  {
+ aggDfStream
+ .writeStream
+.format("memory")
+ .queryName("aggregateStream")
+ .outputMode("append")
+ .start()
+}
+
+z.show(spark.table("aggregateStream").sort("start")

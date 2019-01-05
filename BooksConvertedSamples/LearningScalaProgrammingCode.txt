@@ -1,0 +1,4361 @@
+﻿Conventions used
+
+object First {
+ def main(args: Array[String]): Unit =  {
+ val double: (Int => Int) =  _ * 2
+ (1 to 10) foreach double .andThen(println)
+ }
+}
+
+package lsp
+
+object FirstApp extends App {
+ val double: (Int => Int) =  _ * 2
+ (1 to 10) foreach double .andThen(print)
+}
+
+sbt console
+
+Introduction to Scala
+
+String str =  "Scala is a multi-paradigm language. Scala is scalable too."
+int count =  0;
+for (stringy: str.split (" ")) {
+ if (word.equals (stringy))
+ count++;
+}
+System.out.println ("Word" + word + " occurred " + count + " times.")
+
+val str =  "Scala is a multi-paradigm language. Scala is scalable too."
+println ("Word" + word + " occurred " + str.split(" ").filter(_ = =  word).size + " times.")
+
+Scala is multi-paradigm
+
+package scala
+trait Function1[A, B] {
+ def apply(x: A) : B
+}
+
+val answer =  new Functiona1[Int, Int] {
+ def apply(x: Int): Int =  x * 2
+}
+
+class YearsAndMonths(years: Int, months: Int)
+def age(birthdate: Date): YearsAndMonths =  //Some Logic
+
+Super smart syntax
+
+val words =  Map ("Wisdom" -> "state of being wise")
+println(words("Wisdom"))
+
+> state of being wise
+
+Type is the core
+
+f : R -> N
+
+SBT installation
+
+sbt sbt-version
+[info] 0.13.11
+
+Scala REPL
+
+sbt console
+
+Running our first program
+
+package lsp
+
+object First {
+ def main(args: Array[String]): Unit =  {
+ val double: (Int => Int) =  _ * 2
+ (1 to 10) foreach double .andThen(println)
+ }
+}
+
+(1 to 10) foreach double .andThen(println)
+
+package lsp
+
+object FirstApp extends App {
+ val double: (Int => Int) =  _ * 2
+ (1 to 10) foreach double .andThen(print)
+}
+
+What is underneath a Scala program?
+
+scala> import scala.reflect.runtime.universe._ 
+import scala.reflect.runtime.universe._
+
+scala> val expr =  reify {class Car {val segment= "SUV"; def name= "Q7"}} 
+expr: reflect.runtime.universe.Expr[Unit] =  
+Expr[Unit]({ 
+ class Car extends AnyRef { 
+ def <init>() =  { 
+ super.<init>(); 
+ () 
+ }; 
+ val segment =  "SUV"; 
+ def name =  "Q7" 
+ }; 
+ () 
+})
+
+scala> showRaw(expr.tree) 
+res0: String =  Block(List(ClassDef(Modifiers(), TypeName("Car"), List(), Template(List(Ident(TypeName("AnyRef"))), noSelfType, List(DefDef(Modifiers(), termNames.CONSTRUCTOR, List(), List(List()), TypeTree(), Block(List(Apply(Select(Super(This(typeNames.EMPTY), typeNames.EMPTY), termNames.CONSTRUCTOR), List())), Literal(Constant(())))), ValDef(Modifiers(), TermName("segment"), TypeTree(), Literal(Constant("SUV"))), DefDef(Modifiers(), TermName("name"), List(), List(), TypeTree(), Literal(Constant("Q7"))))))), Literal(Constant(())))
+
+Vals and vars
+
+scala> val a =  10
+a: Int =  10
+
+scala> a =  12
+<console>:12: error: reassignment to val
+ a =  12
+
+scala> var b =  10
+b: Int =  10
+
+scala> b =  12
+b: Int =  12
+
+scala> val a: String =  "I can be inferred."
+a: String =  I can be inferred.
+
+scala> val a: Int =  "12"
+<console>:11: error: type mismatch;
+found : String("12")
+required: Int
+ val a: Int =  "12"
+
+Integer literals
+
+scala> val num =  002
+<console>:1: error: Decimal integer literals may not have a leading zero. (Octal syntax is obsolete.)
+val num =  002
+ ^
+
+scala> 0xFF
+res0: Int =  255
+
+scala> val aByte: Byte =  12
+aByte: Byte =  12
+
+scala> val aByte: Byte =  123456
+<console>:20: error: type mismatch;
+found : Int(123456)
+required: Byte
+ val aByte: Byte =  123456
+
+scala> val outOfRange =  123456789101112131415
+<console>:1: error: integer number too large
+val outOfRange =  123456789101112131415
+
+scala> val aLong =  909L
+aLong: Long =  909
+
+scala> val aLong =  909l
+aLong: Long =  909
+
+scala> val anotherLong: Long =  1
+anotherLong: Long =  1
+
+scala> val aByte : Byte =  1
+aByte: Byte =  1
+
+scala> val aShort : Short =  1
+aShort: Short =  1
+
+Floating point literals
+
+scala> val a =  1. //Not possible!
+
+scala> val aDoubleByDefault =  1.0
+aDoubleByDefault: Double =  1.0
+
+scala> val aFloat: Float =  1.0 //Compile Error!
+scala> val aFloat: Float =  1.0F //Works
+scala> val aFloat: Float =  1.0f //Works
+
+scala> val aFloat: Float =  1.0
+<console>:11: error: type mismatch;
+found : Double(1.0)
+required: Float
+ val aFloat: Float =  1.0
+ ^
+
+Boolean literals
+
+scala> val aBool: Boolean =  1
+<console>:11: error: type mismatch;
+found : Int(1)
+required: Boolean
+ val aBool: Boolean =  1
+ ^
+
+scala> val aBool =  true
+aBool: Boolean =  true
+scala> val aBool =  false
+aBool: Boolean =  false
+
+Character literals
+
+scala> val aChar =  '\'
+<console>:1: error: unclosed character literal
+val aChar =  '\'
+
+scala> val doublequotes =  "\""
+doublequotes: String =  "
+scala> val aString =  doublequotes + "treatme a string" + doublequotes
+aString: String =  "treatme a string"
+
+scala> val c =  '\u0101'
+c: Char =  =C4=81
+
+String literals
+
+scala> val boringString =  "I am a String Literal."
+boringString: String =  I am a String Literal.
+
+scala> val interestingString =  """I am an Interesting String
+ | Also span in multiple Lines!
+ | Ok, That's it about me"""
+interestingString: String = 
+"I am an Interesting String
+
+Also span in multiple Lines!
+Ok, That's it about me"
+
+scala> val aString =  """ / " ' """
+aString: String =  " / " ' "
+scala> println(aString)
+
+/ " '
+
+Symbol literals
+
+scala> val aSymbol =  'givenName
+aSymbol: Symbol =  'givenName
+
+scala> aSymbol.name
+res10: String =  givenName
+
+scala> import scala.reflect.runtime.universe._
+import scala.reflect.runtime.universe._
+
+scala> typeOf[Symbol]
+res12:reflect.runtime.universe.Type=  scala.reflect.runtime.universe.Symbol
+
+Tuple literals
+
+scala> val aTuple =  ("Val1", "Val2", "Val3")
+aTuple: (String, String, String) =  (Val1,Val2,Val3)
+scala> println("Value1 is: " + aTuple._1)
+Value1 is: Val1
+
+aTuple: (String, String, String) =  (Val1,Val2,Val3)
+
+scala> val smartPair =  1 -> "One"
+smartPair: (Int, String) =  (1,One)
+
+Function literals
+
+Int => String
+
+Data types
+
+scala> val x =  10 //x is an object of Type Int
+x: Int =  10 //x is assigned value 10
+
+scala> val y =  16 //y is an object of Type Int
+y: Int =  16 //y is assigned value 16
+
+scala> val z =  x + y //z is addition of x and y's value
+z: Int =  26
+
+scala> def +(x: Int): Int =  ??? //Some definition
+$plus: (x: Int)Int
+
+scala> val aCharAndAnInt =  12 + 'a'
+aCharAndAnInt: Int =  109
+
+scala> def +(x: Char): Int =  ???
+$plus: (x: Char)Int
+
+Any
+
+import java.util.UUID
+
+class Item {
+ val id: UUID =  UUID.randomUUID()
+ }
+
+class ElectronicItem(val name: String, val subCategory: String) extends Item {
+val uuid: String =  "Elec_" + id
+}
+
+object CartApp extends App {
+
+ def showItem(item: ElectronicItem) =  println(s"Item id: ${item.id} uuid: ${item.uuid} name: ${item.name}")
+
+ showItem(new ElectronicItem("Xperia", "Mobiles"))
+ showItem(new ElectronicItem("IPhone", "Mobiles"))
+ }
+
+Item id: 16227ef3-2569-42b3-8c5e-b850474da9c4 uuid: Elec_16227ef3-2569-42b3-8c5e-b850474da9c4 name: Xperia
+
+Item id: 1ea8b6af-9cf0-4f38-aefb-cd312619a9d3 uuid: Elec_1ea8b6af-9cf0-4f38-aefb-cd312619a9d3 name: IPhone
+
+final def  !=   (that: Any): Boolean 
+final def = =  (that: Any): Boolean
+def isInstanceOf[a]: Boolean
+def equals(that: Any): Boolean
+def ##: Int
+def hashCode: Int
+def toString: String
+
+Null and Nothing
+
+def checkIF10AndReturn20(x: Int): Int =   {
+ if(x = =  10)
+ x * 2
+ else 
+ throw new Exception("Sorry, Value wasn't 10")
+ }
+
+Type inference
+
+scala> val treatMeAString =  "Invisible"
+treatMeAString: String =  Invisible
+
+defcheckMeImaString(x: Boolean) =  if(x) "True"else "False"
+
+def recursiveFactorial(n: Int) =  if(n = =  0) 1 else recursiveFactorial(n-1) 
+//Recursive method recursiveFactorial needs result type
+
+scala> val x =  x => x
+<console>:11: error: missing parameter type
+ val x =  x => x
+
+scala> List(1,4,6,7,9).filter(_+1 > 5)
+res0: List[Int] =  List(6, 7, 9)
+
+Operators in Scala
+
+scala> val x =  1 + 10
+x: Int =  11
+
+scala> val y =  1 + 'a'
+y: Int =  98
+
+class Amount(val amt: Double) {
+
+ def taxApplied(tax: Double) =  this.amt * tax/100 + this.amt
+
+ }
+
+object Order extends App {
+ val tax =  10
+ val firstOrderAmount =  130
+
+ def amountAfterTax(amount: Amount) =  amount taxApplied tax
+
+ println(s"Total Amount for order:: ${amountAfterTax(new Amount(firstOrderAmount))}")
+ }
+
+Total Amount for order:: 143.0
+
+> amount taxApplied tax
+
+scala> val firstString =  "I am a String"
+firstString: String =  I am a String
+
+scala> firstString indexOf 'a'
+res1: Int =  2
+
+scala> def truthTeller(lie: Boolean) =  !lie
+truthTeller: (lie: Boolean)Boolean
+
+scala> truthTeller(false)
+res2: Boolean =  true
+
+scala> def truthTeller(lie: Boolean) =  lie.unary_!
+truthTeller: (lie: Boolean)Boolean
+
+scala> 1.toString
+res4: String =  1
+
+scala> "1".toInt
+res5: Int =  1
+
+scala> "ABC".toLowerCase
+res7: String =  abc
+
+Arithmetic operators
+
+scala> val x =  10 - 1
+x: Int =  9
+
+scala> val y =  10 * 1
+y: Int =  10
+
+scala> val z =  10 / 1
+z: Int =  10
+
+scala> val yx =  10 % 9
+yx: Int =  1
+
+scala> val yx =  10 % 9.0
+yx: Double =  1.0
+
+Relational operators
+
+scala> val equal_op =  10 = =  10
+equal_op: Boolean =  true
+
+scala> val not_eq_op =  10 !=  10
+not_eq_op: Boolean =  false
+
+scala> val gt_than_op =  10 > 10
+gt_than_op: Boolean =  false
+
+scala> val gt_than_op =  11 > 10
+gt_than_op: Boolean =  true
+
+scala> val lt_than_op =  11 < 10
+lt_than_op: Boolean =  false
+
+scala> val gt_eq_op =  11 >=  11
+gt_eq_op: Boolean =  true
+
+scala> val lt_eq_op =  11 <=  11
+lt_eq_op: Boolean =  true
+
+Logical operators
+
+scala> val log_not =  !true
+log_not: Boolean =  false
+
+scala> val log_or =  true || false
+log_or: Boolean =  true
+
+scala> val log_and =  true && true
+log_and: Boolean =  true
+
+Bitwise operators
+
+scala> 1 & 2
+res2: Int =  0
+
+scala> 1 | 2
+res3: Int =  3
+
+scala> 1 ^ 2
+res5: Int =  3
+
+scala> ~2
+res8: Int =  -3
+
+Operator precedence
+
+scala> 2 + 3 * 4 / 2 - 1
+res15: Int =  7
+
+scala> 1 + 2 + 3 * 3 * 4 - 1
+res16: Int =  38
+
+Wrapper classes
+
+scala> val x =  10
+x: Int =  10
+
+scala> x.isValidByte
+res1: Boolean =  true
+
+scala> val x =  260
+x: Int =  260
+
+scala> x.isValidByte
+res2: Boolean =  false
+
+scala> val x =  127
+x: Int =  127
+
+scala> x.isValidByte
+res3: Boolean =  true
+
+scala> val x =  "I am a String"
+x: String =  I am a String
+scala> x.charAt(5)
+res13: Char =  a
+
+scala> x.capitalize
+res14: String =  I am a String
+
+scala> x.toUpperCase
+res15: String =  I AM A STRING
+
+scala> x.toLowerCase
+res16: String =  i am a string
+
+scala> val rangeOfNumbers =  1 to 199
+rangeOfNumbers: scala.collection.immutable.Range.Inclusive =  Range 1 to 199
+
+scala> val rangeOfNumbersUntil =  1 until 199
+rangeOfNumbersUntil: scala.collection.immutable.Range =  Range 1 until 199
+
+scala> rangeOfNumbers contains 1
+res17: Boolean =  true
+
+scala> rangeOfNumbersUntil contains 1
+res18: Boolean =  true
+
+scala> rangeOfNumbersUntil contains 199
+res19: Boolean =  false
+
+scala> rangeOfNumbers contains 199
+res20: Boolean =  true
+
+scala> 1 to 10 by 2 foreach println
+
+1
+3
+5
+7
+9
+
+String Interpolators
+
+println(s"Total Amount for order:: ${amountAfterTax(new Amount(firstOrderAmount))}")
+
+scala> val myAge =  s"I completed my $age."
+myAge: String =  I completed my 25.
+
+The s interpolator
+
+scala> val nextYearAge =  s"Next Year, I'll complete ${age + 1}."
+nextYearAge: String =  Next Year, I'll complete 26.
+
+scala> def incrementBy1(x: Int) =  x + 1
+incrementBy1: (x: Int)Int
+
+scala> val nextYearAge =  s"Next Year, I'll complete ${incrementBy1(age)}."
+nextYearAge: String =  Next Year, I'll complete 26.
+
+f Interpolator
+
+scala> val amount =  100
+amount: Int =  100
+scala> val firstOrderAmount =  f"Your total amount is: $amount%.2f"
+firstOrderAmount: String =  Your total amount is: 100.00
+
+The raw interpolator
+
+scala> val rawString =  raw"I have no escape \n character in the String \n "
+rawString: String =  "I have no escape \n character in the String \n "
+
+scala> val rawString =  "I have no escape \n character in the String \n "
+rawString: String = 
+"I have no escape
+character in the String
+"
+
+Looping
+
+object PagePrinter extends App {
+
+ /*
+ * Prints pages page 1 to lastIndex for doc
+ */
+ def printPages(doc: Document, lastIndex: Int) =  ??? //Yet to be defined
+
+ /*
+ * Prints pages page startIndex to lastIndex for doc
+ */
+ def printPages(doc: Document, startIndex: Int, lastIndex: Int) =  ???
+
+ /*
+ * Prints pages with given Indexes for doc
+ */
+ def printPages(doc: Document, indexes: Int*) =  ??? 
+
+ /*
+ * Prints pages 
+ */ 
+ private def print(index: Int) =  println(s"Printing Page $index.")
+
+ }
+
+
+ /*
+ * Declares a Document type with two arguments numOfPages, typeOfDoc
+ */
+ case class Document(numOfPages: Int, typeOfDoc: String)
+
+The for loop
+
+scala> val stocks =  List("APL", "GOOG", "JLR", "TESLA") 
+stocks: List[String] =  List(APL, GOOG, JLR, TESLA) 
+
+scala> stocks.foreach(x => println(x))
+APL 
+GOOG 
+JLR 
+TESLA
+
+object PagePrinter extends App{
+
+ /*
+ * Prints pages page 1 to lastIndex for doc
+ */
+ def printPages(doc: Document, lastIndex: Int) =  if(lastIndex <=  doc.numOfPages) for(i <- 1 to lastIndex) print(i)
+
+ /*
+ * Prints pages page startIndex to lastIndex for doc
+ */
+ def printPages(doc: Document, startIndex: Int, lastIndex: Int) =  if(lastIndex <=  doc.numOfPages && startIndex > 0 && startIndex < lastIndex) for(i <- startIndex to lastIndex) print(i)
+
+ /*
+ * Prints pages with given Indexes for doc
+ */
+ def printPages(doc: Document, indexes: Int*) =  for(index <- indexes if index <=  doc.numOfPages && index > -1) print(index)
+
+
+ /*
+ * Prints pages
+ */
+ private def print(index: Int) =  println(s"Printing Page $index.")
+
+ println("---------Method V1-----------")
+ printPages(Document(15, "DOCX"), 5)
+
+ println("---------Method V2-----------")
+ printPages(Document(15, "DOCX"), 2, 5)
+
+ println("---------Method V3-----------")
+ printPages(Document(15, "DOCX"), 2, 5, 7, 15)
+
+ }
+
+
+/*
+ * Declares a Document type with two arguments numOfPages, typeOfDoc
+ */
+ case class Document(numOfPages: Int, typeOfDoc: String)
+
+---------Method V1----------- 
+Printing Page 1. 
+Printing Page 2. 
+Printing Page 3. 
+Printing Page 4. 
+Printing Page 5. 
+---------Method V2----------- 
+Printing Page 2. 
+Printing Page 3. 
+Printing Page 4. 
+Printing Page 5. 
+---------Method V3----------- 
+Printing Page 2. 
+Printing Page 5. 
+Printing Page 7. 
+Printing Page 15.
+
+The while Loop
+
+while (condition check (if it's true))  
+ ... // Block of Code to be executed
+
+scala> val stocks =  List("APL", "GOOG", "JLR", "TESLA") 
+stocks: List[String] =  List(APL, GOOG, JLR, TESLA) 
+
+scala> val iteraatorForStocks =  stocks.iterator 
+iteraatorForStocks: Iterator[String] =  non-empty iterator 
+
+scala> while(iteraatorForStocks.hasNext) println(iteraatorForStocks.next()) 
+APL 
+GOOG 
+JLR 
+TESLA
+
+The do while loop
+
+do
+ ... // Block of Code to be executed 
+ while(condition check (if it's true))
+
+scala> do println("I'll stop by myself after 1 time!") while(false)
+
+I'll stop by myself after 1 time!
+
+The for expressions
+
+object ForExpressions extends App {
+
+ val person1 =  Person("Albert", 21, 'm')
+ val person2 =  Person("Bob", 25, 'm')
+ val person3 =  Person("Cyril", 19, 'f')
+
+ val persons =  List(person1, person2, person3)
+
+ for {
+ person <- persons
+ age =  person.age
+ name =  person.name
+ if age > 20 && name.startsWith("A")
+ } {
+ println(s"Hey ${name} You've won a free Gift Hamper.")
+ }
+
+ case class Person(name: String, age: Int, gender: Char)
+ }
+
+Hey Albert You've won a free Gift Hamper.
+
+The for yield expressions
+
+object ForYieldExpressions extends App {
+
+ val person1 =  Person("Albert", 21, 'm')
+ val person2 =  Person("Bob", 25, 'm')
+ val person3 =  Person("Cyril", 19, 'f')
+
+ val persons =  List(person1, person2, person3)
+
+ val winners =  for {
+ person <- persons
+ age =  person.age
+ name =  person.name
+ if age > 20
+ } yield name
+
+ winners.foreach(println)
+
+ case class Person(name: String, age: Int, gender: Char)
+ }
+
+Albert
+Bob
+
+Recursion
+
+object RecursionEx extends App {
+
+ /*
+ * 2 to the power n
+ * only works for positive integers!
+ */
+ def power2toN(n: Int): Int =  if(n = =  0) 1 else 2 * power2toN(n - 1)
+
+ println(power2toN(2))
+ println(power2toN(4))
+ println(power2toN(6))
+ }
+
+4 
+16 
+64
+
+def power2toN(n: Int) =  if(n = =  0) 1 else (2 * power2toN(n - 1))
+
+Why recursion over iteration?
+
+def power2toN(n: Int): Int =  if(n = =  0) 1 else 2 * power2toN(n - 1)
+
+The ideal way to write recursive functions
+
+if(n = =  0) 1 else 2 * power2toN(n - 1)
+
+package chapter3
+
+import scala.annotation.tailrec
+
+ object TailRecursionEx extends App {
+
+ /*
+ * 2 to the power n
+ * @tailrec optimization
+ */
+ def power2toNTail(n: Int): Int =  {
+ @tailrec
+ def helper(n: Int, currentVal: Int): Int =  {
+ if(n = =  0) currentVal else helper(n - 1, currentVal * 2)
+ }
+ helper(n, 1)
+ }
+
+ println(power2toNTail(2))
+ println(power2toNTail(4))
+ println(power2toNTail(6))
+ }
+
+4 
+16 
+64
+
+The if else conditional expression
+
+if (condition (is true)) 
+ ... //Block of code to be executed 
+else 
+ ... //Block of code to be executed 
+
+scala> val age =  17 
+age: Int =  17 
+
+scala> if(age > 18) println("You're now responsible adult.") else println("You should grow up.") 
+You should grow up.
+
+scala> val marks =  89 
+marks: Int =  89 
+
+scala> val performance =  if(marks >=  90) "Excellent" else if(marks > 60 && marks < 90) "Average" else "Poor" 
+performance: String =  Average
+
+Pattern matching
+
+object PatternMatching extends App {
+
+ def matchAgainst(i: Int) =  i match {
+ case 1 => println("One")
+ case 2 => println("Two")
+ case 3 => println("Three")
+ case 4 => println("Four")
+ }
+
+ matchAgainst(5)
+ }
+
+Exception in thread "main" scala.MatchError: 5 (of class java.lang.Integer) 
+ at PatternMatching$.matchAgainst(PatternMatching.scala:6) 
+ at PatternMatching$.delayedEndpoint$PatternMatching$1(PatternMatching.scala:13) 
+ at PatternMatching$delayedInit$body.apply(PatternMatching.scala:4) 
+ at scala.Function0.apply$mcV$sp(Function0.scala:34) 
+ at scala.Function0.apply$mcV$sp$(Function0.scala:34) 
+ at scala.runtime.AbstractFunction0.apply$mcV$sp(AbstractFunction0.scala:12)
+
+object PatternMatching extends App {
+
+ def matchAgainst(i: Int) =  i match {
+ case 1 => println("One")
+ case 2 => println("Two")
+ case 3 => println("Three")
+ case 4 => println("Four")
+ case _ => println("Not in Range 1 to 4")
+ }
+
+ matchAgainst(1)
+ matchAgainst(5)
+ }
+
+One 
+Not in Range 1 to 4
+
+Function syntax
+
+modifiers... 
+def function_name(arg1: arg1_type, arg2: arg2_type,...): return_type =  ???
+
+def compareIntegers(value1: Int, value2: Int): Int =  if (value1 = =  value2) 0 else if (value1 > value2) 1 else -1
+
+def compareIntegersV1(value1: Int, value2: Int): Int = 
+  if (value1 = =  value2) 0 else if (value1 > value2) 1 else -1
+
+def compareIntegersV2(value1: Int, value2: Int): Int =  {
+  println(s" Executing V2")
+  if (value1 = =  value2) 0 else if (value1 > value2) 1 else -1 }
+
+object FunctionSyntax extends App{
+ /*
+  * Function compare two Integer numbers
+  * @param value1 Int
+  * @param value2 Int
+  * return Int
+  * 1  if value1 > value2 * 0 if value1 =  value2 * -1 if value1 < value2 */ def compareIntegers(value1: Int, value2: Int): Int =  if (value1 = =  value2) 0 else if (value1 > value2) 1 else -1  def compareIntegersV1(value1: Int, value2: Int): Int =  { if (value1 = =  value2) 0 else if (value1 > value2) 1 else -1 }
+
+ def compareIntegersV2(value1: Int, value2: Int): Int =  if (value1 = =  value2) 0 else if (value1 > value2) 1 else -1  println(compareIntegers(1, 2)) println(compareIntegersV1(2, 1)) println(compareIntegersV2(2, 2))  }
+
+-1
+1
+0
+
+Nesting of functions
+
+object FunctionSyntaxOne extends App {
+
+  def compareIntegersV4(value1: Int, value2: Int): String =  {
+ println("Executing V4")
+    val result =  if (value1 = =  value2) 0 else if (value1 > value2) 1 else -1 giveAMeaningFullResult(result, value1, value2) }  private def giveAMeaningFullResult(result: Int, value1: Int, value2: Int) =  result match { case 0 => "Values are equal" case -1 => s"$value1 is smaller than $value2" case 1 => s"$value1 is greater than $value2" case _ => "Could not perform the operation" }  println(compareIntegersV4(2,1)) }
+
+Executing V4
+2 is greater than 1
+
+object FunctionSyntaxTwo extends App {
+
+  def compareIntegersV5(value1: Int, value2: Int): String =  {
+ println("Executing V5")
+
+    def giveAMeaningFullResult(result: Int) =  result match {
+      case 0 => "Values are equal" case -1 => s"$value1 is smaller than $value2" case 1 => s"$value1 is greater than $value2" case _ => "Could not perform the operation" }  val result =  if (value1 = =  value2) 0 else if (value1 > value2) 1 else -1 giveAMeaningFullResult(result) }  println(compareIntegersV5(2,1)) }
+
+Executing V5
+2 is greater than 1
+
+Passing a variable number of arguments
+
+/*
+  * Prints pages with given Indexes for doc
+  */
+  def printPages(doc: Document, indexes: Int*) =  for(index <- indexes if index <=  doc.numOfPages) print(index)
+
+def average(numbers: Int*): Double =  ???
+
+object FunctionCalls extends App {
+
+  def average(numbers: Int*) : Double =  numbers.foldLeft(0)((a, c) => a + c) / numbers.length   def averageV1(numbers: Int*) : Double =  numbers.sum / numbers.length  println(average(2,2)) println(average(1,2,3)) println(averageV1(1,2,3))  }
+
+2.0
+2.0
+2.0
+
+def averageV1(numbers: Int*, wrongArgument: Int): Double =  numbers.sum / numbers.length
+
+Calling a function with a default parameter value
+
+def compareIntegersV6(value1: Int, value2: Int =  10): String =  {
+ println("Executing V6")
+
+  def giveAMeaningFullResult(result: Int) =  result match {
+    case 0 => "Values are equal" case -1 => s"$value1 is smaller than $value2" case 1 => s"$value1 is greater than $value2" case _ => "Could not perform the operation" }  val result =  if (value1 = =  value2) 0 else if (value1 > value2) 1 else -1 giveAMeaningFullResult(result) }  println(compareIntegersV6(12))
+
+Executing V6
+12 is greater than 10
+
+compareIntegersV6(12)
+
+def compareIntegersV6(value1: Int =  10, value2: Int) =  ???
+
+println(compareIntegersV6(12)) // Compiler won't allow
+
+Calling a function while passing named arguments
+
+def compareIntegersV6(value1: Int =  10, value2: Int): String =  {
+ println("Executing V6")
+
+  def giveAMeaningFullResult(result: Int) =  result match {
+    case 0 => "Values are equal" case -1 => s"$value1 is smaller than $value2" case 1 => s"$value1 is greater than $value2" case _ => "Could not perform the operation" }  val result =  if (value1 = =  value2) 0 else if (value1 > value2) 1 else -1 giveAMeaningFullResult(result) }  println(compareIntegersV6(value2 =  12))
+
+Executing V6
+10 is smaller than 12
+
+println(compareIntegersV6(value2 =  12, value1 =  10))
+
+Executing V6
+10 is smaller than 12
+
+Function literals
+
+def compareIntegersV6(value1: Int =  10, value2: Int): Int =  ???
+
+(value1: Int, value2: Int) => Int
+
+val compareFuncLiteral =  (value1: Int, value2: Int) => if (value1 = =  value2) 0 else if (value1 > value2) 1 else -1
+
+private def print(index: Int) =  println(s"Printing Page $index.")
+
+(index: Int) => Unit
+
+object ColorPrinter extends App {
+
+  def printPages(doc: Document, lastIndex: Int, print: (Int) => Unit) =  if(lastIndex <=  doc.numOfPages) for(i <- 1 to lastIndex) print(i)  val colorPrint =  (index: Int) => println(s"Printing Color Page $index.")  val simplePrint =  (index: Int) => println(s"Printing Simple Page $index.")  println("---------Method V1-----------") printPages(Document(15, "DOCX"), 5, colorPrint)  println("---------Method V2-----------") printPages(Document(15, "DOCX"), 2, simplePrint) }  case class Document(numOfPages: Int, typeOfDoc: String)
+
+---------Method V1-----------
+Printing Color Page 1.
+Printing Color Page 2.
+Printing Color Page 3.
+Printing Color Page 4.
+Printing Color Page 5.
+---------Method V2-----------
+Printing Simple Page 1.
+Printing Simple Page 2.
+
+scala> val names =  List("Alice","Allen","Bob","Catherine","Alex") names: List[String] =  List(Alice, Allen, Bob, Catherine, Alex)  scala> val nameStartsWithA =  names.filter((name) => name.startsWith("A")) nameStartsWithA: List[String] =  List(Alice, Allen, Alex)
+
+(name) => name.startsWith("A")
+
+scala> val nameStartsWithA =  names.filter(_.startsWith("A")) nameStartsWithA: List[String] =  List(Alice, Allen, Alex)
+
+Call by name
+
+def printPages(doc: Document, lastIndex: Int, print: (Int) => Unit, isPrinterOn: () => Boolean) =  {  if(lastIndex <=  doc.numOfPages && isPrinterOn()) for(i <- 1 to lastIndex) print(i)  }
+
+printPages(Document(15, "DOCX"), 16, colorPrint, () => !printerSwitch)
+
+object ColorPrinter extends App {
+
+  val printerSwitch =  false
+
+  def printPages(doc: Document, lastIndex: Int, print: (Int) => Unit, isPrinterOn: => Boolean) =  {  if(lastIndex <=  doc.numOfPages && isPrinterOn) for(i <- 1 to lastIndex) print(i)  }  val colorPrint =  (index: Int) => { println(s"Printing Color Page $index.") }  println("---------Method V1-----------") printPages(Document(15, "DOCX"), 2, colorPrint, !printerSwitch)  }  case class Document(numOfPages: Int, typeOfDoc: String)
+
+---------Method V1-----------
+Printing Color Page 1.
+Printing Color Page 2.
+
+printPages(Document(15, "DOCX"), 2, colorPrint, !printerSwitch)
+
+Call by value
+
+def compareIntegers(value1: Int, value2: Int): Int = 
+       if (value1 = =  value2) 0 else if (value1 > value2) 1 else -1  compareIntegers(10, 8)
+
+Partial functions
+
+scala> val oneToFirst: PartialFunction[Int, String] =  { | case 1 => "First" | } oneToFirst: PartialFunction[Int, String] =  <function1>  scala> println(oneToFirst(1)) First
+
+trait PartialFunction[-A, +B] extends (A) => B
+
+scala> println(oneToFirst(2)) scala.MatchError: 2 (of class java.lang.Integer) at scala.PartialFunction$$anon$1.apply(PartialFunction.scala:254) at scala.PartialFunction$$anon$1.apply(PartialFunction.scala:252) at $anonfun$1.applyOrElse(<console>:12) at $anonfun$1.applyOrElse(<console>:11) at scala.runtime.AbstractPartialFunction.apply(AbstractPartialFunction.scala:34)
+
+scala> oneToFirst.isDefinedAt(1) res3: Boolean =  true  scala> oneToFirst.isDefinedAt(2) res4: Boolean =  false
+
+object PartialFunctions extends App {
+
+  val isPrimeEligible: PartialFunction[Item, Boolean] =  {
+    case item => item.isPrimeEligible }  val amountMoreThan500: PartialFunction[Item, Boolean] =  { case item => item.price > 500.0 }  val freeDeliverable =  isPrimeEligible orElse amountMoreThan500  def deliveryCharge(item: Item): Double =  if(freeDeliverable(item)) 0 else 50  println(deliveryCharge(Item("1", "ABC Keyboard", 490.0, false)))  }  case class Item(id: String, name: String, price: Double, isPrimeEligible: Boolean)
+
+50.0
+
+Motivation
+
+object RESTFulAPIs extends App {
+    //List of Method and URI
+    val listOfAPIs =  List(("GET", "/user/:id"),
+                          ("GET", "user/:id/profile/:p_id"),
+                          ("POST", "/user"),
+                          ("POST", "/profile"),
+                          ("PUT", "/user/:id"))
+
+    /*
+     * Returns a scala.collection.immutable.Map[String,  List[(String,String)]]
+     */
+    val groupedListOfAPIs =  listOfAPIs.groupBy(_._1)
+    println(s"APIs grouped to a Map :: $groupedListOfAPIs")
+
+    /*
+     * Returns a scala.collection.immutable.Map[String, List[String]]
+     */
+    val apisByMethod =  groupedListOfAPIs.mapValues(_.map(_._2))
+    println(s"APIs By Method :: $apisByMethod")
+}
+
+APIs grouped to a Map :: Map(POST -> List((POST,/user), (POST,/profile)), GET -> List((GET,/user/:id), (GET,user/:id/profile/:p_id)), PUT -> List((PUT,/user/:id))) APIs By Method :: Map(POST -> List(/user, /profile), GET -> List(/user/:id, user/:id/profile/:p_id), PUT -> List(/user/:id))
+
+Map(POST -> List((POST,/user), (POST,/profile)), GET -> List((GET,/user/:id), (GET,user/:id/profile/:p_id)), PUT -> List((PUT,/user/:id)))
+
+def mapValues[W](f: V => W): Map[K, W]
+
+Immutable and mutable collections
+
+scala> val studentsPresent =  List("Alex", "Bob", "Chris")  studentsPresent: List[String] =  List(Alex, Bob, Chris)
+
+def afunction(xs: scala.collection.Iterable[String]) =  ???
+
+Differences between the root and immutable collections
+
+def afunction(xs: scala.collection.Iterable[String])
+
+Traversable
+
+trait Traversable[+A] extends TraversableLike[A, Traversable[A]] with GenTraversable[A] with TraversableOnce[A] with GenericTraversableTemplate[A, Traversable]
+
+def foreach[U](f: Elem => U)
+
+Iterable
+
+def iterator: Iterator[A]
+
+trait Iterable[+A] extends Traversable[A] with GenIterable[A] with GenericTraversableTemplate[A, Iterable] with IterableLike[A, Iterable[A]]
+
+Seq
+
+trait Seq[+A] extends PartialFunction[Int, A] with Iterable[A] with GenSeq[A] with GenericTraversableTemplate[A, Seq] with SeqLike[A, Seq[A]]
+
+scala> val aSeq =  scala.collection.LinearSeq[Int](1,2,3,4) aSeq: scala.collection.LinearSeq[Int] =  List(1, 2, 3, 4)  scala> aSeq(1) res0: Int =  2
+
+scala> aSeq(5) java.lang.IndexOutOfBoundsException: 5 at scala.collection.LinearSeqOptimized.apply(LinearSeqOptimized.scala:63) at scala.collection.LinearSeqOptimized.apply$(LinearSeqOptimized.scala:61) at scala.collection.immutable.List.apply(List.scala:86) ... 29 elided
+
+Map
+
+trait Map[K, +V] extends Iterable[(K, V)] with GenMap[K, V] with MapLike[K, V, Map[K, V]]
+
+scala> val aMap =  Map("country" -> "capital", "Poland" -> "Warsaw") 
+aMap: scala.collection.immutable.Map[String, String] =  Map(country -> capital, Poland -> Warsaw)
+
+Set
+
+trait Set[A] extends (A) =E2=87=92 Boolean with Iterable[A] with GenSet[A] with GenericSetTemplate[A, Set] with SetLike[A, Set[A]]
+
+scala> val aSet =  Set(1,2,3,4) aSet: scala.collection.immutable.Set[Int] =  Set(1, 2, 3, 4)  scala> aSet(2) res0: Boolean =  true  scala> aSet(5) res1: Boolean =  false  scala> aSet(0) res2: Boolean =  false
+
+List
+
+val aList =  List(1,2,3,4)
+
+1 :: 2 :: 3 :: 4 :: Nil
+
+scala> aList.::(5) res2: List[Int] =  List(5, 1, 2, 3, 4)
+
+scala> 5 :: aList
+res0: List[Int] =  List(5, 1, 2, 3, 4)
+
+Map
+
+scala> val aMap =  Map(1 -> "one", 2 -> "two", 3 -> "three") aMap: scala.collection.immutable.Map[Int,String] =  Map(1 -> one, 2 -> two, 3 -> three)
+
+scala> aMap.+(4 -> "four") res5: scala.collection.immutable.Map[Int, String] =  Map(1 -> one, 2 -> two, 3 -> three, 4 -> four)
+
+scala> println(aMap) Map(1 -> one, 2 -> two, 3 -> three)
+
+scala> aMap.isDefinedAt(4) res8: Boolean =  false  scala> aMap.isDefinedAt(2) res9: Boolean =  true
+
+SortedSet
+
+TreeSet()(implicit ordering: Ordering[A])
+
+package chapter5
+
+import scala.collection.immutable.TreeSet
+
+object TreeSetImpl extends App {
+
+  //implicit val ordering =  Ordering.fromLessThan[Int](_ > _)  val treeSet =  new TreeSet() + (1, 3, 12, 3, 5)  println(treeSet) }
+
+Error:(9, 17) diverging implicit expansion for type scala.math.Ordering[T1]
+starting with method Tuple9 in object Ordering
+  val treeSet =  new TreeSet() + (1, 3, 12, 3, 5)
+Error:(9, 17) not enough arguments for constructor TreeSet: (implicit ordering: Ordering[A])scala.collection.immutable.TreeSet[A].
+Unspecified value parameter ordering.
+  val treeSet =  new TreeSet() + (1, 3, 12, 3, 5)
+
+TreeSet(12, 5, 3, 1)
+
+Streams
+
+scala> val aStream =  Stream(1,2,3,4,55,6) aStream: scala.collection.immutable.Stream[Int] =  Stream(1, ?)
+
+scala.collection.immutable.Stream[Int] =  Stream(1, ?)
+
+scala> val anotherStream =  1 #:: 2 #:: 3 #:: Stream.empty anotherStream: scala.collection.immutable.Stream[Int] =  Stream(1, ?)
+
+Vector
+
+scala> val vector =  Vector(1,2,3) vector: scala.collection.immutable.Vector[Int] =  Vector(1, 2, 3)  scala> println(vector) Vector(1, 2, 3)
+
+scala> vector :+ 4 res12: scala.collection.immutable.Vector[Int] =  Vector(1, 2, 3, 4)  scala> 4 +: vector  res15: scala.collection.immutable.Vector[Int] =  Vector(4, 1, 2, 3)
+
+scala> vector(2) res16: Int =  3
+
+scala> vector.isDefinedAt(5) res17: Boolean =  false
+
+scala> vector.updated(2,10) res19: scala.collection.immutable.Vector[Int] =  Vector(1, 2, 10)
+
+scala> println(vector) Vector(1, 2, 3)
+
+Immutable stack
+
+scala> val stack =  Stack(1,2,3) stack: scala.collection.immutable.Stack[Int] =  Stack(1, 2, 3)  scala> stack.pop res24: scala.collection.immutable.Stack[Int] =  Stack(2, 3)  scala> stack.push(4) res26: scala.collection.immutable.Stack[Int] =  Stack(4, 1, 2, 3)
+
+Immutable queue
+
+scala> val queue =  Queue(1,2,3) queue: scala.collection.immutable.Queue[Int] =  Queue(1, 2, 3)  scala> queue.enqueue(4) res27: scala.collection.immutable.Queue[Int] =  Queue(1, 2, 3, 4)  scala> queue.dequeue res28: (Int, scala.collection.immutable.Queue[Int]) =  (1,Queue(2, 3))
+
+Ranges
+
+scala> val oneTo10 =  1 to 10 oneTo10: scala.collection.immutable.Range.Inclusive =  Range 1 to 10  scala> val oneTo10By2 =  1 to 10 by 2 oneTo10By2: scala.collection.immutable.Range =  inexact Range 1 to 10 by 2  scala> oneTo10 foreach println 1 2 3 4 . . . remaining elements  scala> oneTo10By2 foreach println 1 3 5 7 9
+
+scala> val oneUntil5 =  1 until 5 oneUntil5:scala.collection.immutable.Range =  Range 1 until 5  scala> oneUntil5 foreach println 1 2 3 4
+
+ArrayBuffer
+
+scala> import scala.collection.mutable._ import scala.collection.mutable._  scala> val buff =  ArrayBuffer(1,2,3) buff: scala.collection.mutable.ArrayBuffer[Int] =  ArrayBuffer(1, 2, 3)   scala> println(buff) ArrayBuffer(1, 2, 3)
+
+scala> buff +=  4 res35: buff.type =  ArrayBuffer(1, 2, 3, 4)  scala> println(buff) ArrayBuffer(1, 2, 3, 4)  scala> buff -=  4 res36: buff.type =  ArrayBuffer(1, 2, 3)  scala> println(buff) ArrayBuffer(1, 2, 3)
+
+ListBuffer
+
+scala> val listBuffer =  ListBuffer("Alex", "Bob", "Charles") listBuffer: scala.collection.mutable.ListBuffer[String] =  ListBuffer(Alex, Bob, Charles)  scala> listBuffer +=  "David" res39: listBuffer.type =  ListBuffer(Alex, Bob, Charles, David)  scala> println(listBuffer) ListBuffer(Alex, Bob, Charles, David)
+
+StringBuilder
+
+scala> val builder =  new StringBuilder builder: StringBuilder =   scala> builder ++=  "aa" res45: builder.type =  aa  scala> builder ++=  "b" res46: builder.type =  aab  scala> builder.toString res48: String =  aab
+
+Array
+
+final class Array[T] extends java.io.Serializable with java.lang.Cloneable
+
+scala> val array =  Array("about", "to", "declare") array: Array[String] =  Array(about, to, declare)
+
+scala> array(0) =  "Where"  scala> array foreach println Where to declare
+
+Rich operations performed on collections
+
+package chapter5
+
+object CollectionOperations extends App {
+
+  val source =  io.Source.fromFile("../src/chapter5/football_stats.csv")   // Give pathString for the csv file
+
+}
+
+io.Source.fromFile("filePath")
+
+case class Player(name: String, nationality: String, age: String, club: String, domesticLeague: String, rawTotal: String, finalScore: String, ranking2016: String, ranking2015: String)
+
+source.getLines().toList
+
+2016,Up/down,2015,2014,2013,Name,Nationality, Club at Dec 20 2016,Domestic league, Age at 20 Dec 2016,RAW TOTAL,HIGHEST SCORE REMOVED,FINAL SCORE,VOTES CAST,No1 PICK
+
+def giveMePlayers(list: List[String]): List[Player] =  list match {
+    case head :: tail => tail map {line => val columns =  line.split((",")).map(_.trim) Player(columns(5),columns(6),columns(9),columns(7), columns(8),columns(10), columns(12), columns(0),columns(2)) } case Nil => List[Player]() }
+
+def map[B](f: (A) =E2=87=92 B): Traversable[B]
+
+package chapter5
+
+object CollectionOperations extends App {
+
+  val source =  io.Source.fromFile("/Users/vika/Documents/LSProg/LSPWorkspace/FirstProject/src/chapter5/football_stats.csv")
+  val bufferedSourceToList: List[String] =  {
+    val list =  source.getLines().toList
+    source.close()
+    list
+  }
+
+  def giveMePlayers(list: List[String]): List[Player] =  list match {
+      case head :: tail => tail map {line => val columns =  line.split((",")).map(_.trim) Player(columns(5),columns(6),columns(9),columns(7), columns(8),columns(10), columns(12), columns(0),columns(2)) } case Nil => List[Player]() }  val players =  giveMePlayers(bufferedSourceToList)}  case class Player(name: String, nationality: String, age:String, club: String, domesticLeague: String, rawTotal: String, finalScore: String, ranking2016: String, ranking2015: String)
+
+val filterTop10 =  players filter(_.ranking2016.toInt < 11)
+
+def filter(p: A => Boolean): Repr
+
+def showPlayers(players: List[Player]) =  players.foreach{p => println(s"""Player: ${p.name} Country: ${p.nationality} Ranking 2016: ${p.ranking2016}
+
+***** Other Information *****
+Age: ${p.age} | Club: ${p.club} | Domestic League: ${p.domesticLeague}
+Raw Total: ${p.rawTotal} | Final Score: ${p.finalScore} | Ranking 2015: ${p.ranking2015}
+##########################################################""")
+ }
+
+Player: Cristiano Ronaldo  Country: Portugal       Ranking 2016: 1 
+
+***** Other Information ***** 
+Age: 32  |  Club: Real Madrid  |  Domestic League: Spain 
+Raw Total: 4829  |  Final Score: 4789  |  Ranking 2015: 2
+##########################################################
+
+val takeTop10 =  players takeWhile(_.ranking2016.toInt < 11)
+
+def takeWhile(p: (A) =E2=87=92 Boolean): Traversable[A]
+
+def dropWhile(p: (A) =E2=87=92 Boolean): Traversable[A]
+
+val first50Players =  players take 50
+val (top20,least30) =  first50Players partition(_.ranking2016.toInt < 21) showPlayers(top20)
+
+def drop(n: Int): Traversable[A]
+
+def take(n: Int): Traversable[A]
+
+def partition(p: (A) =E2=87=92 Boolean): (Traversable[A], Traversable[A])
+
+def slice(from: Int, until: Int): Traversable[A]
+
+def span(p: (A) =E2=87=92 Boolean): (Traversable[A], Traversable[A]) 
+ def splitAt(n: Int): (Traversable[A], Traversable[A])
+
+Select Players from Germany who have ranking in Top 50.
+
+first50Players filter(_.nationality.equals("Germany"))
+
+val isGermanPlayer: (Player => Boolean) =  _.nationality.equalsIgnoreCase("Germany")  val numberOfGermanPlayers =  players count isGermanPlayer println(s"German Players: $numberOfGermanPlayers")  Run: German Players: 17
+
+val isAnyPlayerAbove45 =  players exists(p => p.age.toInt > 40) println(s"isAnyPlayerAbove45: $isAnyPlayerAbove45")  Run: isAnyPlayerAbove45: false
+
+val topPlayerWithAge35plus =  players find(p => p.age.toInt > 35) printPlayer(topPlayerWithAge35plus.get)  Run: Player: Zlatan Ibrahimovic Country: Sweden Ranking 2016: 20   ***** Other Information *****  Age: 36 | Club: Manchester United | Domestic League: England  Raw Total: 1845 | Final Score: 1809 | Ranking 2015: 7 ##########################################################
+
+val top5PlayerWithAge35plus =  players filter isAge35plus take 5
+showPlayers(top5PlayerWithAge35plus)
+
+Run:
+Player: Zlatan Ibrahimovic       Country: Sweden   Ranking 2016: 20 
+
+***** Other Information ***** 
+Age: 36  |  Club: Manchester United  |  Domestic League: England 
+Raw Total: 1845  |  Final Score: 1809  |  Ranking 2015: 7
+##########################################################
+. . . and next 4 player information
+
+def find(p: (A) =E2=87=92 Boolean): Option[A]
+
+def count(p: (A) =E2=87=92 Boolean): Int
+
+def exists(p: (A) =E2=87=92 Boolean): Boolean
+
+def forall(p: (A) =E2=87=92 Boolean): Boolean
+
+val Top20Countries =  top20.foldLeft(List[String]())((b,a) => a.nationality :: b)
+
+List(Sweden, England, Germany, France, France, Spain, Argentina, Belgium, Croatia, Argentina, Algeria, Chile, Gabon, Poland, Wales, Brazil, France, Uruguay, Argentina, Portugal)
+
+val top20Countries =  top20.foldRight(List[String]())((b,a) => b.nationality :: a)
+
+List(Portugal, Argentina, Uruguay, France, Brazil, Wales, Poland, Gabon, Chile, Algeria, Argentina, Croatia, Belgium, Argentina, Spain, France, France, Germany, England, Sweden)
+
+def foldLeft[B](z: B)(op: (B, A) =E2=87=92 B): B
+
+def foldRight[B](z: B)(op: (A, B) => B): B
+
+top20Countries.par map(println(_))
+
+Wales
+Portugal
+Argentina
+France
+Croatia
+Argentina
+Poland
+France
+Uruguay
+. .. remaining elements
+
+ParArray
+
+scala> import scala.collection.parallel.mutable._ import scala.collection.parallel.mutable._  scala> val pararr =  ParArray(1,2,3,4,5,6,7,8,9,10) pararr: scala.collection.parallel.mutable.ParArray[Int] =  ParArray(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+scala> pararr.seq res1: scala.collection.mutable.ArraySeq[Int] =  ArraySeq(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+ParVector
+
+scala> val parvec =  Vector(1,2,3,4,5,6,7,8,9,10) parvec: scala.collection.immutable.Vector[Int] =  Vector(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+scala> parvec.filter(_ > 5) res0: scala.collection.immutable.Vector[Int] =  Vector(6, 7, 8, 9, 10)  And yes we can anytime convert our collection to it's sequential version using seq method.  scala> parvec.seq res1: scala.collection.immutable.IndexedSeq[Int] =  Vector(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+Converting a Java collection into a Scala collection
+
+package chapter5
+
+import java.time.LocalDate
+import scala.collection.JavaConverters._
+
+object CollectionConvertors extends App {
+ /*
+ We'll create a java collection of a couple of days and convert it to Scala Collection
+ */
+val aJavaList =  new java.util.ArrayList[LocalDate]()
+aJavaList.add(LocalDate.now())
+aJavaList.add(aJavaList.get(0).plusDays(1))
+
+println(s"Java List of today and tomorrow: $aJavaList")
+
+val scalaDates =  aJavaList.asScala
+scalaDates map { date =>
+println(s"Date :: $date")
+ }
+
+val backToJavaList =  scalaDates.asJavaCollection
+println(backToJavaList)
+}
+
+Java List of today and tomorrow: [2017-10-01, 2017-10-02]
+Date :: 2017-10-01
+Date :: 2017-10-02
+[2017-10-01, 2017-10-02]
+
+val backToJavaList =  scalaDates.asJava
+println(backToJavaList)
+
+Classes
+
+class Country(var name: String, var capital: String)
+
+object CountryApp extends App {
+  val country =  new Country("France", "Paris")
+  println(s"Country Name: ${country.name} and Capital: ${country.capital}")
+}
+
+Country Name: France and Capital: Paris
+
+public class CountryJava {
+    private String name;
+    private String capital;
+
+    public CountryJava(String name, String capital){
+        this.name =  name;
+        this.capital =  capital;
+    }
+
+    public void setName(String name){this.name =  name;}
+    public String getName(){return this.name;}
+
+    public void setCapital(String capital){this.capital =  capital;}
+    public String getCapital(){return this.capital;}
+ }
+
+class CountryJavaApp {
+    public static void main(String[] args) {
+        CountryJava country =  new CountryJava("France", "Paris");
+        System.out.println("Country Name: "+ country.getName() + " and Capital: "+ country.getCapital());
+    }
+}
+
+Country Name: France and Capital: Paris
+
+class Country(name: String, capital: String)
+
+println(s"Country Name: ${country.name} and Capital: ${country.capital}")
+
+object CountryApp extends App {
+  val country =  new Country("France", "Paris")
+  country.name =  "Germany"
+  country.capital =  "Berlin"
+  println(s"Country Name: ${country.name} and Capital: ${country.capital}")
+}
+
+Country Name: Germany and Capital: Berlin
+
+class Country(val name: String, val capital: String)
+
+country.name =  "Germany"
+country.capital =  "Berlin"
+
+case class Country(name: String, capital: String)
+
+class Country(val name: String, val capital: String){
+  var populationMap =  scala.collection.mutable.Map[String, Double]()
+  
+  def getPopulation(year: String): Double =  populationMap(year) //In Million
+}
+
+object CountryApp extends App {
+  val country =  new Country("France", "Paris")
+  country.populationMap +=  ("2015" -> 64.39) +=  ("2016" -> 64.67) +=  ("2017" -> 64.93) println(s"Country Name: ${country.name} and Population 2017: ${country.getPopulation("2017")} million") }
+
+Country Name: France and Population 2017: 64.93 million
+
+public class chapter6.Country {
+     public java.lang.String name();
+     public void name_$eq(java.lang.String);
+     public java.lang.String capital();
+     public void capital_$eq(java.lang.String);
+     public chapter6.Country(java.lang.String, java.lang.String);
+}
+
+object CountryApp extends App {
+  val country =  new Country("France", "Paris")
+  country.name_= ("Germany")
+  country.capital_= ("Berlin")
+  println(s"Country Name: ${country.name} and 
+ capital: ${country.capital}") }
+
+Country Name: Germany and capital: Berlin
+
+public class chapter6.Country {
+    public java.lang.String name();
+    public java.lang.String capital();
+    public chapter6.Country(java.lang.String, java.lang.String);
+}
+
+private def getPopulation(year: String): Double =  populationMap(year) 
+//In Million
+
+println(s"Country Name: ${country.name} and Population 2017: ${country.getPopulation("2017")} million")
+
+val country =  new Country("France", "Paris")
+println(country)
+
+class Country(val name: String, val capital: String){
+  override def toString: String =  s"Country($name, $capital)"
+}
+
+val country =  new Country("France", "Paris")
+println(country)
+
+Country(France, Paris)
+
+Abstract classes
+
+abstract class Person
+class Customer extends Person
+class Employee extends Person
+
+abstract class Person(category: String) {
+  val idPrefix: String
+}
+
+class Customer extends Person("External") {
+  override val idPrefix: String =  "CUST"
+}
+
+class Employee extends Person("Internal") {
+  override val idPrefix: String =  "EMP"
+}
+
+Abstract classes and traits
+
+trait Person {
+  val category: String
+  val idPrefix: String
+}
+
+class Customer extends Person {
+  override val category: String =  "External"
+  override val idPrefix: String =  "CUST"
+}
+
+class Employee extends Person {
+  override val category: String =  "Internal"
+  override val idPrefix: String =  "EMP"
+}
+
+abstract class Person(category: String) //can give cons params
+
+trait Person(category: String) //can't give cons params
+
+The final classes
+
+public final class String extends Object
+
+scala> abstract final class Person defined class Person  scala> class Employee extends Person <console>:12: error: illegal inheritance from final class Person class Employee extends Person
+
+Objects as singletons
+
+object CountryUtil {
+  
+}
+
+object CountryUtil {
+  /*
+  * Function takes a sequence of population per million and returns average.
+  * */
+  def populationAverage(pops: Seq[Double]) =  pops.sum / pops.length
+}
+
+object CountryApp extends App {
+  val country =  new Country("France", "Paris")
+  country.populationMap +=  ("2015" -> 64.39) +=  ("2016" -> 64.67) +=  ("2017" -> 64.93)  println(s"Country Name: ${country.name} and Population 2017: ${country.getPopulation("2017")} million")  println(s"${country.name}'s average population: ${CountryUtil.populationAverage(country.populationMap.values.toSeq)}")  }
+
+Country Name: France and Population 2017: 64.93 million
+France's average population: 64.66333333333334
+
+class WeCant extends CountryUtil {
+} 
+// Sorry we can't extend from an object
+
+public final class chapter6.CountryUtil {
+  public static double populationAverage(scala.collection.Seq<java.lang.Object>); }
+
+public final class chapter6.CountryUtil$ {
+  public static chapter6.CountryUtil$ MODULE$;
+  public static {};
+  public double populationAverage(scala.collection.Seq<java.lang.Object>); }
+
+class Continent
+
+object CountryUtil extends Continent {
+      //some code here
+}
+
+import java.time.LocalDate
+import java.time.format.{DateTimeFormatter, TextStyle}
+import java.util.Locale
+import scala.util.{Failure, Success, Try}
+
+object DateUtil {
+  /*
+  * Just pass a date with format DD/MM/YYYY, get back DAY_OF_WEEK
+  * */
+  def dayOfWeek(date: String): Option[String] =  Try{
+      LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy")).getDayOfWeek
+    } match {
+      case Success(dayOfWeek) => Some(dayOfWeek.getDisplayName(TextStyle.FULL, Locale.ENGLISH)) case Failure(exp) => exp.printStackTrace; None } }  object TestDateUtil extends App { import DateUtil._  val date =  "01/01/1992"  dayOfWeek(date) match { case Some(dow) => println(s"It was $dow on $date") case None => println(s"Something went wrong!") }  }
+
+It was Wednesday on 01/01/1992
+
+Companion objects
+
+class Country(val name: String, val capital: String){
+  var populationMap =  scala.collection.mutable.Map[String, Double]()
+  def getPopulation(year: String): Double =  populationMap(year) //In Million
+
+  override def toString: String =  s"Country($name,$capital)"
+}
+
+object Country {
+  /*
+  * Function takes a sequence of population per million and returns average.
+  * */
+  def populationAverage(pops: Seq[Double]) =  pops.sum / pops.length
+}
+
+object CountryApp extends App {
+  val country =  new Country("France", "Paris")
+  country.populationMap +=  ("2015" -> 64.39) +=  ("2016" -> 64.67) +=  ("2017" -> 64.93)  println(s"Country Name: ${country.name} and Population 2017: ${country.getPopulation("2017")} million")  println(s"${country.name}'s average population: ${Country.populationAverage(country.populationMap.values.toSeq)}") }
+
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
+class Date(val dateStr: String) {
+  override def toString: String =  s"Date(${this.dateStr})"
+}
+
+object Date{
+  def apply(str: String): Date =  {
+    val dater =  LocalDate.parse(str, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+    new Date(s"${dater.getDayOfWeek} ${dater.getDayOfMonth}-${dater.getMonth}-${dater.getYear}")
+  }
+}
+
+object DateApp extends App {
+  val date =  Date("01/01/1992")
+  println(date)
+ }
+
+Date(WEDNESDAY 1-JANUARY-1992)
+
+val date =  Date("01/01/1992")
+
+class Country(val name: String, val capital: String) {
+
+  override def toString: String =  s"Country($name,$capital)"
+
+  override def equals(obj: scala.Any): Boolean =  ???
+
+  override def hashCode(): Int =  ???
+
+}
+
+Case classes
+
+class Country(val name: String, val capital: String) {
+
+  override def toString: String =  s"Country($name,$capital)"
+
+  override def equals(obj: scala.Any): Boolean =  ???
+
+  override def hashCode(): Int =  ???
+
+}
+
+case class Country(name: String, capital: String)
+
+case class Country(name: String, capital: String)
+
+object CountryUtil extends App {
+  val country =  Country("France", "Paris")
+  println(s"Our country is: $country")
+
+  println(s"Equality => ${country = =  country}")  println(s"HashCode for country instance: ${country.hashCode()}") }
+
+Our country is: Country(France,Paris)
+Equality => true HashCode for country instance: -66065175
+
+public final class chapter6.Country$ extends scala.runtime.AbstractFunction2<java.lang.String, java.lang.String, chapter6.Country> implements scala.Serializable { public static chapter6.Country$ MODULE$; public static {}; public final java.lang.String toString(); public chapter6.Country apply(java.lang.String, java.lang.String); public scala.Option<scala.Tuple2<java.lang.String, java.lang.String>> unapply(chapter6.Country); public java.lang.Object apply(java.lang.Object, java.lang.Object); }
+
+public class chapter6.Country implements scala.Product,scala.Serializable {
+  public static scala.Option<scala.Tuple2<java.lang.String, java.lang.String>> unapply(chapter6.Country); public static chapter6.Country apply(java.lang.String, java.lang.String); public static scala.Function1<scala.Tuple2<java.lang.String, java.lang.String>, chapter6.Country> tupled(); public static scala.Function1<java.lang.String, scala.Function1<java.lang.String, chapter6.Country>> curried(); public java.lang.String name(); public java.lang.String capital(); public chapter6.Country copy(java.lang.String, java.lang.String); public java.lang.String copy$default$1(); public java.lang.String copy$default$2(); public java.lang.String productPrefix(); public int productArity(); public java.lang.Object productElement(int); public scala.collection.Iterator<java.lang.Object> productIterator(); public boolean canEqual(java.lang.Object); public int hashCode(); public java.lang.String toString(); public boolean equals(java.lang.Object); public chapter6.Country(java.lang.String, java.lang.String); }
+
+package chapter6
+
+object CountryUtil extends App {
+  case class Country(name: String, capital: String)
+  val country =  Country("France", "Paris")
+  println(s"Country: => $country") println(s"Equality: => ${country = =  country}") println(s"HashCode: => ${country.hashCode()}")  println(s"Unapply: => ${Country.unapply(country)}") println(s"apply: => ${Country.apply("Germany","Berlin")}")  println(s"copy: => ${country.copy("Germany","Berlin")}") println(s"copyName: => ${country.copy(name= "Germany")}") println(s"copyCapital: => ${country.copy(capital= "Berlin")}")  println(s"productArity: => ${country.productArity}") println(s"productPrefix: => ${country.productPrefix}") println(s"productElement(0): => ${country.productElement(0)}") println(s"productElement(1): => ${country.productElement(1)}") }
+
+Country: => Country(France,Paris) Equality: => true HashCode: => -66065175 Unapply: => Some((France,Paris)) apply: => Country(Germany,Berlin) copy: => Country(Germany,Berlin) copyName: => Country(Germany,Paris) copyCapital: => Country(France,Berlin) productArity: => 2 productPrefix: => Country productElement(0): => France productElement(1): => Paris
+
+case class Country(name: String, capital: String)
+val country =  Country("France", "Paris")
+
+country match {
+  case Country("Germany", _) => println(s"It's Germany") case Country("France", _) => println(s"It's France") case Country(_, _) => println(s"It's some country") }
+
+It's France
+
+package chapter6
+
+object CountryUtil extends App {
+  case class Country(name: String, capital: String)
+  val country =  Country("France", "Paris")
+}
+
+class Country(name: String, capital: String)
+
+package chapter6
+case class Country(name: String, capital: String)
+
+object CountryUtil extends App { 
+  val country =  Country("France", "Paris")
+}
+
+class Country(name: String, capital: String)
+
+Country is already defined in scope
+
+abstract class Continent
+case class Country(name: String, capital: String) extends Continent
+
+Composition and inheritance
+
+class Book(val title: String)
+class Dictionary(name: String) extends Book(name) {
+  // data and behavior
+}
+
+class Book(val title: String) {
+ val chapters =  scala.collection.mutable.Set[Chapter]()
+ def addChapter(chapter: Chapter) =  chapters.add(chapter)
+ def pages =  chapters.foldLeft(0)((b, c) => b + c.noOfPages)
+}
+
+case class Chapter(name: String, sn: Int, noOfPages: Int)
+
+object BookApp extends App {
+ val book =  new Book("The New Book")
+ book.addChapter(Chapter("Chapter1", 1, 15))
+ book.addChapter(Chapter("Chapter2", 2, 13))
+ book.addChapter(Chapter("Chapter3", 3, 17))
+
+ println(book.title)
+ println(book.pages)
+}
+
+Extending classes
+
+class Book(val title: String){
+  // data and behaviour for Book
+}
+
+class Dictionary(name: String) extends Book(name) {
+  // data and behaviour for dictionary
+}
+
+object BookApp extends App {
+  val dictionary =  new Dictionary("Collins")
+  println(dictionary.title)
+}
+
+Collins
+
+Overriding data and behavior
+
+class Book(val title: String){
+  def cover(cover: String): String =  "Paperback_" + cover
+}
+
+class Dictionary(name: String) extends Book(name){
+  // wants to define its own version of cover method
+}
+
+class Dictionary(name: String) extends Book(name){
+  override def cover(cover: String): String =  "Hardcover_" + cover
+}
+
+object BookApp extends App {
+  val dictionary =  new Dictionary("Collins")
+  println(dictionary.title)
+  println(dictionary.cover("The Collins Dictionary"))
+}
+
+Collins
+Hardcover_The Collins Dictionary
+
+Error:(18, 7) overriding method cover in class Book of type (cover: String)String;
+ method cover needs `override' modifier
+ def cover(cover: String): String =  "Hardcover_" + cover
+
+Error:(18, 16) method cover overrides nothing.
+Note: the super classes of class Dictionary contain the following, non-final members named cover:
+def cover(cover: String): String
+override def cover(cover: Cover): String =  "Hardcover_" + cover
+
+class Book(val title: String){
+  def coverType: String =  "Paperback"
+  def cover(cover: String): String =  coverType + "_" + cover
+}
+
+class Dictionary(name: String) extends Book(name){
+  override val coverType: String =  "Hardcover"
+}
+
+Error:(19, 16) overriding value coverType in class Book of type String;
+ method coverType needs to be a stable, immutable value
+  override def coverType: String =  "Hardcover"
+
+Restricting inheritance =E2=80=93 final keyword
+
+class Book(val title: String){
+  final val coverType: String =  "Paperback"
+  def cover(cover: String): String =  coverType + "_" + cover
+}
+
+Error:(19, 16) overriding value coverType in class Book of type String;
+ value coverType cannot override final member
+ override val coverType: String =  "Hardcover"
+
+Dynamic binding in function invocation
+
+class Book(val title: String){
+  val coverType: String =  "Paperback"
+  def cover(cover: String): String =  coverType + "_" + cover
+}
+
+class Dictionary(name: String) extends Book(name){
+  override val coverType: String =  "Hardcover"
+}
+
+class Encyclopedia(name: String) extends Book(name){
+  override val coverType: String =  "Blue_Hardcover"
+}
+
+object BookApp extends App {
+  val dictionary: Book =  new Dictionary("Collins")
+  val encyclopedia: Book =  new Encyclopedia ("Britannica")
+  val theBoringBook: Book =  new Book("TheBoringBook")
+
+  println(s"${dictionary.title} has cover ${dictionary.cover("The Collins Dictionary")}")
+  println(s"${encyclopedia.title} has cover ${encyclopedia.cover("Britannica")}")
+  println(s"${theBoringBook.title} has cover ${theBoringBook.cover("Some Book")}")
+}
+
+Collins has cover Hardcover_The Collins Dictionary
+Britannica has cover Blue_Hardcover_Britannica
+TheBoringBook has cover Paperback_Some Book
+
+val dictionary: Book =  new Dictionary("Collins")
+val encyclopedia: Book =  new Encyclopedia ("Britannica")
+val theBoringBook: Book =  new Book("TheBoringBook")
+
+Misusing inheritance
+
+class CustomStack extends util.ArrayList[String] {
+  def push(value: String) =  ???
+  def pop =  ???
+}
+
+Default and parameterized constructors
+
+import java.time.LocalDate
+
+case class Employee(name: String, id: String, contact: String, email: String) case class StartUp(name: String, founder: Employee, coFounders: Option[Set[Employee]], members: Option[List[Employee]], foundingDate: Option[LocalDate])
+
+case class StartUp(name: String, founder: Employee, coFounders: Option[Set[Employee]], members: Option[List[Employee]], foundingDate: Option[LocalDate]){
+
+  //founder | name
+  def this(name: String, founder: Employee) =  this(name, founder, None, None, None)
+
+
+  //founder | foundingDate
+  def this(name: String, founder: Employee, foundingDate: LocalDate) =  this(name, founder, None, None, Some(foundingDate))
+
+  //founder | coFounders
+  def this(name: String, founder: Employee, coFounders: Set[Employee]) =  this(name, founder, Some(coFounders), None, None)
+
+  //founder | coFounders | members
+  def this(name: String, founder: Employee, coFounders: Set[Employee], members: List[Employee]) =  this(name, founder, Some(coFounders), Some(members), None)
+
+  //founder | coFounders | foundingDate
+  def this(name: String, founder: Employee, coFounders: Set[Employee], foundingDate: LocalDate) =  this(name, founder, Some(coFounders), None, Some(foundingDate))
+
+  //founder | members    | foundingDate
+  def this(name: String, founder: Employee, members: List[Employee], foundingDate: LocalDate) =  this(name, founder, None, Some(members), Some(foundingDate))
+
+}
+
+object StartUpApp extends App {
+
+  val startUpWithFoundingDate =  new StartUp("WSup", Employee("Rahul Sharma", "RH_ID_1", "9090000321", "rahul_sharma@abc.com"), LocalDate.now())
+
+  println(s"${startUpWithFoundingDate.name} founded on ${startUpWithFoundingDate.foundingDate.get} by ${startUpWithFoundingDate.founder.name}")
+
+  val startUp =  new StartUp("Taken", Employee("David Barbara", "DB_ID_1", "9090654321", "david_b@abc.com"))
+
+  println(s"${startUp.name} founded by ${startUp.founder.name}")
+}
+
+WSup founded on Sun Jun 13 20:29:00 IST 2016 by Rahul Sharma
+Taken founded by David Barbara
+
+object StartUpApp extends App {
+  
+  val startUp =  StartUp("Taken", Employee("David Barbara", "DB_ID_1", "9090654321", "david_b@abc.com"))
+  println(s"${startUp.name} founded by ${startUp.founder.name}")
+ }
+
+Error:(30, 24) not enough arguments for method apply: (name: String, founder: chapter7.Employee, coFounders: Option[Set[chapter7.Employee]], members: Option[List[chapter7.Employee]], foundingDate: Option[java.util.Date])chapter7.StartUp in object StartUp.
+Unspecified value parameters coFounders, members, foundingDate.
+val startUp =  StartUp("Taken", Employee("David Barbara", "DB_ID_1", "9090654321", "david_b@abc.com"))
+
+object StartUp {
+
+  def apply(name: String, founder: Employee): StartUp =  new StartUp(name, founder, None, None, None)
+}
+
+object StartUpApp extends App {
+
+  val startUp =  StartUp("Taken", Employee("David Barbara", "DB_ID_1", "9090654321", "david_b@abc.com"))
+
+  println(s"${startUp.name} founded by ${startUp.founder.name}")
+}
+
+Taken founded by David Barbara
+
+Traits
+
+trait Socialize {
+  
+ //people who socialise, greets. def greet(name: String) =  "Hello " + name
+}
+
+case class Person(val name: String)
+
+object SocializeApp extends App {
+  val person =  Person("Victor Mark")
+  val employee =  new Employee("David Barbara") with Socialize
+
+  println(employee.greet(person.name))
+
+  class Employee(fullName: String) extends Person(fullName)
+}
+
+Hello Victor Mark
+
+public interface chapter7.Socialize {
+  public static java.lang.String greet$(chapter7.Socialize, java.lang.String);
+  public java.lang.String greet(java.lang.String);
+  public static void $init$(chapter7.Socialize);
+}
+
+trait Socialize {
+
+  def greet(name: String) =  "Hello " + name
+
+  val socialNetworks =  Set("Facebook", "LinkedIn", "Twitter", "Instagram", "Youtube")
+
+  def linkToSocialNetwork(network: String, uri: String)
+}
+
+object SocializeApp extends App {
+
+  val employee =  new Employee("David Barbara")
+  employee.linkToSocialNetwork("LinkedIn", "www.linkedin.com/profiles/david_b")
+
+  println(employee.mapOfSocialNetwork)
+
+}
+
+class Employee(fullName: String) extends Person(fullName) with Socialize {
+
+  var mapOfSocialNetwork =  new scala.collection.mutable.HashMap[String, String]()
+
+  override val socialNetworks =  Set("LinkedIn", "Twitter", "Youtube") 
+ override def linkToSocialNetwork(network: String, uri: String): Unit =  if (socialNetworks contains network) mapOfSocialNetwork.put(network, uri) }
+
+Map(LinkedIn -> www.linkedin.com/profiles/david_b)
+
+def linkToSocialNetwork(network: String, uri: String)
+
+Traits as composable mix-ins
+
+package chapter7
+
+
+case class Amount(amt: Double, currency: String){
+  override def toString: String =  s"$amt ${currency.toUpperCase}"
+}
+
+abstract class CreditCard {
+  val ccType =  "Default"
+  def creditLimit(x: Double) : Amount
+ 
+  //legacy creditCardNumberGeneratorLogic
+  val ccNum =  scala.util.Random.nextInt(1000000000).toString
+ 
+  //other methods
+}
+
+object CCApp extends App {
+  val basicCreditCard =  new CreditCard {
+    override def creditLimit(x: Double): Amount =  Amount(x, "USD")
+  }
+
+  val limit =  basicCreditCard.creditLimit(1000)
+  println(s"CreditCardNumber ${basicCreditCard.ccNum} with limit: $limit")
+}
+
+CreditCardNumber 44539599 with limit: 1000.0 USD
+
+val basicCreditCard =  // Some Credit Card impl
+basicCreditCard.ccNumber
+
+trait CreditCardOps {
+   self: CreditCard => val ccNumber: String =  ccType match { case "BASIC" => "BC" + ccNum case _ => "DC" + ccNum } }  object CCApp extends App { val basicCreditCard =  new CreditCard with CreditCardOps { override def creditLimit(x: Double): Amount =  Amount(x, "USD") }  val limit =  basicCreditCard.creditLimit(1000) println(s"CreditCardNumber ${basicCreditCard.ccNumber} with limit: $limit") }
+
+CreditCardNumber DC896146072 with limit: 1000.0 USD
+
+class DebitCard
+val someDebitCard =  new DebitCard with CreditCardOps
+
+self: CreditCard =>
+
+trait CreditCardOps {
+   self: CreditCard => val ccNumber: String =  ccType match { case "BASIC" => "BC" + ccNum case _ => "DC" + ccNum } }
+
+trait CreditCardOps {
+
+   self: CreditCard => val ccNumber: String =  ccType match { case "BASIC" => "BC" + ccNum case _ => "DC" + ccNum } override val ccNum =  ccNumber // will be null }
+
+Traits as stackable modifications
+
+new Service with BasicPackage
+
+new Service with BasicPackage with DiamondPackage
+
+abstract class CreditCard {
+  val ccType =  "Default"
+  def creditLimit(x: Double) : Amount
+
+  //legacy creditCardNumberGeneratorLogic
+  val ccNum =  scala.util.Random.nextInt(1000000000).toString
+
+  //other methods}
+
+class BasicCreditCard extends CreditCard {
+  override def creditLimit(x: Double): Amount =  Amount(x,"USD")
+}
+
+trait GoldSubscription extends CreditCard {
+  abstract override def creditLimit(x: Double): Amount =  super.creditLimit(x * 1.10)
+}
+
+trait PlatinumSubscription extends CreditCard {
+  abstract override def creditLimit(x: Double): Amount =  super.creditLimit(x * 1.25)
+}
+
+abstract override def creditLimit(x: Double): Amount =  //super call
+
+object CCApp extends App {
+  val basicCreditCard =  new BasicCreditCard()      
+  println(basicCreditCard.creditLimit(15000))
+
+  val goldCreditCard =  new BasicCreditCard() with GoldSubscription
+  println(goldCreditCard.creditLimit(15000))
+
+  val platinumCreditCard =  new BasicCreditCard() with PlatinumSubscription
+  println(platinumCreditCard.creditLimit(15000))
+
+  val gpluspCreditCard =  new BasicCreditCard() with GoldSubscription with PlatinumSubscription
+  println(gpluspCreditCard.creditLimit(15000))
+}
+
+15000.0 USD
+16500.0 USD
+18750.0 USD
+20625.0 USD
+
+trait GoldSubscription extends CreditCard {
+  abstract override def creditLimit(x: Double): Amount =  super.creditLimit(x * 1.10)
+}
+
+val gpluspCreditCard =  new BasicCreditCard() with GoldSubscription with PlatinumSubscription
+
+println(gpluspCreditCard.creditLimit(15000))
+             and we got the desired result: 20625.0 USD
+
+Linearization
+
+abstract class Language {
+  def sayHello: String
+}
+
+trait British extends Language {
+  override def sayHello: String =  "Hello"
+}
+
+trait Spanish extends Language {
+  override def sayHello: String =  "Hola"
+}
+
+class Socializer extends British with Spanish {
+  override def sayHello: String =  super.sayHello
+}
+
+object Linearization extends App {
+
+  class Person(val name: String)
+
+  val albert =  new Person("Alberto")
+  val socializer =  new Socializer()
+
+  println(s"${socializer.sayHello} ${albert.name}")
+}
+
+Hola Alberto
+
+class Socializer extends British with Spanish {
+  override def sayHello: String =  super.sayHello
+}
+
+British -> AnyRef -> Any
+
+Spanish -> AnyRef -> Any
+
+Spanish ->
+
+Spanish -> British -> AnyRef -> Any
+
+Socializer -> Spanish -> British -> AnyRef -> Any
+
+Hola Alberto
+
+Package statements
+
+package country
+
+class Country(val name: String) {
+  import Country._
+
+  val populationsMap  =  scala.collection.mutable.Map[Int, Double]()
+
+  def showAveragePopulation() =  println(averagePopulation(this.populationsMap.values))
+ }  object Country {
+ def averagePopulation(populations: Iterable[Double]) =  populations.sum / populations.size  }
+
+import country.Country._
+
+Multiple package statements in a file
+
+import country.Country
+import customutil.Util.averagePopulation
+
+package country {
+
+  class Country(val name: String) {
+
+    val populationsMap  =  scala.collection.mutable.Map[Int, Double]()
+
+    def showAveragePopulation() =  println(averagePopulation(this.populationsMap.values))
+ } }  package state {  class State(val name: String) {  val populationsMap =  scala.collection.mutable.Map[Int, Double]()  def showAveragePopulation() =  println(averagePopulation(this.populationsMap.values))
+ }  }  package customutil { object Util {  def averagePopulation(populations: Iterable[Double]) =  populations.sum / populations.size  } }
+
+Nested package statements
+
+import country.Country
+
+package country {
+  import customutil.Util.averagePopulation
+
+  abstract class Region
+  
+  class Country(val name: String) extends Region{
+
+    val populationsMap  =  scala.collection.mutable.Map[Int, Double]()
+
+    def showAveragePopulation() =  println(averagePopulation(this.populationsMap.values))
+
+  }
+
+  package state {
+
+    class State(val name: String) extends Region {
+
+      val populationsMap  =  scala.collection.mutable.Map[Int, Double]()
+
+      def showAveragePopulation() =  println(averagePopulation(this.populationsMap.values))
+    }
+
+  }
+}
+
+package customutil {
+  object Util {
+
+    def averagePopulation(populations: Iterable[Double]) =  populations.sum / populations.size
+
+  }
+}
+
+Chaining package statements
+
+package country
+package state
+
+class State(val name: String) extends Region {
+
+  val populationsMap  =  scala.collection.mutable.Map[Int, Double]()
+
+  def showAveragePopulation =  println(averagePopulation(this.populationsMap.values))
+}
+
+Importing packages
+
+object CountryApp extends App {
+  import customutil.Util.averagePopulation
+  val aCountry =  new Country("France")
+  aCountry.populationsMap.put(2017, 64.94)
+  aCountry.populationsMap.put(2016, 64.66)
+  aCountry.populationsMap.put(2015, 64.395)
+
+  println(averagePopulation(aCountry.populationsMap.values))
+}
+
+64.66499999999999
+
+package country {
+ abstract class Region
+
+ import customutil.{Util => u}
+
+ class Country(val name: String) extends Region {
+
+ val populationsMap =  scala.collection.mutable.Map[Int, Double]()
+
+ def showAveragePopulation =  println(u.averagePopulation(this.populationsMap.values))
+ }
+
+ package state {
+
+ class State(val name: String) extends Region {
+
+ import u.{averagePopulation => ap}
+
+ val populationsMap =  scala.collection.mutable.Map[Int, Double]()
+
+ def showAveragePopulation =  println(ap(this.populationsMap.values))
+ }
+
+ }
+ }
+
+ package customutil {
+ object Util {
+
+ def averagePopulation(populations: Iterable[Double]) =  populations.sum / populations.size
+
+ }
+ }
+
+import customutil.{Util => u}
+
+println(u.averagePopulation(this.populationsMap.values))
+
+import u.{averagePopulation => ap}
+
+println(ap(this.populationsMap.values))
+
+import package1.{Member => _}
+
+Visibility rules
+
+package restaurant
+
+package privaterestaurant {
+
+  case class Dish(name: String)
+
+  trait Kitchen {
+    self: PrivateRestaurant =>  private val secret =  "Secret to tasty dish" //Think of a secret logical evaluation resulting in value, we don't want to expose.  def cookMyDish: Option[Dish] =  Some(Dish(secret))  }  class PrivateRestaurant extends Kitchen {  def serveDishWithSecret =  Dish(secret) // Symbol secret is inaccessible from this place.  def serveDish =  cookMyDish // Works fine }  }
+
+protected val secret =  "Secret to tasty dish" //Think of a secret logical evaluation resulting in value, we don't want to expose.
+
+class PrivateRestaurant extends Kitchen {
+
+  def serveDishWithSecret =  Dish(secret) // Works fine
+  def serveDish =  cookMyDish // Works fine
+}
+
+case class Dish(name: String)
+
+class Restaurant
+
+package privaterestaurant{
+ trait Kitchen { self: Restaurant =>  private[privaterestaurant] val secret =  "Secret to tasty dish" //Think of a secret logical evaluation resulting in value, we don't want to expose.  def cookMyDish: Option[Dish] =  Some(Dish(secret))  }  class PrivateRestaurant extends Restaurant with Kitchen {  def serveDishWithSecret =  Dish(secret) // Symbol secret is inaccessible from this place.  def serveDish =  cookMyDish // Works fine }  }  package protectedrestaurant {  import restaurant.privaterestaurant.Kitchen  class ProtectedRestaurant extends Restaurant with Kitchen {  def serveDishWithSecret =  Dish(secret) // Symbol secret is inaccessible from this place.  def serveDish =  cookMyDish // Works fine } }
+
+private[privaterestaurant] val secret =  "Secret to tasty dish" //Think of a secret logical evaluation resulting in value, 
+//we don't want to expose
+
+private[privaterestaurant] val secret
+
+Sealed traits
+
+sealed trait Season
+
+case object Autumn extends Season
+case object Winter extends Season
+case object Spring extends Season
+case object Summer extends Season
+case object Monsoon extends Season
+
+object SealedApp extends App {
+  def season(season: Season) =  season match {
+    case Autumn => println(s"It's Autumn :)") case Winter => println(s"It's Winter, Xmas time!") case Spring => println(s"It's Spring!!") case Summer => println(s"It's summer, who likes summer anyway!") case Monsoon => println(s"It's Monsoon!!") } season(Spring) }
+
+It's Spring!!"
+
+Function literals
+
+(value1: Int, value2: Int) => Int
+
+def printPages(doc: Document, lastIndex: Int, print: (Int) => Unit) =  if(lastIndex <=  doc.numOfPages) for(i <- 1 to lastIndex) print(i)  val colorPrint =  (index: Int) => println(s"Printing Color Page $index.")  val simplePrint =  (index: Int) => println(s"Printing Simple Page $index.")  println("---------Method V1-----------") printPages(Document(15, "DOCX"), 5, colorPrint)  println("---------Method V2-----------") printPages(Document(15, "DOCX"), 2, simplePrint)
+
+(index: Int) => Unit
+
+def printColorPages(doc: Document, lastIndex: Int, startIndex: Int) =  if(lastIndex <=  doc.numOfPages) for(i <- startIndex to lastIndex) colorPrint(i)  def printSimplePages(doc: Document, lastIndex: Int, startIndex: Int) =  if(lastIndex <=  doc.numOfPages) for(i <- startIndex to lastIndex) simplePrint(i)
+
+(index: Int) => Unit
+
+def printPages(doc: Document, lastIndex: Int, print: (Int) => Unit) =  if(lastIndex <=  doc.numOfPages) for(i <- 1 to lastIndex) print(i)
+
+trait Function1[-T1, +R] extends AnyRef
+
+public static scala.Function1<java.lang.Object, scala.runtime.BoxedUnit> colorPrint()  public static void printPages(chapter4.Document, int, scala.Function1<java.lang.Object, scala.runtime.BoxedUnit>, scala.Function0<java.lang.Object>)
+
+def andThen[A](g: (R) =E2=87=92 A): (T1) =E2=87=92 A
+
+def compose[A](g: (A) =E2=87=92 T1): (A) =E2=87=92 R
+
+val incrementByOne =  (num: Int) => num + 1  val isEven =  (num: Int) => num % 2 = =  0  val incrementAndCheckForEven =  incrementByOne andThen isEven  println(s"Representing andThen function ${incrementAndCheckForEven(1)}")
+
+def andThen[A](g: (R) =E2=87=92 A): (T1) =E2=87=92 A
+
+Methods
+
+object Methods {
+
+  def filePrinter() =  {
+    println("Version 0")
+    val filesHere =  (new File(".")).listFiles()
+    for(file <- filesHere) println(file) }  def main(args: Array[String]): Unit =  { filePrinter() }  }
+
+Version 0
+./.idea
+./FirstProject.iml
+./out
+./src
+
+def filePrinterV2() {
+  println("Version 2")
+  val filesHere =  (new File(".")).listFiles()
+  for(file <- filesHere) println(file) }
+
+import java.io.File
+
+object Methods {
+
+  def filePrinter() =  {
+    println("Version 0")
+    val filesHere =  (new File(".")).listFiles()
+    for(file <- filesHere) println(file) }  def filePrinterV1() { println("Version 1") val filesHere =  (new File(".")).listFiles() for(file <- filesHere) println(file) }  def filePrinterV2() { println("Version 2") val filesHere =  (new File(".")).listFiles() for(file <- filesHere) println(file) }  def filePrinterV3() =  println("Version 3") val filesHere =  (new File(".")).listFiles() for(file <- filesHere) println(file)  def main(args: Array[String]): Unit =  { filePrinter() filePrinterV1() filePrinterV2() filePrinterV3() }  }
+
+./.idea
+./FirstProject.iml
+./out
+./src
+Version 0
+./.idea
+./FirstProject.iml
+./out
+./src
+Version 1
+./.idea
+./FirstProject.iml
+./out
+./src
+Version 2
+./.idea
+./FirstProject.iml
+./out
+./src
+Version 3
+
+Functions versus methods
+
+val colorPrint =  (index: Int) => println(s"Printing Color Page $index.")   val colorPrintV2 =  new Function1[Int, Unit]{ override def apply(index: Int): Unit =  println(s"Printing Color Page $index.") }  def colorPrintV3(index: Int) =  println(s"Printing Color Page $index.")
+
+println("---------Function V1-----------")
+printPages(Document(15, "DOCX"), 2, colorPrint)
+
+println("---------Function V2-----------")
+printPages(Document(15, "DOCX"), 2, colorPrintV2)
+
+println("---------Method V3-----------")
+printPages(Document(15, "DOCX"), 2, colorPrintV3)
+
+---------Function V1-----------
+Printing Color Page 1.
+Printing Color Page 2.
+---------Function V2-----------
+Printing Color Page 1.
+Printing Color Page 2.
+---------Method V3-----------
+Printing Color Page 1.
+Printing Color Page 2.
+
+:> javap ColorPrinter.class 
+Compiled from "FuncLiterals.scala"
+public final class chapter4.ColorPrinter { public static void main(java.lang.String[]); public static void delayedInit(scala.Function0<scala.runtime.BoxedUnit>); public static void delayedEndpoint$chapter4$ColorPrinter$1(); public static long executionStart();  public static void colorPrintV3(int);  public static scala.Function1<java.lang.Object, scala.runtime.BoxedUnit> colorPrintV2();  public static scala.Function1<java.lang.Object, scala.runtime.BoxedUnit> colorPrint();  public static void printPages(chapter4.Document, int, scala.Function1<java.lang.Object, scala.runtime.BoxedUnit>, scala.Function0<java.lang.Object>);  public static boolean printerSwitch(); }
+
+colorPrintV2(3)
+
+new Function1[Int, Unit]().apply(3)
+
+colorPrint = =  colorPrintV2 //false
+
+colorPrint = =  colorPrintV3 //Compile Time Error
+
+val colorPrintV4 =  colorPrintV3 _
+
+Methods or functions?
+
+object ColorPrinter extends App {
+
+  val printerSwitch =  false
+
+ def printPages(doc: Document, lastIndex: Int, print: (Int) => Unit, isPrinterOn: => Boolean) =  {  if(lastIndex <=  doc.numOfPages && isPrinterOn) for(i <- 1 to lastIndex) print(i)  }  val colorPrint =  (index: Int) => println(s"Printing Color Page $index.")  val colorPrintV2 =  new Function1[Int, Unit]{ override def apply(index: Int): Unit =  println(s"Printing Color Page $index.") }  println("---------Function V1-----------") printPages(Document(15, "DOCX"), 2, colorPrint, !printerSwitch)  println("---------Function V2-----------") printPages(Document(15, "DOCX"), 2, colorPrintV2, !printerSwitch)  }  case class Document(numOfPages: Int, typeOfDoc: String)
+
+What are closures?
+
+object AClosure extends App {
+
+  var advertisement =  "Buy an IPhone7"
+
+  val playingShow =  (showName: String) => println(s"Playing $showName. Here's the advertisement: $advertisement")  playingShow("GOT") advertisement =  "Buy an IPhone8"  playingShow("GOF")  }
+
+Playing GOT. Here's the advertisement: Buy an IPhone7
+Playing GOF. Here's the advertisement: Buy an IPhone8
+
+(showName: String) => println(s"Playing $showName. No Advertisement")
+
+(showName: String) => println(s"Playing $showName. Here's the advertisement: $advertisement")
+
+val printerSwitch =  false
+
+def printPages(doc: Document, lastIndex: Int, print: (Int) => Unit) =  {  if(lastIndex <=  doc.numOfPages) for(i <- 1 to lastIndex) print(i)  }  val colorPrint =  (index: Int) => if(!printerSwitch) println(s"Printing Color Page $index.")  val colorPrintV2 =  new Function1[Int, Unit]{ override def apply(index: Int): Unit =  if(!printerSwitch) println(s"Printing Color Page $index.") }
+
+val printerSwitch =  false
+
+def printPages(doc: Document, lastIndex: Int, print: (Int) => Unit) =  {  if(lastIndex <=  doc.numOfPages && !printerSwitch) for(i <- 1 to lastIndex) print(i)  }  val colorPrint =  (index: Int) => println(s"Printing Color Page $index.")  val colorPrintV2 =  new Function1[Int, Unit]{ override def apply(index: Int): Unit =  println(s"Printing Color Page $index.") }
+
+Higher-order functions
+
+def sum(a: Int, b: Int) =  a + b
+
+object HOFs extends App {
+
+  def multiplier10(x : Int): Int => Int =  x => x * 10 //functionAsOutput  def intOpPerformer(g: Int => Int) : Int =  g(5) //functionAsInput  def multiplicator(x: Int)(g: Int => Int): Int =  g(x) //functionAsParameter  println(s"functionAsInput Result: ${intOpPerformer(multiplier10(5))}")  println(s"functionAsParameter Result: ${multiplicator(5)(multiplier10(5))}")  }
+
+functionAsInput Result: 50
+functionAsParameter Result: 50
+
+intOpPerformer(multiplier10(5))
+
+multiplicator(5)(multiplier10(5))
+
+def printPages(doc: Document, lastIndex: Int, print: (Int) => Unit, isPrinterOn: => Boolean) =  {  if(lastIndex <=  doc.numOfPages && isPrinterOn) for(i <- 1 to lastIndex) print(i)  }
+
+printPages(Document(15, "DOCX"), 2, colorPrint, !printerSwitch)
+
+val colorPrint =  (index: Int) => println(s"Printing Color Page $index.")
+
+def add(a: Int, b: Int) =  a + b
+
+def multiply(a: Int, b: Int) =  a * b
+
+def subtract(a: Int, b: Int) =  a - b
+
+def modulus(a: Int, b: Int) =  a % b
+
+add(10, 5)
+subtract(10, 5)
+multiply(10, 5)
+modulus(10, 5)
+
+val add =  (a: Int, b: Int) => a + b val multiply =  (a: Int, b: Int) => a * b val subtract =  (a: Int, b: Int) => a - b val modulus =  (a: Int, b: Int) => a % b
+
+def operation(op: (Int, Int) => Int, a: Int, b: Int) : Int =  op(a, b)
+
+operation(add, 10, 5)
+operation(subtract, 10, 5)
+operation(multiply, 10, 5)
+operation(modulus, 10, 5)
+
+object HOFs extends App {
+  
+  def operation(op: (Int, Int) => Int, a: Int, b: Int) : Int =  op(a,b)  println(operation((a, b) => a + b, 10, 5)) println(operation((a, b) => a * b, 10, 5)) println(operation((a, b) => a - b, 10, 5)) println(operation((a, b) => a % b, 10, 5))  }
+
+15
+50
+5
+0
+
+Currying
+
+WebsitePlatform => DomainName => Host
+
+def makeWebsite(platform: WebsitePlatform, domainName: DomainName, host: Host) =  println(s"Making $domainName using $platform with hosting from $host ")
+
+def makeWebsite(platform: WebsitePlatform)(domainName: DomainName)(host: Host): Unit
+
+WebsitePlatform => DomainName => Host => Unit
+
+DomainName => Host => Unit
+
+Host => Unit
+
+object Curried extends App {
+
+  type WebsitePlatform =  String
+  type DomainName =  String
+  type Host =  String
+
+  def makeWebsite(platform: WebsitePlatform)(domainName: DomainName)(host: Host) = 
+    println(s"Making $domainName using $platform with hosting from $host ")
+
+
+  val wordPress: DomainName => Host => Unit =  makeWebsite("WordPress")  val wordPressDummyDotCom : Host => Unit =  wordPress("dummy123.com")  val blueHostedWordPressDummyDotCom : Unit =  wordPressDummyDotCom("Bluehost.com")  blueHostedWordPressDummyDotCom
+
+ }
+
+Making dummy123.com using WordPress with hosting from Bluehost.com
+
+Converting a function with multiple parameters to curried form
+
+def add =  (x: Int, y: Int) => x + y  val addCurried =  add.curried  println(add(5,6)) println(addCurried(5)(6))
+
+11
+11
+
+val addCurriedUncurried =  Function.uncurried(addCurried)
+
+println(addCurriedUncurried(5,6))
+
+11
+
+Partially applied functions
+
+def makeWebsite(platform: WebsitePlatform, domainName: DomainName, host: Host) = 
+  println(s"Making $domainName using $platform with hosting from $host ")
+
+object PaF extends App {
+
+  type WebsitePlatform =  String
+  type DomainName =  String
+  type Host =  String
+  type Protocol =  String
+
+  def makeWebsite(platform: WebsitePlatform, domainName: DomainName, host: Host) = 
+    println(s"Making $domainName using $platform with hosting from $host ")
+
+  val wordPressSite: (DomainName, Host) => Unit =  makeWebsite("WordPress", _: DomainName, _: Host)  val makeExampleDotCom: (WebsitePlatform, Host) => Unit =  makeWebsite(_: WebsitePlatform, "example.com", _: Host )  val makeBlueHostingExampleDotCom: (WebsitePlatform) => Unit =  makeWebsite(_: WebsitePlatform, "example.com", "bluehost.com" )  makeWebsite("Wordpress", "anyDomain.com", "Godaddy.com") wordPressSite("example.com", "Godaddy.com") makeExampleDotCom("Wordpress", "bluehost.com") makeBlueHostingExampleDotCom("Blogger")  }
+
+Making anyDomain.com using Wordpress with hosting from Godaddy.com 
+Making example.com using WordPress with hosting from Godaddy.com 
+Making example.com using Wordpress with hosting from bluehost.com 
+Making example.com using Blogger with hosting from bluehost.com
+
+val wordPressSite: (DomainName, Host) => Unit =  makeWebsite("WordPress", _: DomainName, _: Host)
+
+(DomainName, Host) => Unit
+
+wordPressSite("example.com", "Godaddy.com")
+
+val makeExampleDotCom: (WebsitePlatform, Host) => Unit =  makeWebsite(_: WebsitePlatform, "example.com", _: Host )
+
+(WebsitePlatform, Host) => Unit
+
+For expressions
+
+object ForExpressions extends App {
+
+  val person1 =  Person("Albert", 21, 'm')
+  val person2 =  Person("Bob", 25, 'm')
+  val person3 =  Person("Cyril", 19, 'f')
+  val persons =  List(person1, person2, person3)
+
+  val winners =  for {
+    person <- persons age =  person.age name =  person.name if age > 20 } yield name  winners.foreach(println)  }  case class Person(name: String, age: Int, gender: Char)
+
+Albert
+Bob
+
+val winners1 =  persons withFilter(_.age > 20) map(_.name) winners1.foreach(println) 
+case class Person(name: String, age: Int, gender: Char)
+
+Albert
+Bob
+
+case class Car(name: String, brandName: String)
+case class Brand(name: String, cars: List[Car])
+
+val brands =  List(
+Brand("Toyota", List(Car("Corolla", "Toyota"))),
+Brand("Honda",  List(Car("Accord", "Honda"))),
+Brand("Tesla",  List(Car("Model S", "Tesla"),
+                                      Car("Model 3", "Tesla"),
+                                      Car("Model X", "Tesla"),
+                                      Car("New Model", "Tesla"))))
+
+val teslaCarsStartsWithModel =  for {
+  brand <- brands car <- brand.cars if car.name.startsWith("Model") && brand.name = =  "Tesla" } yield (brand.name, car.name)  teslaCarsStartsWithModel foreach println
+
+(Tesla,Model S)
+(Tesla,Model 3)
+(Tesla,Model X)
+
+val teslaCarsStartsWithModel2 =  brands.flatMap(brand =>  brand.cars withFilter(_.name.startsWith("Model") && brand.name = =  "Tesla") map(car => (brand.name, car.name)))  teslaCarsStartsWithModel2 foreach println
+
+(Tesla,Model S)
+(Tesla,Model 3)
+(Tesla,Model X)
+
+For(gen1 <- list, gen2 <- gen1.list, filter1)
+
+for {
+  brand <- brands car <- brand.cars if car.name.startsWith("Model") && brand.name = =  "Tesla" } yield (brand.name, car.name)
+
+brands.flatMap{ brand => for{ car <- brand.cars if car.name.startsWith("Model") && brand.name = =  "Tesla" } yield (brand.name, car.name) }
+
+brands.flatMap{ brand => brand.cars withFilter{ car =>  car.name.startsWith("Model") && brand.name = =  "Tesla" } map(car => (brand.name, car.name))  }
+
+Pattern matching
+
+val somelist =  List(1,2,3)
+
+somelist match {
+  case Nil => Nil case _ => ??? }
+
+val somelist =  1 :: 2 :: 3 :: Nil
+
+val x =  somelist match {
+  case Nil => Nil case _ => println("anything") case head :: tail => println("something with a head and a tail") } Warning:(21, 10) patterns after a variable pattern cannot match (SLS 8.1.1) case _ => println("anything") Warning:(22, 33) unreachable code due to variable pattern on line 21 case head :: tail => println("something with a head and a tail") Warning:(22, 33) unreachable code case head :: tail => println("something with a head and a tail")
+
+Matching a variable
+
+import scala.util.control.NonFatal
+
+def safeToInt(canBeNumber: String): Option[Int] =  { try { Some(canBeNumber.toInt) } catch { case NonFatal(e) => None } }  safeToInt("10") match { case None => println("Got nothing") case someValue => println(s"Got ${someValue.get}") }
+
+Got 10
+
+Matching a constant
+
+def matchAgainst(i: Int) =  i match {
+  case 1 => println("One") case 2 => println("Two") case 3 => println("Three") case 4 => println("Four") case _ => println("Not in Range 1 to 4") }  matchAgainst(1)
+ matchAgainst(5)
+
+One
+Not in Range 1 to 4
+
+Matching a constructor
+
+def safeToInt(canBeNumber: String): Option[Int] =  {
+  try {
+    Some(canBeNumber.toInt)
+  } catch {
+    case NonFatal(e) => None } }  safeToInt("10") match { case None => println("Got nothing") case Some(value) => println(s"Got $value") }
+
+Got 10
+
+case Some(value) => println(s"Got $value")
+
+trait Employee
+ case class ContractEmp(id: String, name: String) extends Employee
+ case class Developer(id: String, name: String) extends Employee
+ case class Consultant(id: String, name: String) extends Employee
+
+/*
+ * Process joining bonus if
+ *     :> Developer has ID Starting from "DL" JB: 1L * :> Consultant has ID Starting from "CNL": 1L */ def processJoiningBonus(employee: Employee, amountCTC: Double) =  employee match { case ContractEmp(id, _) => amountCTC case Developer(id, _) => if(id.startsWith("DL")) amountCTC + 10000.0 else amountCTC case Consultant(id, _) => if(id.startsWith("CNL")) amountCTC + 10000.0 else amountCTC }  val developerEmplEligibleForJB =  Developer("DL0001", "Alex") val consultantEmpEligibleForJB =  Consultant("CNL0001","Henry") val developer =  Developer("DI0002", "Heith")  println(processJoiningBonus(developerEmplEligibleForJB, 55000)) println(processJoiningBonus(consultantEmpEligibleForJB, 65000)) println(processJoiningBonus(developer, 66000))
+
+65000.0
+75000.0
+66000.0
+
+case Developer(id, _) => if(id.startsWith("DL")) amountCTC + 10000.0 else amountCTC
+
+/*
+ * Process joining bonus if
+ *     :> Developer has ID Starting from "DL" JB: 1L * :> Consultant has ID Starting from "CNL": 1L */ def processJoiningBonus(employee: Employee, amountCTC: Double) =  employee match { case ContractEmp(id, _) => amountCTC case Developer(id, _) if id.startsWith("DL") => amountCTC + 10000.0 case Consultant(id, _) if id.startsWith("CNL") => amountCTC + 10000.0 case _ => amountCTC }
+
+65000.0
+75000.0
+66000.0
+
+case Developer(id, _) if id.startsWith("DL") => amountCTC + 10000.0
+
+case class Car(name: String, brand: CarBrand)
+case class CarBrand(name: String)
+
+val car =  Car("Model X", CarBrand("Tesla"))
+val anyCar =  Car("Model XYZ", CarBrand("XYZ"))
+
+def matchCar(c: Car) =  c match {
+  case Car(_, brand @ CarBrand("Tesla")) => println("It's a Tesla Car!") case _ => println("It's just a Carrr!!") }  matchCar(car) matchCar(anyCar)
+
+It's a Tesla Car!
+It's just a Carrr!!
+
+def safeToInt(canBeNumber: String): Option[Int] =  {
+  try {
+    Some(canBeNumber.toInt)
+  } catch {
+    case NonFatal(e) => None } }  safeToInt("10") match { case None => println("Got nothing") case Some(value) => println(s"Got $value") }
+
+Option type
+
+scala> val a: Option =  Some(1) <console>:11: error: class Option takes type parameters val a: Option =  Some(1)  scala> val a: Option[Int] =  Some(1) a: Option[Int] =  Some(1)
+
+scala> a map println 1
+
+def safeToInt(canBeNumber: String): Int =  {
+  try {
+     canBeNumber.toInt
+  } catch {
+    case NonFatal(e) => throw Exception } }
+
+Lazy declaration
+
+scala> lazy val v =  1 v: Int =  <lazy>  scala> val z =  1 z: Int =  1
+
+Tail call optimization
+
+import scala.annotation.tailrec
+
+object TailRecursion { def main(args: Array[String]): Unit =  { val list =  List("Alex", "Bob", "Chris", "David", "Raven", "Stuart") someRecursiveMethod(list)  }  /* You have a sorted list of names of employees, within a company. print all names until the name "Raven" comes */ @tailrec def someRecursiveMethod(list: List[String]): Unit =  { list match { case Nil => println("Can't continue. Either printed all names or encountered Raven") case head :: tail => if(head !=  "Raven") { println(s"Name: $head") someRecursiveMethod(tail) } else someRecursiveMethod(Nil) }
+ }
+ }
+
+Name: Alex
+Name: Bob
+Name: Chris
+Name: David
+Can't continue. Either printed all names or encountered Raven
+
+@tailrec
+def someRecursiveMethod(list: List[String]): Unit =  {
+    list match {
+      case Nil => println(s"Can't continue. Either printed all names or encountered Raven") case head :: tail => if(head !=  "Raven") { println(s"Name: $head") someRecursiveMethod(tail) println("Won't happen") } else someRecursiveMethod(Nil)  } } Error:(21, 30) could not optimize @tailrec annotated method someRecursiveMethod: it contains a recursive call not in tail position someRecursiveMethod(tail)
+
+Combinators
+
+val brands =  List(Brand("Toyota", List(Car("Corolla", "Toyota"))),
+                  Brand("Honda", List(Car("Accord", "Honda"))),
+                  Brand("Tesla", List(Car("Model S", "Tesla"),
+                                      Car("Model 3", "Tesla"),
+                                      Car("Model X", "Tesla"),
+                                      Car("New Model", "Tesla"))))
+
+
+brands.foreach((b: Brand) => { //Take the brand name, and check the number of Cars and print them.
+val brandName =  b.name println(s"Brand: $brandName || Total Cars:${b.cars.length}") (brandName, b.cars) })
+
+((x) => x * y)
+
+creditCards.filter(_.limit < 55000)
+ .map(cc => cc.accounts(cc.holder)) .filter(_.isLinkedAccount) .get .info
+
+Type parameterization
+
+object TypeParameterization {
+
+  def main(args: Array[String]): Unit =  {
+      val mayBeAnInteger =  Some("101")
+      val mayBeADouble =  Some("101.0")
+      val mayBeTrue =  Some("true")
+
+    println(s"Calling mapToInt: ${mapToInt(mayBeAnInteger, (x: String) => x.toInt)}") println(s"Calling mapToDouble: ${mapToDouble(mayBeADouble, (x: String) => x.toDouble)}") println(s"Calling mapToBoolean: ${mapToBoolean(mayBeTrue, (x: String) => x.toBoolean)}") } def mapToInt(mayBeInt: Option[String], function: String => Int) =  function(mayBeInt.get)  def mapToDouble(mayBeDouble: Option[String], function: String => Double) =  function(mayBeDouble.get)  def mapToBoolean(mayBeBoolean: Option[String], function: String => Boolean) =  function(mayBeBoolean.get) }
+
+Calling mapToInt: 101
+Calling mapToDouble: 101.0
+Calling mapToBoolean: true
+
+object TypeParameterization {
+
+  def main(args: Array[String]): Unit =  {
+      val mayBeAnInteger =  Some("101")
+      val mayBeADouble =  Some("101.0")
+      val mayBeTrue =  Some("true")
+
+    println(s"Calling mapToValue: ${mapToValue(mayBeAnInteger, x => x.toInt)}") println(s"Calling mapToValue: ${mapToValue(mayBeADouble, x => x.toDouble)}") println(s"Calling mapToValue: ${mapToValue(mayBeTrue, x => x.toBoolean)}") }  def mapToValue[T](mayBeValue: Option[String], function: String => T) =  function(mayBeValue.get) }
+
+Calling mapToValue: 101
+Calling mapToValue: 101.0
+Calling mapToValue: true
+
+def mapToValue[T](mayBeValue: Option[String], function: String => T) : T =  function(mayBeValue.get)
+
+def mapToValue[A, B](mayBeValue: Option[A], function: A => B) : B =  function(mayBeValue.get)
+
+def map[B](f: A => B): Option[B] =  if (isEmpty) None else Some(f(this.get))
+
+Advanced Functional Programming
+
+Animal         |      Food
+
+def serveSharedMeal(
+ animalOne: Animal, 
+ animalTwo: Animal, 
+ meal: Food) =  ??? 
+//don't care about the implementation
+
+Why so serious about types?
+
+Data     |            Operations
+
+scala> val xs: List =  List("ABC") <console>:11: error: type List takes type parameters val xs: List =  List("ABC")
+
+scala> val xs: List[T] =  List("ABC") <console>:11: error: not found: type T val xs: List[T] =  List("ABC")
+
+scala> val xs: List[String] =  List("ABC") xs: List[String] =  List(ABC)
+
+Here comes type parameterization
+
+def servseMeal[A, B](serveTo: A, serveThis: Option[B]) =  ???
+
+serveMeal(Human(Category("MALE")), None)
+serveMeal(Human(Category("FEMALE")), Some(Food()))
+serveMeal(Animal(), None)
+serveMeal(Animal(), Some("NONVEG"))
+
+case class Human(category: Category)
+case class Category(name: String)
+case class Animal()
+case class Food()
+
+def serveMeal[A, B](serveTo: A, serveThis: Option[B]) =  ???
+
+serveMeal(Human(Category("MALE")): Human, None: Option[Food])
+serveMeal(Human(Category("FEMALE")): Human, Some(Food()): Option[Food])
+serveMeal(Animal() : Animal, None: Option[Food])
+serveMeal(Animal(): Animal, Some(Food()): Option[Food])
+
+Another way around - generic classes and traits
+
+sealed abstract class List[+A] extends AbstractSeq[A]
+  with LinearSeq[A]
+  with Product
+  with GenericTraversableTemplate[A, List]
+  with LinearSeqOptimized[A, List[A]]
+  with Serializable
+
+Type parameter names
+
+//With type parameter name A
+
+sealed abstract class List[+A] extends AbstractSeq[A] 
+
+//With type parameter name T
+
+sealed abstract class List[+T] extends AbstractSeq[T]
+
+Container types
+
+sealed abstract class Option[+A] extends Product 
+   with Serializable
+
+sealed abstract class Either[+A, +B] extends Product with Serializable
+
+object TypeErasure extends App {
+  val strings: List[String] =  List("First", "Second", "Third")
+  val noStringsAttached: List[Int] =  List(1, 2, 3)
+
+  def listOf[A](value: List[A]) =  value match {
+    case listOfString: List[String] => println("Strings Attached!") case listOfNumbers: List[Int] => println("No Strings Attached!") }  listOf(strings) listOf(noStringsAttached) }
+
+Strings Attached!
+Strings Attached!
+
+Type erasure
+
+trait Tfoo[T]{
+  val member: T
+}
+
+trait Tfoo {
+  val member: Object   //Cause scala files gets converted to *.class files.
+}
+
+Variance under inheritance
+
+abstract class Animal()
+
+class Cat(name: String) extends Animal()               // Inheritance relationship between Cat and Animal
+
+def doSomethingForAnimals(animals: List[Animal]) =  ??? //definitely do something for animals.
+
+Is it possible to pass an argument that's a list of Cats?
+val cats =  List(new Cat("Mischief"), new Cat("Birdie"))
+doSomethingForAnimals(cats)
+
+class AircraftSeat[-T]
+
+abstract class Passengers
+class CorporatePassengers extends Passengers
+class RegularPassengers extends Passengers
+
+def reserveSeatForCorporatePassengers(corporateSeats: AircraftSeat[CorporatePassengers]) =  ??? //Seat booking logic!
+
+object ContraVariance extends App {
+  
+  class AircraftSeat[-T]
+
+  def reserveSeatForCorporatePassengers(corporateSeats: AircraftSeat[CorporatePassengers]) =  {
+    //Performs some logic regarding the seat reservation!
+    println(s" Seats Confirmed!")
+  }
+
+  abstract class Passengers
+  class CorporatePassengers extends Passengers
+  class RegularPassengers extends Passengers
+
+  reserveSeatForCorporatePassengers(new AircraftSeat[CorporatePassengers])
+
+  reserveSeatForCorporatePassengers(new AircraftSeat[Passengers])
+
+}
+
+Seats Confirmed!
+Seats Confirmed!
+
+trait Function1[-T1, +R] extends AnyRef {self => /** Apply the body of this function to the argument. * * @return the result of function application. */ def apply(v1: T1): R  }
+
+scala> val func =  (i: Int) => i.toString func: Int => String
+
+new Function1[Int, String]{
+  override def apply(v1: Int): String =  v1.toString
+}
+
+Abstract types
+
+trait ThinkingInTermsOfT {
+      type T
+}
+
+val instance =  new ThinkingInTermsOfT {
+  type T =  Int
+
+  def behaviourX(t: T): T =  ???
+}
+
+type T =  Int
+
+object AbstractTypes extends App {
+
+  trait ColumnParameterized[T] {
+       def column() : T
+  }
+
+  trait ColumnAbstract {
+    type T
+
+    def column(): T
+  }
+
+  val aColumnFromParameterized =  new ColumnParameterized[String] {
+    override val column =  "CITY"
+  }
+
+  val aColumnFromAbstract =  new ColumnAbstract {
+    type T =  String
+
+    override val column =  "HOUSE_NO"
+  }
+
+  println(s"Coloumn from Parameterized: ${aColumnFromParameterized.column}   |  and Column from Abstract: ${aColumnFromAbstract.column} ")
+  
+}
+
+Column from Parameterized: CITY   |  and Column from Abstract: HOUSE_NO
+
+type T =  String
+
+override val column =  23
+
+trait ActionGenerator[In] {
+  type Out
+
+  def generateAction(): Out
+}
+
+type Out =  Int => String
+
+object RatingApp extends App {
+
+  type Rating =  Int
+  type NumericString =  String //String that can be converted into Int!
+  type AlphaNumeric =  String  //Alphanumeric String
+
+  val simpleRatingGenerator =  new ActionGenerator[NumericString] {
+    type Out =  NumericString => Rating  /* Times when ratings are simple NumericStrings * Rating as 1, 2, 3, 4, 5 * We don't care about numbers more than 5 */ override def generateAction(): NumericString => Rating =  _.toInt }  val generateNumericRating =  simpleRatingGenerator.generateAction()  println(generateNumericRating("1")) }
+
+1
+
+val generateNumericRating =  simpleRatingGenerator.genrateAction()
+println(generateNumericRating("1"))
+
+val alphanumericRatingGenerator =  new ActionGenerator[AlphaNumeric] {
+  type Out =  AlphaNumeric => Rating  /* Times when ratings are Awesome, Super, Good, something else like Neutral * Rating as 1, 2, 3, 4, 5 */ override def generateAction(): AlphaNumeric => Rating =  toRating// Some other mechanism to generate the rating }  val toRating: AlphaNumeric => Rating =  _ match { case "Awesome" => 5 case "Cool" => 4 case "Nice" => 3 case "Worst Ever" => 1 case _ => 3 // No Comments then average rating. }
+
+val generateAlphanumericRating =  alphanumericRatingGenerator.generateAction()
+
+println(generateAlphanumericRating("Awesome"))
+
+5
+
+Type bounds
+
+class AircraftSeat[-T]
+
+class AircraftSeat[-T <: Passengers]
+
+object Bounds extends App {
+
+   /*
+    * AircraftSeats can be consumed only by Passengers.
+    */
+  class AircraftSeat[-T <: Passengers]  def reserveSeatForCorporatePassengers(corporateSeats: AircraftSeat[CorporatePassengers]) =  { //Performs some logic regarding the seat reservation! println(s"Seats Confirmed!") }  val corporateSeat =  new AircraftSeat[CorporatePassengers]() val passengersSeat =  new AircraftSeat[Passengers]()   reserveSeatForCorporatePassengers(new AircraftSeat[CorporatePassengers]())  reserveSeatForCorporatePassengers(new AircraftSeat[Passengers]())  abstract class Passengers class CorporatePassengers extends Passengers class RegularPassengers extends Passengers  }
+
+class Person(name: String)
+
+val seat: AircraftSeat[Person] =  new AircraftSeat[Person]()
+
+type arguments [chapter10.Bounds.Person] do not conform to class AircraftSeat's type parameter bounds [-T <: chapter10.Bounds.Passengers]  val seat: AircraftSeat[Person] =  new AircraftSeat[Person]()
+
+class ListLikeStructure[T >: AnyRef]
+
+new ListLikeStructure[Any]()
+new ListLikeStructure[AnyRef]()
+
+new ListLikeStructure[String]()
+Error:(30, 7) type arguments [String] do not conform to class ListLikeStructure's type parameter bounds [T >: AnyRef]  new ListLikeStructure[String]()
+
+abstract class Zero
+trait One extends Zero
+trait Two extends One
+trait Three extends Two
+trait Four extends Three
+
+class ListLikeStructure[T >: Four <: Two]
+
+new ListLikeStructure[Four]
+new ListLikeStructure[Three]
+new ListLikeStructure[Two]
+
+new ListLikeStructure[One]
+type arguments [chapter10.Bounds.One] do not conform to class ListLikeStructure's type parameter bounds [T >: chapter10.Bounds.Four <: chapter10.Bounds.Two] new ListLikeStructure[One]
+
+trait ThinkingInTermsOfT {
+      type T <: Two }
+
+Abstract versus parameterized types
+
+abstract class Food
+class Grass extends Food
+class Meat extends Food
+
+abstract class Animal {
+   type SuitableFood <: Food  def eatMeal(meal: SuitableFood) }
+
+class Cow extends Animal {
+  type SuitableFood <: Grass  override def eatMeal(meal: SuitableFood): Unit =  println("Cow's eating grass!")  }
+
+class Lion extends Animal {
+  type SuitableFood <: Meat  override def eatMeal(meal: SuitableFood): Unit =  println("Lion's eating meat!") }
+
+object AbsVsParamTypes extends App {
+
+  abstract class Animal {
+     type SuitableFood <: Food  def eatMeal(meal: SuitableFood) }  class Lion extends Animal { type SuitableFood <: Meat  override def eatMeal(meal: SuitableFood): Unit =  println("Lion's eating meat!") }  class Cow extends Animal { type SuitableFood <: Grass  override def eatMeal(meal: SuitableFood): Unit =  println("Cow's eating grass!") }  val lion =  new Lion(){ type SuitableFood =  Meat }  val cow =  new Cow(){ type SuitableFood =  Grass }  cow.eatMeal(new Grass) lion.eatMeal(new Meat)   abstract class Food class Grass extends Food class Meat extends Food }
+
+Cow's eating grass!
+Lion's eating meat!
+
+Type-classes
+
+trait CSVEncoder[T] {
+  def encode(t: T): List[String]
+}
+
+Exception handling =E2=80=93 the old way
+
+def toInt(str: String): Int =  str.toInt
+
+println(toInt("121"))
+println(toInt("-199"))
+
+121
+-199
+
+println(toInt("+ -199"))
+
+Exception in thread "main" java.lang.NumberFormatException: For input string: "+ -199"
+   at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+
+import java.lang.Exception
+
+object Main extends App {
+
+  def toInt(str: String): Int = 
+    try{
+      str.toInt
+    } catch {
+      case exp: Exception => println("Something unexpected happened, you may want to check the string you passed for conversion.")  println("WARN: Overriding the usual behavior, returning Zero!") 0 }  println(toInt("121")) println(toInt("-199")) println(toInt("+ -199")) }
+
+121
+-199
+
+WARN: Overriding the usual behavior, returning Zero!
+0
+
+Using the Option way
+
+def toInt(str: String): Option[Int] =  Try(str.toInt) match {
+  case Success(value) => Some(value) case Failure(_) => None }
+
+sealed abstract class Try[+T] extends Product with Serializable
+
+object Try {
+  /** Constructs a 'Try' using the by-name parameter.  This
+   * method will ensure any non-fatal exception is caught and a
+   * 'Failure' object is returned.
+   */
+  def apply[T](r: => T): Try[T] =  try Success(r) catch { case NonFatal(e) => Failure(e) } } final case class Success[+T](value: T) extends Try[T] final case class Failure[+T](exception: Throwable) extends Try[T]
+
+def getAccountInfo(id: String): Option[AccountInfo]
+
+def makeTransaction(amt: Double, accountInfo: AccountInfo): Option[Double]
+
+case class AccountInfo(id: String, balance: Double)
+
+import scala.util.Try
+
+object BankApp extends App {
+
+  val accountHolders =  Map(
+    "1234" -> AccountInfo("Albert", 1000), "2345" -> AccountInfo("Bob", 3000), "3456" -> AccountInfo("Catherine", 9000), "4567" -> AccountInfo("David", 7000) )  def getAccountInfo(id: String): Option[AccountInfo] =  Try(accountHolders(id)).toOption  def makeTransaction(amt: Double, accountInfo: AccountInfo): Option[Double] =  Try(accountInfo.balance - amt).toOption  println(getAccountInfo("1234").flatMap(actInfo => makeTransaction(100, actInfo)))  println(getAccountInfo("12345").flatMap(actInfo => makeTransaction(100, actInfo))) }  case class AccountInfo(id: String, balance: Double)
+
+Some(900.0)
+None
+
+Either left or right
+
+import java.lang.Exception
+import scala.util.{Failure, Success, Try}
+
+object Main extends App {
+
+  def toInt(str: String): Either[String, Int] =  Try(str.toInt) match {
+    case Success(value) => Right(value) case Failure(exp) => Left(s"${exp.toString} occurred," + s" You may want to check the string you passed.") }  println(toInt("121")) println(toInt("-199")) println(toInt("+ -199")) }
+
+Right(121)
+Right(-199)
+Left(java.lang.NumberFormatException: For input string: "+ -199" occurred, You may want to check the string you passed.)
+
+sealed abstract class Either[+A, +B] extends Product with Serializable
+final case class Right[+A, +B](value: B) extends Either[A, B]
+final case class Left[+A, +B](value: A) extends Either[A, B]
+
+Either[String, Int]
+
+import scala.util.{Failure, Success, Try}
+
+object BankApp extends App {
+
+  val accountHolders =  Map(
+    "1234" -> AccountInfo("Albert", 1000), "2345" -> AccountInfo("Bob", 3000), "3456" -> AccountInfo("Catherine", 9000), "4567" -> AccountInfo("David", 7000) )   def getAccountInfo(id: String): Either[String, AccountInfo] =  Try(accountHolders(id)) match { case Success(value) => Right(value) case Failure(excep) => Left("Couldn't fetch the AccountInfo, Please Check the id passed or try again!") }   def makeTransaction(amount: Double, accountInfo: AccountInfo): Either[String, Double] =  Try { if(accountInfo.balance < amount) throw new Exception("Not enough account balance!") else accountInfo.balance - amount } match {  case Success(value) => Right(value) case Failure(excep) => Left(excep.getMessage) }  println(getAccountInfo("1234").flatMap(actInfo => makeTransaction(100, actInfo)))  println(getAccountInfo("1234").flatMap(actInfo => makeTransaction(10000, actInfo)))  println(getAccountInfo("12345").flatMap(actInfo => makeTransaction(100, actInfo))) }  case class AccountInfo(id: String, balance: Double)
+
+Right(900.0)
+Left(Not enough account balance!)
+Left(Couldn't fetch the AccountInfo, Please Check the id passed or try again!)
+
+def flatMap[A, B](someValue: Option[A])(functionToPerfom: A => Option[B]): Option[B] =  if (someValue.isEmpty) None else functionToPerfom(someValue.get)
+
+Implicits - what and why
+
+import scala.concurrent.Future
+
+object FuturesApp extends App {
+
+  val futureComp =  Future {
+     1 + 1
+  }
+
+  println(s"futureComp: $futureComp")
+
+  futureComp.map(result => println(s"futureComp: $result")) }
+
+Error:(7, 27) Cannot find an implicit ExecutionContext. You might pass
+an (implicit ec: ExecutionContext) parameter to your method
+or import scala.concurrent.ExecutionContext.Implicits.global.
+  val futureComp =  Future {
+
+Error:(7, 27) not enough arguments for method apply: (implicit executor: scala.concurrent.ExecutionContext)scala.concurrent.Future[Int] in object Future.
+Unspecified value parameter executor.
+  val futureComp =  Future {
+
+def apply[T](body: =>T)(implicit executor: ExecutionContext): Future[T]
+
+import scala.concurrent.Future
+
+object FuturesApp extends App {
+
+  implicit val ctx =  scala.concurrent.ExecutionContext.Implicits.global
+
+  val futureComp =  Future {
+     1 + 1
+  }
+
+  println(s"futureComp: $futureComp")
+
+  futureComp.map(result => println(s"futureComp: $result")) }
+
+futureComp: Future(Success(2))
+futureComp: 2
+
+Implicit parameters
+
+import java.time.{LocalDateTime}
+
+object ImplicitParameter extends App {
+
+  implicit val dateNow =  LocalDateTime.now()
+
+  def showDateTime(implicit date: LocalDateTime) =  println(date)
+  
+  //Calling functions!
+  showDateTime
+}
+
+2017-11-17T10:06:12.321
+
+The implicitly method
+
+def implicitly[T](implicit e: T) =  e
+
+import java.time.{LocalDateTime}
+
+object ImplicitParameter extends App {
+
+  implicit val dateNow =  LocalDateTime.now()
+
+  def showDateTime(implicit date: LocalDateTime) =  println(date)
+
+  val ldt =  implicitly[LocalDateTime]
+
+  println(s"ldt value from implicit scope: $ldt")
+}
+
+ldt value from implicit scope: 2017-12-17T10:47:13.846
+
+Implicit conversions
+
+scala> import java.time.LocalDate import java.time.LocalDate  scala> val ld =  LocalDate.now ld: java.time.LocalDate =  2017-12-17  scala> ld.plusDays(1) res0: java.time.LocalDate =  2017-12-18  scala> ld.plusWeeks(1) res1: java.time.LocalDate =  2017-12-24  scala> ld.plusMonths(1) res2: java.time.LocalDate =  2018-01-17  scala> ld.plusYears(1) res3: java.time.LocalDate =  2018-12-17
+
+import java.time.LocalDate
+
+case class CustomDate(date: LocalDate) {
+  def +(days: Day): CustomDate =  CustomDate(this.date.plusDays(days.num))
+  def -(days: Day): CustomDate =  CustomDate(this.date.minusDays(days.num))
+
+  def +(weeks: Week): CustomDate =  CustomDate(this.date.plusWeeks(weeks.num))
+  def -(weeks: Week): CustomDate =  CustomDate(this.date.minusWeeks(weeks.num))
+
+  def +(months: Month): CustomDate =  CustomDate(this.date.plusMonths(months.num))
+  def -(months: Month): CustomDate =  CustomDate(this.date.minusMonths(months.num))
+
+  def +(years: Year): CustomDate =  CustomDate(this.date.plusYears(years.num))
+  def -(years: Year): CustomDate =  CustomDate(this.date.minusYears(years.num))
+
+  def till(endDate: CustomDate): CustomDateRange =  if(this.date isBefore endDate.date)
+    CustomDateRange(this, endDate)
+  else {
+    throw new IllegalArgumentException("Can't create a DateRange with given start and end dates.")
+  }
+
+  override def toString: String =  s"Date: ${this.date}"
+}
+
+case class Day(num: Int)
+case class Week(num: Int)
+case class Month(num: Int)
+case class Year(num: Int)
+
+case class CustomDateRange(sd: CustomDate, ed: CustomDate){
+  override def toString: String =  s"$sd till $ed "
+}
+
+import java.time.LocalDate
+
+object BeautifulDateApp extends App {
+
+  val today =  CustomDate(LocalDate.now())
+  val tomorrow =  today + Day(1)
+  val yesterday =  today - Day(1)
+
+  println(today)
+  println(tomorrow)
+  println(today + Year(1))
+
+  val dateRange =  today till tomorrow + Day(20)
+  println(dateRange)
+
+}
+
+Date: 2017-12-17
+Date: 2017-12-18
+Date: 2018-12-17
+Date: 2017-12-17 till Date: 2018-01-07
+
+case class Day(num: Int)
+case class Week(num: Int)
+case class Month(num: Int)
+case class Year(num: Int)
+
+case class CustomDateRange(sd: CustomDate, ed:CustomDate){
+  override def toString: String =  s"$sd till $ed "
+}
+
+object LocalDateOps {
+  implicit class CustomDate(val date: LocalDate) {
+
+    def +(days: Day): CustomDate =  CustomDate(this.date.plusDays(days.num))
+    def -(days: Day): CustomDate =  CustomDate(this.date.minusDays(days.num))
+
+    def +(weeks: Week): CustomDate =  CustomDate(this.date.plusWeeks(weeks.num))
+    def -(weeks: Week): CustomDate =  CustomDate(this.date.minusWeeks(weeks.num))
+
+    def +(months: Month): CustomDate =  CustomDate(this.date.plusMonths(months.num))
+    def -(months: Month): CustomDate =  CustomDate(this.date.minusMonths(months.num))
+
+    def +(years: Year): CustomDate =  CustomDate(this.date.plusYears(years.num))
+    def -(years: Year): CustomDate =  CustomDate(this.date.minusYears(years.num))
+
+    def till(endDate: CustomDate): CustomDateRange =  if(this.date isBefore endDate.date)
+      CustomDateRange(this, endDate)
+    else {
+      throw new IllegalArgumentException("Can't create a DateRange with given start and end dates.")
+    }
+
+    override def toString: String =  s"Date: ${this.date}"
+  }
+}
+
+import java.time.LocalDate
+import LocalDateOps._
+
+object BeautifulDateApp extends App {
+
+  val today =  LocalDate.now()
+  val tomorrow =  today + Day(1)
+  val yesterday =  today - Day(1)
+
+  println(today)
+  println(tomorrow)
+  println(today + Year(1))
+
+  val dateRange =  today till tomorrow + Day(20)
+  println(dateRange)
+}
+
+2017-12-17
+Date: 2017-12-18
+Date: 2018-12-17
+Date: 2017-12-17 till Date: 2018-01-07
+
+val today =  LocalDate.now()
+
+val tomorrow =  today + Day(1)
+
+Looking for implicits
+
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+
+
+object FuturesApp extends App {
+
+  val futureComp =  Future {
+     1 + 1
+  }
+
+  println(s"futureComp: $futureComp")
+
+  futureComp.map(result => println(s"futureComp: $result")) }
+
+futureComp: Future(Success(2))
+futureComp: 2
+
+import scala.concurrent.ExecutionContext.Implicits._
+
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+
+object FuturesApp extends App {
+
+  implicit val ctx =  scala.concurrent.ExecutionContext.Implicits.global
+
+  val futureComp =  Future {
+     1 + 1
+  }
+
+  println(s"futureComp: $futureComp")
+
+  futureComp.map(result => println(s"futureComp: $result")) }
+
+Error:(10, 27) ambiguous implicit values:
+ both lazy value global in object Implicits of type => scala.concurrent.ExecutionContext and value ctx in object FuturesApp of type => scala.concurrent.ExecutionContext match expected type scala.concurrent.ExecutionContext val futureComp =  Future {
+
+Type-classes ahead!
+
+trait CSVEncoder[T]{
+  def encode(value: T): List[String]
+}
+
+case class Person(name: String)
+
+CSVEncoder.toCSV(Person("Max"))
+
+Person("Caroline").toCSV
+
+object CSVEncoder {
+ 
+ def toCSV[T](list: List[T])(implicit encoder: CSVEncoder[T]): String = 
+  list.map(mem => encoder.encode(mem).mkString(", ")).mkString(", ")  }
+
+implicit val personEncoder: CSVEncoder[Person] =  new CSVEncoder[Person] {
+  def encode(person: Person) =  List(person.name)
+}
+
+object EncoderApp extends App {
+  import CSVEncoder.personEncoder
+
+  println(CSVEncoder.toCSV(List(Person("Max Black"), Person("Caroline Channing"))))
+
+}
+
+Max Black, Caroline Channing
+
+trait CSVEncoder[T]{
+  def encode(value: T): List[String]
+}
+
+object CSVEncoder {
+
+  def toCSV[T](list: List[T])(implicit encoder: CSVEncoder[T]): String = 
+    list.map(mem => encoder.encode(mem).mkString(", ")).mkString(", ")  implicit val personEncoder: CSVEncoder[Person] =  new CSVEncoder[Person] {
+ def encode(person: Person) =  List(person.name) }  }  case class Person(name: String)  object EncoderApp extends App { import CSVEncoder._ import CSVEncoderOps._  println(CSVEncoder.toCSV(List(Person("Max Black"), Person("Caroline Channing"))))  println(List(Person("Max Black"), Person("Caroline Channing")).toCSV) }  object CSVEncoderOps { implicit class CSVEncoderExt[T](list: List[T]) { def toCSV(implicit encoder: CSVEncoder[T]) : String =  list.map(mem => encoder.encode(mem).mkString(", ")).mkString(", ") } }
+
+Max Black, Caroline Channing
+Max Black, Caroline Channing
+
+List(Person("Max Black"), Person("Caroline Channing")).toCSV
+
+implicit class CSVEncoderExt[T](list: List[T]) {
+    def toCSV(implicit encoder: CSVEncoder[T]) : String = 
+      list.map(mem => encoder.encode(mem).mkString(", ")).mkString(", ") }
+
+Understanding the Actor system
+
+val system =  ActorSystem("SimpleActorSystem")
+system.actorOf(Props[SimpleActor], "simple-actor")
+
+val anotherSimpleActor =  context.actorOf(Props[AnotherSimplActor], "another-simple-actor")
+
+context.actorOf(Props[AnotherSimpleActor], "another-simple-actor")
+
+akka://SimpleActorSystem/user/simple-actor/another-simple-actor
+
+akka://SimpleActorSystem/user/simple-actor
+
+Props
+
+val props =  Props[SimpleActor]()
+  .withDispatcher("some-simple-dispatcher")
+
+val simpleActor: ActorRef =  system.actorOf(props, "simple-actor")
+
+Actor references and paths
+
+val simpleActor: ActorRef =  system.actorOf(props, "simple-actor")
+
+Selecting existing actorRefs via actorSelection
+
+context.actorSelection("../siblingActor")
+
+context.actorSelection("/user/siblingActor")
+
+context.actorSelection("akka://someActorSystem/user/*/LogicAActor")
+
+Setting up the environment
+
+import Dependencies._
+
+    lazy val root =  (project in file(".")).
+      settings(
+        inThisBuild(List(
+          organization :=  "com.example",
+          scalaVersion :=  "2.12.3",
+          version      :=  "0.1.0-SNAPSHOT"
+        )),
+        name :=  "Hello",
+        libraryDependencies +=  scalaTest % Test
+      )
+
+libraryDependencies ++=  Seq(
+  "com.typesafe.akka" %% "akka-actor" % "2.5.8",
+  "com.typesafe.akka" %% "akka-testkit" % "2.5.8",
+  "org.scalatest" %% "scalatest" % "3.0.1" % "test"
+  )
+
+Writing our first Actor
+
+import akka.actor.Actor
+
+class SimpleActor extends Actor {
+   
+  override def receive =  Actor.emptyBehavior
+
+}
+
+import akka.actor.ActorSystem
+
+object AkkaStarter extends App {
+
+  val simpleActorSystem =  ActorSystem("SimpleActorSystem")
+
+}
+
+import akka.actor.{Actor, ActorSystem, Props}
+
+class SimpleActor extends Actor {
+  override def receive =  Actor.emptyBehavior
+}
+
+object SimpleActor {
+  val props =  Props[SimpleActor]
+}
+
+object AkkaStarter extends App {
+
+  val simpleActorSystem =  ActorSystem("SimpleActorSystem")
+
+  val simpleActor =  simpleActorSystem.actorOf(SimpleActor.props)
+}
+
+val simpleActor =  simpleActorSystem.actorOf(SimpleActor.props, "simple-actor")
+
+case class Player(name: String, nationality: String, age:String, club: String, domesticLeague: String, rawTotal: String, finalScore: String, ranking2016: String, ranking2015: String)
+
+object Util {
+
+  def bufferedSourceToList(source: BufferedSource): List[String] =  {
+      val list =  source.getLines().toList
+      source.close()
+      list
+  }
+
+  def asPlayers(listOfPlayersString: List[String]) : List[Player] =  listOfPlayersString match {
+    case head :: tail => tail map {line => val columns =  line.split((",")).map(_.trim) Player(columns(5),columns(6),columns(9),columns(7), columns(8),columns(10), columns(12), columns(0),columns(2)) } case Nil => List[Player]() }  }
+
+class SimpleActor extends Actor {
+  import scala.io.Source
+  import SimpleActor.ShowFootballPlayersRequest
+  import Util._
+
+  override def receive =  {
+    case ShowFootballPlayersRequest(url) => { val playersInfoSource =  Source.fromFile(url)  val players =  asPlayers(bufferedSourceToList(playersInfoSource)) players.foreach(player => println(player + "n")) } }  }  object SimpleActor { val props =  Props[SimpleActor]  final case class ShowFootballPlayersRequest(uri: String)
+ }
+
+val fileSource =  "/Users/vika/Workspace/akkaa/akka-starter/src/main/scala/files/football_stats.csv"
+
+simpleActor ! ShowFootballPlayersRequest(fileSource)
+
+final case class GetPlayerInformationRequest(name: String, source: List[Player])
+final case class PlayerInformationResponse(player: Option[Player])
+
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+
+case GetPlayerInformationRequest(name, listOfPlayers) => { log.info(s"Executing GetPlayerInformationRequest($name, listOfPlayers)")
+
+akka.pattern.pipe(
+ Future.successful(PlayerInformationResponse(listOfPlayers.find(_.name.contains(name))))
+) to sender()
+
+}
+
+class SimpleActor extends Actor with ActorLogging
+
+akka.pattern.pipe(someFuture) to sender()
+
+import akka.pattern._
+  someFuture pipeTo sender()
+
+//Storing players in a collection!
+val players: List[Player] =  Util
+  .asPlayers(bufferedSourceToList(
+    scala.io.Source.fromFile(fileSource)
+  ))
+
+simpleActor ? GetPlayerInformationRequest("Cristiano Ronaldo", players)
+
+import akka.pattern.ask
+
+import akka.util.Timeout
+import scala.concurrent.duration._
+
+implicit val timeout =  Timeout(5 seconds)
+
+val playerInformation =  (simpleActor ? GetPlayerInformationRequest("Cristiano Ronaldo", players))
+
+playerInformation
+  .mapTo[PlayerInformationResponse]
+  .map(futureValue => { futureValue.player map println })
+
+The tell versus ask versus forward method
+
+class AnotherActor extends Actor {
+  override def receive =  {
+    case ShowFootballPlayersRequest(url) => { val playersInfoSource =  Source.fromFile(url)  val players =  asPlayers(bufferedSourceToList(playersInfoSource)) players.foreach(player => println(player + "n")) } } }  object AnotherActor { val props =  Props[AnotherActor] }
+
+class SimpleActor extends Actor with ActorLogging { 
+
+ implicit val ec =  context.dispatcher 
+ // Works as executionContext for actor calls  val anotherActor =  context.actorOf(AnotherActor.props)  override def receive =  { case ShowFootballPlayersRequest(url) => { anotherActor forward ShowFootballPlayersRequest(url) }  case GetPlayerInformationRequest(name, listOfPlayers) => { log.info(s"Executing GetPlayerInformationRequest($name, listOfPlayers)")  akka.pattern.pipe( Future.successful(PlayerInformationResponse(listOfPlayers.find(_.name.contins(name)) ))
+) to sender() } } }
+
+package lsp
+
+import lsp.SimpleActor.{GetPlayerInformationRequest, PlayerInformationResponse, ShowFootballPlayersRequest}
+import akka.actor.{Actor, ActorLogging, ActorSystem, PoisonPill, Props}
+import akka.pattern.ask
+import scala.io.{BufferedSource, Source}
+import akka.util.Timeout
+import lsp.Util.{asPlayers, bufferedSourceToList}
+import scala.concurrent.duration._
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+
+
+class SimpleActor extends Actor with ActorLogging {
+
+  val anotherActor =  context.actorOf(AnotherActor.props)
+
+  override def receive =  {
+    case ShowFootballPlayersRequest(url) => { anotherActor forward ShowFootballPlayersRequest(url) }  case GetPlayerInformationRequest(name, listOfPlayers) => { log.info(s"Executing GetPlayerInformationRequest($name, listOfPlayers)")  akka.pattern.pipe( Future { PlayerInformationResponse(listOfPlayers.find(_.name.contains(name))) } ) to sender()  }  }  } object SimpleActor { val props =  Props[SimpleActor]  final case class ShowFootballPlayersRequest(uri: String)  final case class GetPlayerInformationRequest(name: String, source: List[Player]) final case class PlayerInformationResponse(player: Option[Player]) }
+
+class AnotherActor extends Actor {
+  override def receive =  {
+    case ShowFootballPlayersRequest(url) => { val playersInfoSource =  Source.fromFile(url)  val players =  asPlayers(bufferedSourceToList(playersInfoSource))  players.foreach(player => println(player)) } }  } object AnotherActor { val props =  Props[AnotherActor] }
+
+object AkkaStarter extends App {
+  import Util._
+
+  implicit val timeout =  Timeout(5 seconds)
+
+  val simpleActorSystem =  ActorSystem("SimpleActorSystem")
+  val simpleActor =  simpleActorSystem.actorOf(SimpleActor.props, "simple-actor")
+
+  val fileSource = 
+    "/Users/vika/Workspace/akkaa/akka-starter/src/main/scala/files/football_stats.csv"
+
+  //simpleActor ! ShowFootballPlayersRequest(fileSource)
+
+  //Storing players in a collection!
+  val players: List[Player] =  Util
+    .asPlayers(bufferedSourceToList(
+      scala.io.Source.fromFile(fileSource)
+    ))
+
+  val playerInformation =  (simpleActor ? GetPlayerInformationRequest("Cristiano Ronaldo", players))
+
+  playerInformation
+    .mapTo[PlayerInformationResponse]
+    .map(futureValue => { futureValue.player map println })  simpleActor ! PoisonPill }
+
+object Util {
+
+  def bufferedSourceToList(source: BufferedSource): List[String] =  {
+      val list =  source.getLines().toList
+
+      source.close()
+      list
+  }
+
+  def asPlayers(listOfPlayersString: List[String]) : List[Player] =  listOfPlayersString match {
+    case head :: tail => tail map {line => val columns =  line.split((",")).map(_.trim) Player(columns(5),columns(6),columns(9),columns(7), columns(8),columns(10), columns(12), columns(0),columns(2)) } case Nil => List[Player]() }  }  case class Player(name: String, nationality: String, age:String, club: String, domesticLeague: String, rawTotal: String, finalScore: String, ranking2016: String, ranking2015: String)
+
+[INFO] [12/27/2017 14:40:48.150] [SimpleActorSystem-akka.actor.default-dispatcher-2] [akka://SimpleActorSystem/user/simple-actor] Executing GetPlayerInformationRequest(Cristiano Ronaldo, listOfPlayers)
+Player(Cristiano Ronaldo,Portugal,32,Real Madrid,Spain,4829,4789,1,2)
+
+Stopping Actors
+
+case "terminate" => context stop self
+
+simpleActor ! PoisonPill
+
+The preStart and postStop hooks
+
+override def preStart(): Unit =  log.info("SimpleActor starting!")
+
+override def postStop(): Unit =  log.info("SimpleActor stopping!")
+
+[INFO] [12/27/2017 14:56:54.887] [SimpleActorSystem-akka.actor.default-dispatcher-3] [akka://SimpleActorSystem/user/simple-actor] SimpleActor starting!
+[INFO] [12/27/2017 14:56:54.915] [SimpleActorSystem-akka.actor.default-dispatcher-2] [akka://SimpleActorSystem/user/simple-actor] Executing GetPlayerInformationRequest(Cristiano Ronaldo, listOfPlayers)
+Player(Cristiano Ronaldo,Portugal,32,Real Madrid,Spain,4829,4789,1,2)
+[INFO] [12/27/2017 14:56:54.938] [SimpleActorSystem-akka.actor.default-dispatcher-2] [akka://SimpleActorSystem/user/simple-actor] SimpleActor stopping!
+
+OneForOne versus AllForOne strategy
+
+case class OneForOneStrategy(
+  maxNrOfRetries:              Int      =  -1,
+  withinTimeRange:             Duration =  Duration.Inf,
+  override val loggingEnabled: Boolean  =  true)
+
+case class AllForOneStrategy(
+  maxNrOfRetries:              Int      =  -1,
+  withinTimeRange:             Duration =  Duration.Inf,
+  override val loggingEnabled: Boolean  =  true)
+
+Applying the supervision strategy
+
+import akka.actor.SupervisorStrategy.{Resume, Restart}
+
+override val supervisorStrategy = 
+  OneForOneStrategy(
+    maxNrOfRetries =  3,
+    withinTimeRange =  1 minute
+  ){
+    case _: ArithmeticException => { log.info("Supervisor handling ArithmeticException! n Resuming!") Resume } case _: Exception => { log.info("Supervisor handling Exception! n Restarting!") Restart } }
+
+package example
+
+import akka.actor.{Actor, ActorSystem, OneForOneStrategy, Props, ActorLogging}
+import scala.concurrent.duration._
+
+object SupervisionStrategyInPractice extends App {
+  val system =  ActorSystem("anActorSystem")
+
+  val topLevelActor =  system.actorOf(TopLevelActor.props)
+
+  //Sending StopIt
+  topLevelActor ! TopLevelActor.StopIt
+  //Sending RestartIt
+  topLevelActor ! TopLevelActor.RestartIt
+}
+
+class TopLevelActor extends Actor with ActorLogging {
+  import akka.actor.SupervisorStrategy.{Resume, Restart
+
+  import TopLevelActor._
+
+  override val preStart =  log.info(s"TopLevelActor started!")
+  override val postStop =  log.info(s"TopLevelActor stopping!")
+
+  val superSimpleActor =  context.actorOf(SuperSimpleActor.props)
+
+  override def receive =  {
+    case StopIt => superSimpleActor ! SuperSimpleActor.ArithmeticOpRequest case RestartIt => superSimpleActor ! SuperSimpleActor.OtherMessage }  override val supervisorStrategy =  OneForOneStrategy( maxNrOfRetries =  3,  withinTimeRange =  1 minute ){ case _: ArithmeticException => { log.info("Supervisor handling ArithmeticException! n Resuming!") Resume } case _: Exception => { log.info("Supervisor handling Exception! n Restarting!") Restart } } }  
+ object TopLevelActor { val props =  Props[TopLevelActor] case object StopIt case object RestartIt }  class SuperSimpleActor extends Actor with ActorLogging { import SuperSimpleActor._  override val preStart =  log.info(s"SuperSimpleActor started!") override val postStop =  log.info(s"SuperSimpleActor stopping!")  override def preRestart(reason: Throwable, message: Option[Any]): Unit =  log.info(s"SuperSimpleActor restarting!")  override def receive =  { case ArithmeticOpRequest => 1 / 0 case OtherMessage => throw new Exception("Some Exception Occurred!") }  }  object SuperSimpleActor { val props =  Props[SuperSimpleActor]  case object ArithmeticOpRequest case object OtherMessage  }
+
+[INFO] [12/28/2017 13:35:39.856] [anActorSystem-akka.actor.default-dispatcher-2] [akka://anActorSystem/user/$a] TopLevelActor started!
+[INFO] [12/28/2017 13:35:39.856] [anActorSystem-akka.actor.default-dispatcher-2] [akka://anActorSystem/user/$a] TopLevelActor stopping!
+[INFO] [12/28/2017 13:35:39.857] [anActorSystem-akka.actor.default-dispatcher-3] [akka://anActorSystem/user/$a/$a] SuperSimpleActor started!
+[INFO] [12/28/2017 13:35:39.857] [anActorSystem-akka.actor.default-dispatcher-3] [akka://anActorSystem/user/$a/$a] SuperSimpleActor stopping!
+[INFO] [12/28/2017 13:35:39.864] [anActorSystem-akka.actor.default-dispatcher-2] [akka://anActorSystem/user/$a] Supervisor handling ArithmeticException! 
+ Resuming!
+[WARN] [12/28/2017 13:35:39.865] [anActorSystem-akka.actor.default-dispatcher-2] [akka://anActorSystem/user/$a/$a] / by zero
+[INFO] [12/28/2017 13:35:39.867] [anActorSystem-akka.actor.default-dispatcher-2] [akka://anActorSystem/user/$a] Supervisor handling Exception! 
+ Restarting!
+[ERROR] [12/28/2017 13:35:39.868] [anActorSystem-akka.actor.default-dispatcher-2] [akka://anActorSystem/user/$a/$a] Some Exception Occurred!
+java.lang.Exception: Some Exception Occurred! at example.SuperSimpleActor$$anonfun$receive$2.applyOrElse(SupervisionStrategyInPractice.scala:66)
+   at akka.actor.Actor.aroundReceive(Actor.scala:517)
+   at akka.actor.Actor.aroundReceive$(Actor.scala:515)
+   at example.SuperSimpleActor.aroundReceive(SupervisionStrategyInPractice.scala:55) ...
+[INFO] [12/28/2017 13:35:39.868] [anActorSystem-akka.actor.default-dispatcher-3] [akka://anActorSystem/user/$a/$a] SuperSimpleActor restarting!
+[INFO] [12/28/2017 13:35:39.871] [anActorSystem-akka.actor.default-dispatcher-3] [akka://anActorSystem/user/$a/$a] SuperSimpleActor started!
+[INFO] [12/28/2017 13:35:39.871] [anActorSystem-akka.actor.default-dispatcher-3] [akka://anActorSystem/user/$a/$a] SuperSimpleActor stopping!
+
+Testing actors
+
+package lsp
+
+import akka.actor.ActorSystem
+import akka.testkit.{ImplicitSender, TestKit}
+import lsp.SimpleActor.{GetPlayerInformationRequest, PlayerInformationResponse}
+import org.scalatest.{BeforeAndAfterAll, WordSpecLike}
+
+class SimpleActorSpec extends TestKit(ActorSystem("testActorSystem"))
+  with ImplicitSender with WordSpecLike with BeforeAndAfterAll {
+
+  override def afterAll(): Unit =  super.afterAll()
+
+  val players =  List(Player("Cristiano Ronaldo", "Portuguese", "32", "Real Madrid", "La Liga", "1999", "1999", "1", "1"))
+
+  "SimpleActor" must {
+
+    "test for PlayerInformationRequest" in {
+
+      val simpleActor =  system.actorOf(SimpleActor.props)
+
+      simpleActor ! GetPlayerInformationRequest("Cristiano Ronaldo", players)
+
+      val expectedResponse = 
+        PlayerInformationResponse(Some(Player("Cristiano Ronaldo", "Portuguese", "32", "Real Madrid", "La Liga", "1999", "1999", "1", "1")))
+
+      expectMsg(expectedResponse)
+    }
+    
+  }
+  
+}
+
+class SimpleActorSpec extends TestKit(ActorSystem("testActorSystem"))
+  with ImplicitSender with WordSpecLike with BeforeAndAfterAll
+
+simpleActor ! GetPlayerInformationRequest("Cristiano Ronaldo", players)
+
+Locks and synchronization
+
+object ThreadFirstEncounter extends App {
+
+  class FirstThread extends Thread {
+    override def run(): Unit =  println(s"FirstThread's run!")
+  }
+
+  val firstThread =  new FirstThread()
+  firstThread.start()
+
+  println(s"CurrentThread: ${Thread.currentThread().getName}")
+  println(s"firstThread: ${firstThread.getName}")
+
+}
+
+FirstThread's run!
+CurrentThread: main
+firstThread: Thread-0
+
+object TowardsLocking extends App {
+  var counter =  0 // counter variable
+
+  def readWriteCounter(): Int =  {
+    val incrementedCounter =  counter + 1  //Reading counter
+    counter =  incrementedCounter // Writing to counter
+    incrementedCounter
+  }
+
+  def printCounter(nTimes: Int): Unit =  {
+    val readWriteCounterNTimes =  for(i <- 1 to nTimes) yield readWriteCounter() println(s"${Thread.currentThread.getName} executing :: counter $nTimes times: $readWriteCounterNTimes") }  class First extends Thread { override def run(): Unit =  { printCounter(10) } }  val first =  new First first.start() // thread-0  printCounter(10) // main thread  }
+
+main executing :: counter 10 times:  Vector(1, 3, 5, 7, 9, 11, 13, 15, 17, 18)
+Thread-0 executing :: counter 10 times:  Vector(1, 2, 4, 6, 8, 10, 11, 12, 14, 16)
+
+def readWriteCounter(): Int =  {
+    val incrementedCounter =  counter + 1  //Reading counter
+    counter =  incrementedCounter // Writing to counter
+    incrementedCounter
+  }
+
+object TowardsLockingOne extends App {
+  var counter =  0 // counter variable
+
+  def readWriteCounter(): Int =  this.synchronized {
+    val incrementedCounter =  counter + 1  //Reading counter
+    counter =  incrementedCounter // Writing to counter
+    incrementedCounter
+  }
+
+  def printCounter(nTimes: Int): Unit =  {
+    val readWriteCounterNTimes =  for(i <- 1 to nTimes) yield readWriteCounter() println(s"${Thread.currentThread.getName} executing :: counter $nTimes times: $readWriteCounterNTimes") }  class First extends Thread { override def run(): Unit =  { printCounter(10) } }  val first =  new First first.start() // thread-0  printCounter(10) // main thread }
+
+def readWriteCounter(): Int =  this.synchronized {
+    val incrementedCounter =  counter + 1  //Reading counter
+    counter =  incrementedCounter // Writing to counter
+    incrementedCounter
+  }
+
+val any =  new Any()
+
+def readWriteCounter(): Int =  any.synchronized {
+    val incrementedCounter =  counter + 1  //Reading counter
+    counter =  incrementedCounter // Writing to counter
+    incrementedCounter
+  }
+
+Executor and ExecutionContext
+
+import java.util.concurrent.ForkJoinPool
+import scala.concurrent.{ExecutionContext, ExecutionContextExecutor}
+
+object TowardsExecutor extends App {
+
+  val executor: ForkJoinPool =  new java.util.concurrent.ForkJoinPool()
+  executor.execute(new Runnable {
+    override def run(): Unit = 
+      println(s"${Thread.currentThread().getName()} printing this in execution of juc.ForkJoinPool!")
+  })
+
+  val ec: ExecutionContextExecutor =  ExecutionContext.global
+  ec.execute(new Runnable {
+    override def run(): Unit = 
+      println(s"${Thread.currentThread().getName()} printing this in execution of sc.ExecutionContext!")
+  })
+}
+
+val executor: ForkJoinPool =  new java.util.concurrent.ForkJoinPool()
+val ec: ExecutionContextExecutor =  ExecutionContext.global
+
+import java.util.concurrent.ForkJoinPool
+import scala.concurrent.{ExecutionContext, ExecutionContextExecutor}
+
+object TowardsExecutor extends App {
+
+  val executor: ForkJoinPool =  new java.util.concurrent.ForkJoinPool()
+  executor.execute(new Runnable {
+    override def run(): Unit = 
+      println(s"${Thread.currentThread().getName()} printing this in execution of juc.ForkJoinPool!")
+  })
+
+  val ec: ExecutionContextExecutor =  ExecutionContext.global
+  ec.execute(new Runnable {
+    override def run(): Unit = 
+      println(s"${Thread.currentThread().getName()} printing this in execution of sc.ExecutionContext!")
+  })
+  
+  Thread.sleep(500)
+
+}
+
+scala-execution-context-global-11 printing this in execution of sc.ExecutionContext!
+ForkJoinPool-1-worker-1 printing this in execution of juc.ForkJoinPool!
+
+Working with Futures
+
+import scala.concurrent._
+import scala.concurrent.ExecutionContext.Implicits.global
+
+object FutureExample extends App {
+
+  val fileSource =  "/Users/vika/Documents/LSProg/LSPWorkspace/FirstProject/src/chapter5/football_stats.csv"
+
+  def listOfPlayers(): Future[List[Player]] =  Future {
+    val source =  io.Source.fromFile(fileSource)
+    val list =  source.getLines().toList
+    source.close()
+    giveMePlayers(list)
+  }
+
+  println(s"listOfPlayers completed: ${listOfPlayers.isCompleted}")
+
+  Thread.sleep(500)
+
+  println(s"listOfPlayers completed: ${listOfPlayers.isCompleted}")
+
+  def giveMePlayers(list: List[String]): List[Player] =  list match {
+    case head :: tail => tail map {line => val columns =  line.split((",")).map(_.trim) Player(columns(5),columns(6),columns(9),columns(7), columns(8),columns(10), columns(12), columns(0),columns(2)) } case Nil => List[Player]() }  }  case class Player(name: String, nationality: String, age:String, club: String, domesticLeague: String, rawTotal: String, finalScore: String,ranking2016: String, ranking2015: String)
+
+listOfPlayers completed: false
+listOfPlayers completed: true
+
+import scala.concurrent._
+import scala.concurrent.ExecutionContext.Implicits.global
+
+object FutureExample extends App {
+
+  val fileSource = 
+"/Users/vika/Documents/LSProg/LSPWorkspace/FirstProject/src/chapter13/football_stats.csv"
+
+  val listOfPlayers: Future[List[Player]] =  Future {
+      val source =  io.Source.fromFile(fileSource)
+      val list =  source.getLines().toList
+
+      source.close()
+
+      giveMePlayers(list)
+  }
+
+  def giveMePlayers(list: List[String]): List[Player] =  list match {
+    case head :: tail => tail map {line => val columns =  line.split((",")).map(_.trim) Player(columns(5),columns(6),columns(9),columns(7), columns(8),columns(10), columns(12), columns(0),columns(2)) } case Nil => List[Player]() }  // Registering a callback listOfPlayers foreach { case list => list foreach println }  Thread.sleep(5000)  }  case class Player(name: String, nationality: String, age: String, club: String, domesticLeague: String, rawTotal: String, finalScore: String,ranking2016: String, ranking2015: String)
+
+What if Future computations go wrong?
+
+listOfPlayers onComplete {
+  case Success(list) => list foreach println case Failure(_) => println(s"listOfPlayers couldn't be fetched.") }
+
+def onComplete[U](f: Try[T] => U)(implicit executor: ExecutionContext): Unit
+
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{Failure, Success}
+
+object TowardsFutureComposition extends App {
+
+def firstFuture: Future[String] =  Future { "1" }
+def secondFuture(str: String): Future[Int] =  Future { str.toInt }
+
+  firstFuture onComplete {
+    case Success(value1) => secondFuture(value1) onComplete { case Success(value2) => println(s"Converted int: $value2") case Failure(exception) => println(s"Conversion failed due to ${exception.getMessage} ") } case Failure(excep) => Future.failed(excep) }  Thread.sleep(5000) }
+
+Why not compose two or more Futures?
+
+object FutureComposition extends App {
+
+  def firstFuture: Future[String] =  Future { "1" }
+
+  def secondFuture(str: String): Future[Int] =  Future { str.toInt }
+
+  firstFuture flatMap( secondFuture(_) ) map(result => println(s"Converted int: $result"))  Thread.sleep(5000) }
+
+Converted int: 1
+
+firstFuture flatMap( secondFuture(_) ) map(result => println(s"Converted int: $result"))
+
+def flatMap[S](f: T => Future[S])(implicit executor: ExecutionContext): Future[S]
+
+for {
+  value1 <- firstFuture value2 <- secondFuture(value1) } yield println(s"Converted int: $value2")
+
+Working with Promises
+
+import scala.concurrent._
+import scala.concurrent.ExecutionContext.Implicits.global
+
+object ItsAPromise extends App {
+
+  val firstPromise =  Promise[String]
+
+  for {
+    value1 <- firstPromise.future } yield println(s"Value1: $value1")  firstPromise.success("1")  Thread.sleep(500) }
+
+Value1: 1
+
+def apply[T](): Promise[T]
+
+firstPromise.success("1")
+
+Parallel collections
+
+import scala.collection.parallel.immutable.ParSeq
+import scala.concurrent.Future
+import scala.util.{Failure, Success}
+import scala.concurrent.ExecutionContext.Implicits.global
+
+object TowardsParallelCollections extends App {
+
+  val fileSource =     "/Users/vika/Documents/LSProg/LSPWorkspace/FirstProject/src/chapter13/football_stats.csv"
+
+  val listOfPlayers: Future[List[Player]] =  Future {
+    val source =  io.Source.fromFile(fileSource)
+    val list: List[String] =  source.getLines().toList
+
+    source.close()
+
+    val parSequence =  list.par.tail
+    
+    val playerParSequence: ParSeq[Player] =  parSequence.map {
+      case line => val columns =  line.split((",")).map(_.trim) Player(columns(5),columns(6),columns(9),columns(7), columns(8),columns(10), columns(12), columns(0),columns(2)) }   playerParSequence.toList }  listOfPlayers foreach { case list => list foreach println }  Thread.sleep(5000)  }
+
+Reactive programming
+
+A :=  5
+B :=  A
+C :=  A
+D :=  B + C
+
+A :=  6
+
+React to RxScala
+
+libraryDependencies +=  "io.reactivex" %% "rxscala" % "0.26.5"
+
+Creating Observables
+
+package example
+
+import rx.lang.scala.Observable
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration._    object FirstRxApp extends App {  //Creates an empty Observable. val emptyObservable =  Observable.empty  //Creates an Observable that only emits 1. val numObservable =  Observable.just(1)  val sequence =  List(1, 3, 5, 7, 9)  //Creates an Observable, which emits values from the sequence mentioned. val sequenceObservable =  Observable.from(sequence)  val someAsyncComputation =  Future { 1 } //Creates an Observable, from an async computation val fromAsyncObservable =  Observable.from(someAsyncComputation)  //Creates an Observable, which emits items at a duration gap specified. val intervalObservables =  Observable.interval(200 millis)   //Creates an Observable, which starts emitting, once some observer subscribe to it. val deferObservable =  Observable.defer(fromAsyncObservable)  //Creates an Observable, which never emits any value. val neverObservable =  Observable.never  }
+
+def from[T](f: Future[T])(implicit execContext: ExecutionContext): Observable[T]
+
+def defer[T](observable: => Observable[T]): Observable[T]
+
+import rx.Subscription
+import rx.observers.TestSubscriber
+
+//Subscribing to Observables
+emptyObservable
+  .subscribe(value => println(s"From emptyObservable: $value"))  numObservable .subscribe(value => println(s"From numObservable: $value"))  sequenceObservable .subscribe(value => println(s"From sequenceObservable: $value"))  fromAsyncObservable .subscribe(value => println(s"From fromAsyncObservable: $value"))  intervalObservables .subscribe(value => println(value)) Thread.sleep(1000)   new TestSubscriber[Subscription].awaitTerminalEvent(1000, MILLISECONDS)   deferObservable .subscribe(value => println(s"From deferObservable: $value"))
+
+def subscribe(onNext: T => Unit): Subscription
+
+package example
+
+import rx.lang.scala.Observable
+
+object SmartApp extends App {
+
+  val src = 
+   "/Users/vika/Documents/LSProg/LSPWorkspace/First_Proj_Rx/src/main/scala/example/football_stats.csv"
+
+
+  val playerObservable = 
+    Observable.from(PlayerService.readPlayerDataFromSource(src))
+
+  playerObservable
+    .map(playerString => PlayerService.parseToPlayer(playerString)) .subscribe(player => PlayerService.showPlayerInformation(player), error => println(s"Error Occurred: ${error.getMessage}"))   Thread.sleep(10000) }
+
+package example
+
+import scala.io.BufferedSource
+import scala.util.{Failure, Success, Try}
+
+object PlayerService {
+
+  def readPlayerDataFromSource(src: String): List[String] =  {
+    val source: BufferedSource =  io.Source.fromFile(src)
+    val list: List[String] =  source.getLines().toList
+
+    source.close()
+    list
+  }
+
+  def parseToPlayer(string: String): Option[Player] =  {
+    Try {
+      val columns =  string.split((",")).map(_.trim)
+      Player(columns(5), columns(6), columns(9).toInt, columns(7))
+    } match {
+      case Success(value) => Some(value) case Failure(excep) => None } }  def showPlayerInformation(playerOp: Option[Player]): Unit =  { playerOp.map { player => println("------------ Here's our Player Information ----------- ") println(s"Name: ${player.name}") println(s"Age: ${player.age} | Nationality: ${player.nationality} | League: ${player.league}") println } }  case class Player(name: String, nationality: String, age: Int, league: String)  }
+
+playerObservable
+    .map(playerString => PlayerService.parseToPlayer(playerString))
+
+.subscribe(player => PlayerService.showPlayerInformation(player), error => println(s"Error Occurred: ${error.getMessage}"))
+
+package example
+
+import rx.lang.scala.Observable
+
+object SmartApp extends App {
+
+  val src = 
+    "/Users/vika/Documents/LSProg/LSPWorkspace/First_Proj_Rx/src/main/scala/example/football_stats.csv"
+
+  val playerObservable: Observable[String] = 
+    Observable.from(PlayerService.readPlayerDataFromSource(src))
+
+  val somePlayer =  Some(PlayerService.Player("Random Player", "Random Nation", 31, "Random League"))
+
+  playerObservable
+    .map(playerString => PlayerService.parseToPlayer(playerString)) .merge(Observable.just(somePlayer)) .subscribe(player => PlayerService.showPlayerInformation(player), error => println(s"Error Occurred: ${error.getMessage}"))  Thread.sleep(10000) }
+
+Scenario
+
+"PlayerService" should {
+    "return a Player object." in {//some code}
+    "return an empty collection if there's no data." in {//some code}
+    "return a Nothing on call to getPlayer method with right player string." in {//some code}
+    "return a Some Player instance on call to getPlayer method with right player string." in {//some code}
+    "print a Player's information on console." in {//some code}
+}
+
+Setting up for testing
+
+import Dependencies._
+
+lazy val root =  (project in file(".")).
+  settings(
+    inThisBuild(List(
+      organization :=  "com.example",
+      scalaVersion :=  "2.12.4",
+      version      :=  "0.1.0-SNAPSHOT"
+    )),
+    name :=  "Hello",
+    libraryDependencies +=  scalaTest % Test
+  )
+
+sbt testOnly example.HelloSpec
+
+Testing in style using ScalaTest
+
+package example
+
+import org.scalatest._
+
+
+class HelloSpec extends FlatSpec with Matchers {
+  "The Hello object" should "say hello" in {
+    Hello.greeting shouldEqual "hello"
+  }
+}
+
+package example
+
+object Hello extends Greeting with App {
+  println(greeting)
+}
+
+trait Greeting {
+  lazy val greeting: String =  "hello"
+}
+
+package example
+
+import org.scalatest._
+
+abstract class SomeSpec(toBeTested: String) extends FlatSpec with Matchers
+
+package example
+
+class PlayerSpec extends SomeSpec("PlayerService") {
+
+  it should "compile" in {
+  """PlayerService.Player("Cristiano Ronaldo", "Portuguese", 32, "Real Madrid")""" should compile
+  }
+
+
+}
+
+> testOnly example.PlayerSpec [info] PlayerSpec: [info] - should compile *** FAILED *** [info] Expected no compiler error, but got the following type error: "not found: value Player", for code: Player("Cristiano Ronaldo", "Portuguese", 32, "Real Madrid") (PlayerSpec.scala:6) [info] Run completed in 281 milliseconds. [info] Total number of tests run: 1 [info] Suites: completed 1, aborted 0 [info] Tests: succeeded 0, failed 1, canceled 0, ignored 0, pending 0 [info] *** 1 TEST FAILED *** [error] Failed tests: [error] example.PlayerSpec [error] (test:testOnly) sbt.TestsFailedException: Tests unsuccessful
+
+// src/main/scala/example/PlayerService.scala
+
+object PlayerService extends App {   case class Player(name: String, nationality: String, age: Int, league: String)  }
+
+[info] PlayerSpec:
+[info] - should compile
+[info] Run completed in 199 milliseconds.
+[info] Total number of tests run: 1
+[info] Suites: completed 1, aborted 0
+[info] Tests: succeeded 1, failed 0, canceled 0, ignored 0, pending 0
+[info] All tests passed.
+[success] Total time: 1 s, completed
+
+package example
+
+class PlayerSpec extends SomeSpec("PlayerService") {
+
+  it should "compile" in {
+    """PlayerService.Player("Cristiano Ronaldo", "Portuguese", 32, "Real Madrid")""" should compile
+    }
+
+  it should "throw an exception when source is wrong" in {
+    val src =  "some source"
+    assertThrows[java.io.FileNotFoundException](PlayerService.readPlayerDataFromSource(src))
+  }
+
+  it should "return collection of String when data is read from correct source" in {
+    val src =  "/Users/vika/Documents/LSProg/LSPWorkspace/First_Proj_Testing/src/main/scala/example/football_stats.csv"
+    PlayerService.readPlayerDataFromSource(src) should not be empty
+  }
+
+  it should "return None while parsing wrong player string data into player instance" in {
+    val data =  "some wrong player string"
+    PlayerService.parseToPlayer(data) shouldBe None
+  }
+
+  it should "return Some Player while parsing player string data into player instance" in {
+    val data =  """1,1,2,1,2,Cristiano Ronaldo,Portugal,Real Madrid,Spain,32,4829,40,4789,124,63"""
+    val player =  PlayerService.Player("Cristiano Ronaldo", "Portugal", 32, "Real Madrid")
+    
+    PlayerService.parseToPlayer(data) shouldBe Some(player)
+  }
+
+}
+
+package example
+
+import scala.util.Try
+import scala.util.{Failure, Success}
+
+object PlayerService extends App {
+
+  def readPlayerDataFromSource(src: String): List[String] =  {
+    val source =  io.Source.fromFile(src)
+
+    val list: List[String] =  source.getLines().toList
+
+    source.close()
+    list
+  }
+
+  def parseToPlayer(string: String): Option[Player] =  {
+    Try {
+      val columns =  string.split((",")).map(_.trim)
+      Player(columns(5), columns(6), columns(9).toInt, columns(7))
+    } match {
+      case Success(value) => Some(value) case Failure(excep) => None } }  case class Player(name: String, nationality: String, age: Int, league: String)  }
+
+[info] PlayerSpec:
+[info] - should compile
+[info] - should throw an exception when source is wrong
+[info] - should return collection of String when data is read from correct source
+[info] - should return None while parsing wrong player string data into player instance
+[info] - should return Some Player while parsing player string data into player instance
+[info] Run completed in 324 milliseconds.
+[info] Total number of tests run: 5
+[info] Suites: completed 1, aborted 0
+[info] Tests: succeeded 5, failed 0, canceled 0, ignored 0, pending 0
+[info] All tests passed.
+
+describe("In PlayerService object"){
+ it("should compile") {
+ assertCompiles("""PlayerService.Player (
+ "Cristiano Ronaldo", 
+ "Portuguese", 32, 
+ "Real Madrid")""")
+ }
+ }
+
+"PlayerService.Player.parseToPlayer" when {
+ "wrong parsing data passed" should {
+ "return None" in {
+ PlayerService.parseToPlayer("some wrog data") shouldBe None
+ }
+ }
+ }
+
+"PlayerService.Player.parseToPlayer" - {
+ "wrong parsing data passed" - {
+ "return None" in {
+ PlayerService.parseToPlayer("some wrog data") shouldBe None
+ }
+ }
+ }
+
+Matchers
+
+someCollection should have length 7
+someString should include ("world")
+twenty should be > 10 number shouldBe odd sequence should contain ("thisvalue")
+
+ScalaMock =E2=80=93 a native library to mock objects
+
+libraryDependencies +=  "org.scalamock" %% "scalamock" % "4.0.0" % Test
+
+import org.scalamock.scalatest.MockFactory
+
+class PlayerAppSpec extends SomeSpec("PlayerAppSpec") with MockFactory {
+
+  it should "give us a collection of 2 players" in {
+
+    val mockPlayer =  mock[PlayerService.Player]
+
+    val list =  List(mockPlayer, mockPlayer)
+    list should have length 2
+  }
+
+}
+
+val someStringToIntFunc  =  mockFunction[String, Int]
+someStringToIntFunc expects ("Some Number") returning 1
