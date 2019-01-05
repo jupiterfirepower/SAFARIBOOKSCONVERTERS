@@ -27,8 +27,7 @@ https://html2pdf.com/ - Converting html in more comfortable format pdf.<br>
 # safari-download<br>
 chrome extension to help download safari books online from https://www.safaribooksonline.com/<br>
 <br>
-## Disclaimer
-This is used for research purpose only. Please do not use for commercial activity.
+Fixed url in chrome extention for downloads books<br>
 <br>
 Open chrome://extensions/ in the chrome browser. <br>
 Enable Developer Mode - ON<br>
